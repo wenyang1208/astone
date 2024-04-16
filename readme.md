@@ -5,33 +5,39 @@ Astone is the e-commerce platform offers a diverse range of clothing aligned wit
 
 
 ## Members
-Taha Waheed Fareed Fareed, tfar0012@student.monash.edu\
-Lim Woo Shen, wlim0061@student.monash.edu\
-Mohamed Shaahid Mohamed Altaf, mmoh0162@student.monash.edu\
-Maliha Tariq, mtar0012@student.monash.edu\
-Aaron Leong Weng Hon, aleo0022@student.monash.edu\
-Jastej Singh Gill, jsav0005@student.monash.edu\
-Koe Rui En, rkoe0003@student.monash.edu\
-Chong Jet Shen, jcho0161@student.monash.edu\
-Chua Wen Yang, wchu0033@student.monash.edu\
-Tay Ming Hui, mtay0031@student.monash.edu
+| Name | Role | Email |
+| --- | --- | --- |
+| Koe Rui En | ART | rkoe0003@student.monash.edu |
+| Mohamed Shaahid Mohamed Altaf | ART | mmoh0162@student.monash.edu |
+| Tay Ming Hui | ART | mtay0031@student.monash.edu |
+| Aaron Leong Weng Hon | PM | aleo0022@student.monash.edu |
+| Chong Jet Shen | PM | jcho0161@student.monash.edu |
+| Maliha Tariq | PM | mtar0012@student.monash.edu |
+| Taha Waheed Fareed Fareed | PM | tfar0012@student.monash.edu |
+| Chua Wen Yang | SA | wchu0033@student.monash.edu |
+| Jastej Singh Gill | SA | jsav0005@student.monash.edu |
+| Lim Woo Shen | SA | wlim0061@student.monash.edu |
 
-## Specialist role
-1. Agile Release Train
+## Specialist Roles
+### Agile Release Train
 - Koe Rui En
-- Tay Ming Hui
 - Mohamed Shaahid Mohamed Altaf
+- Tay Ming Hui
 
-2. Product Manager
-- Taha Waheed Fareed Fareed
-- Maliha Tariq
+### Product Manager
 - Aaron Leong Weng Hon
 - Chong Jet Shen
+- Maliha Tariq
+- Taha Waheed Fareed Fareed
 
-3. System Architect
+### System Architect
+- Chua Wen Yang
 - Jastej Singh Gill
 - Lim Woo Shen
-- Chua Wen Yang
+
+## Database
+Astone's Database Management System is PostgreSQL.  
+Refer to [database](./Project/database) for more information.
 
 ## Open License 
-This project is licensed under the GNU v3.0 License - see the LICENSE file for details.
+This project is licensed under the GNU v3.0 License - see the `LICENSE` file for details.  
