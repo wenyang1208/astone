@@ -5,16 +5,16 @@ Astone is the e-commerce platform offers a diverse range of clothing aligned wit
 
 
 ## Members
-Taha Waheed Fareed Fareed\
-Lim Woo Shen\
-Mohamed Shaahid Mohamed Altaf\
-Maliha Tariq\
-Aaron Leong Weng Hon\
-Jastej Singh Gill\
-Koe Rui En\
-Chong Jet Shen\
-Chua Wen Yang\
-Tay Ming Hui\
+Taha Waheed Fareed Fareed, tfar0012@student.monash.edu\
+Lim Woo Shen, wlim0061@student.monash.edu\ 
+Mohamed Shaahid Mohamed Altaf, mmoh0162@student.monash.edu\
+Maliha Tariq, mtar0012@student.monash.edu\
+Aaron Leong Weng Hon, aleo0022@student.monash.edu\
+Jastej Singh Gill, jsav0005@student.monash.edu\
+Koe Rui En, rkoe0003@student.monash.edu\
+Chong Jet Shen, jcho0161@student.monash.edu\
+Chua Wen Yang, wchu0033@student.monash.edu\
+Tay Ming Hui, mtay0031@student.monash.edu
 
 ## Specialist role
 1. Agile Release Train
@@ -34,4 +34,4 @@ Tay Ming Hui\
 - Chua Wen Yang
 
 ## Open License 
-This project is licensed under the Apache 2.0 License - see the LICENSE.md file for details.
+This project is licensed under the GNU v3.0 License - see the LICENSE file for details.
