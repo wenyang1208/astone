@@ -6,7 +6,7 @@ Astone is the e-commerce platform offers a diverse range of clothing aligned wit
 
 ## Members
 Taha Waheed Fareed Fareed, tfar0012@student.monash.edu\
-Lim Woo Shen, wlim0061@student.monash.edu\ 
+Lim Woo Shen, wlim0061@student.monash.edu\
 Mohamed Shaahid Mohamed Altaf, mmoh0162@student.monash.edu\
 Maliha Tariq, mtar0012@student.monash.edu\
 Aaron Leong Weng Hon, aleo0022@student.monash.edu\
