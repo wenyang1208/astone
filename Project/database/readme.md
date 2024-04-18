@@ -27,7 +27,7 @@ These instructions are basic guidelines for setting up the database.
 3. Open the `astone.sql` file in the `database` folder or copy the contents of the file.
 4. Click the `Execute` button to run the script.
 
-## Resources
+## Documentation / Resources
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
 - [pgAdmin Documentation](https://www.pgadmin.org/docs/)
 - [SQL Tutorial](https://www.w3schools.com/sql/)

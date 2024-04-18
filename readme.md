@@ -1,8 +1,6 @@
 # Astone - FIT3170 Full-Year Project
 
-## Description
 Astone is the e-commerce platform offers a diverse range of clothing aligned with the latest fashion trends, aiming to be a trusted destination for quality and style. Built with ReactJS, Python Django, and PostgreSQL.
-
 
 ## Members
 | Name | Role | Email |
@@ -18,26 +16,14 @@ Astone is the e-commerce platform offers a diverse range of clothing aligned wit
 | Jastej Singh Gill | SA | jsav0005@student.monash.edu |
 | Lim Woo Shen | SA | wlim0061@student.monash.edu |
 
-## Specialist Roles
-### Agile Release Train
-- Koe Rui En
-- Mohamed Shaahid Mohamed Altaf
-- Tay Ming Hui
-
-### Product Manager
-- Aaron Leong Weng Hon
-- Chong Jet Shen
-- Maliha Tariq
-- Taha Waheed Fareed Fareed
-
-### System Architect
-- Chua Wen Yang
-- Jastej Singh Gill
-- Lim Woo Shen
+## Specialist Roles / Subteam
+Agile Release Train (ART)  
+Product Manager (PM)  
+System Architect (SA)  
 
 ## Database
 Astone's Database Management System is PostgreSQL.  
 Refer to [database](./Project/database) for more information.
 
 ## Open License 
-This project is licensed under the GNU v3.0 License - see the `LICENSE` file for details.  
+Astone is licensed under the [GNU General Public License v3.0](./LICENSE).
