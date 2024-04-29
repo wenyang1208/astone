@@ -1,0 +1,23 @@
+- model: astoneapp.product  # Replace `astoneapp.product` with your app name and model name
+  pk: 1
+  fields:
+    name: "Product 1"
+    description: "Description of Product 1"
+    category: "Category 1"
+    colors: '[{"name": "Red", "hex": "#FF0000"}, {"name": "Blue", "hex": "#0000FF"}]'
+    sizes: '[{"name": "Small", "code": "S"}, {"name": "Medium", "code": "M"}, {"name": "Large", "code": "L"}]'
+    currency: "MYR"
+    price: "29.99"
+    stock: 100
+
+- model: astoneapp.product
+  pk: 2
+  fields:
+    name: "Product 2"
+    description: "Description of Product 2"
+    category: "Category 2"
+    colors: '[{"name": "Green", "hex": "#00FF00"}, {"name": "Yellow", "hex": "#FFFF00"}]'
+    sizes: '[{"name": "Medium", "code": "M"}, {"name": "Large", "code": "L"}]'
+    currency: "USD"
+    price: "19.99"
+    stock: 50

@@ -19,7 +19,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data    
     environment:
-      - POSTGRES_DB=${SQL_NAME}
+      - POSTGRES=${SQL_NAME}
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PASSWORD}
 

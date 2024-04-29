@@ -5,4 +5,7 @@ from astoneapp.models.product import Product
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'currency', 'price', 'quantity']
+        fields = '__all__'
+
+class ProductCreateResponseSerializer(serializers.Serializer):
+    message = serializers.CharField(max_length=200)

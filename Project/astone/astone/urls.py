@@ -16,10 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from astoneapp.views.product_view import GetCreateUpdateProductView # Add necessary imports
+from astoneapp.views.product_view import * # Add necessary imports
 
 # Add urls as needed, usually one for each view function
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('products/', GetCreateUpdateProductView),
+    # path('products/', GetCreateUpdateProductView),
+    path('products/create/', CreateProductView),
+    path('products/', GetProductView),
 ]
