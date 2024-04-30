@@ -1,39 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import { ProductService } from './services/ProductService';
-
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom"
+import Home from "./pages/home"
+// ...
+import About from "./pages/about"
+import ProductView from './pages/product/productView';
+import CreateProduct from './pages/product/createProduct';
+import NotFound from './pages/404';
+import routes from './routes';
 function App() {
-  const [details, setDetails] = useState([]);
+  // initialize a browser router
+  const router = createBrowserRouter([
+    {
+      // parent route component
+      // element: <Layout />,
 
-  useEffect(() => {
-    const productService = new ProductService();
+      // Custom error page
+      errorElement: <NotFound />,
 
-    // Call the getProducts method from ProductService
-    productService.getProducts()
-      .then(res => {
-        console.log(res);
-        setDetails(res.data);
-      })
-      .catch(err => {
-        console.error('Error fetching products:', err);
-      });
-  }, []);
+      // child route components
+      children: routes
+    },
+  ])
 
   return (
-    <div>
-      <header>Data from Django REST</header>
-      <hr />
-      <h1>Products</h1>
-      {/* Map over the details array in state to render product information */}
-      {details.map((output, id) => (
-        <div key={id}>
-          <h2>{`Product name: ${output.name}`}</h2>
-          <h2>{`Product price: ${output.currency + ' ' + output.price}`}</h2>
-          <h2>{`Product quantity: ${output.quantity}`}</h2>
-          <br />
-        </div>
-      ))}
-    </div>
-  );
+      <RouterProvider router={router} />
+  )
 }
 
-export default App;
+export default App
