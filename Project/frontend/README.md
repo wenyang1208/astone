@@ -2,17 +2,19 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## API rquests
-First, ensure [http://localhost:8000](http://localhost:8000) is running, refer to [backend](./Project/astone) for information on setup and running.
+UI library used is [Material UI](https://mui.com/material-ui/)
+
+## API requests
+First, ensure [http://localhost:8000](http://localhost:8000) is running, refer to [backend](./Project/astone) for information on setup and running.\
 
 
-You can make requests to implemented django REST APIs by sing implemented API urls with axios. \
+You can make requests to implemented django REST APIs by using implemented API urls with axios.\
 
-Some examples of api requests are in the /src/services directory \
+Some examples of api requests are in the /src/services directory\
 
-An example on how to use data received from API request is in the file /src/pages/product/productView.js \
+An example on how to use data received from API request is in the file /src/pages/product/productView.js\
 
-[Basic example](https://medium.com/@devsumitg/how-to-connect-reactjs-django-framework-c5ba268cb8be) \
+[Another example](https://medium.com/@devsumitg/how-to-connect-reactjs-django-framework-c5ba268cb8be)\
 
 ## Available Scripts
 
