@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom"
-import Home from "./pages/home"
 // ...
-import About from "./pages/about"
-import ProductView from './pages/product/productView';
-import CreateProduct from './pages/product/createProduct';
 import NotFound from './pages/404';
 import routes from './routes';
 function App() {
@@ -26,7 +22,9 @@ function App() {
   ])
 
   return (
-      <RouterProvider router={router} />
+    <Suspense fallback={<div>Loading...</div>}>
+        <RouterProvider router={router} />
+    </Suspense>
   )
 }
 

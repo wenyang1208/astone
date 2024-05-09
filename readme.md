@@ -21,9 +21,13 @@ Agile Release Train (ART)
 Product Manager (PM)  
 System Architect (SA)  
 
-## Database
-Astone's Database Management System is PostgreSQL.  
-Refer to [database](./Project/database) for more information.
+## Frontend
+Frontend uses React.js
+Refer to [frontend](./Project/frontend) for more information.
+
+## Backend
+Backend uses Django connected to a Postgres database
+Refer to [backend](./Project/astone) for more information.
 
 ## Open License 
 Astone is licensed under the [GNU General Public License v3.0](./LICENSE).

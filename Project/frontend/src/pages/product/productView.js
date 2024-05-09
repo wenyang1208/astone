@@ -28,7 +28,7 @@ function ProductView() {
         <div key={id}>
           <h2>{`Product name: ${output.name}`}</h2>
           <h2>{`Product price: ${output.currency + ' ' + output.price}`}</h2>
-          <h2>{`Product quantity: ${output.quantity}`}</h2>
+          <h2>{`Product quantity: ${output.stock}`}</h2>
           <br />
         </div>
       ))}
