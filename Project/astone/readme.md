@@ -19,8 +19,7 @@ docker-compose up
 
 If getting the follwing error after running 'docker-compose up': "not found    | ./start.sh: 2:", it is caused by a file formatiing error.
 Refer to the screenshot below on how to resolve this:
-![Screenshot](image.png)
-
+![Alt text](<Screenshot 2024-05-19 005259.jpg>)
 
 
 3. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.
