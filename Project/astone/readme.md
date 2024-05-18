@@ -17,10 +17,15 @@ docker-compose build
 
 docker-compose up
 
+If getting the follwing error after running 'docker-compose up': "not found    | ./start.sh: 2:", it is caused by a file formatiing error.
+Refer to the screenshot below on how to resolve this:
+![Screenshot](image.png)
 
-3. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.\
 
-Note that simply navigating to http://localhost:8000/ in your web browser will lead to a 404 page\
+
+3. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.
+
+Note that simply navigating to http://localhost:8000/ in your web browser will lead to a 404 page
 
 
 4. **Admin Interface**: Access the Django admin page at `http://localhost:8000/admin/` to manage entities. Use the following credentials:
