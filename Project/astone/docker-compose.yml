@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  web: 
+  web:
     build:
       context: .
     ports:
@@ -13,25 +13,17 @@ services:
       - .env
     depends_on:
       - postgres_db
-    
-  postgres_db:
-    image: postgres
-    volumes:
-      - postgres_data:/var/lib/postgresql/data    
-    environment:
-      - POSTGRES=${SQL_NAME}
-      - POSTGRES_USER=${SQL_USER}
-      - POSTGRES_PASSWORD=${SQL_PASSWORD}
 
-  db:
+  postgres_db:
     image: postgres:latest
     ports:
-      - '4020:5432'
+      - '5432:5432'
     environment:
-    - POSTGRES_USER=postgres
-    - POSTGRES_PASSWORD=postgres
-    volumes: 
-      - ./init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+      - POSTGRES_DB=${SQL_NAME}
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   postgres_data:

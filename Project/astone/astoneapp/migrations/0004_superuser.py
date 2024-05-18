@@ -1,5 +1,6 @@
 import os
 from django.db import migrations
+from django.utils import timezone
 
 class Migration(migrations.Migration):
 
@@ -10,7 +11,7 @@ class Migration(migrations.Migration):
     def generate_superuser(apps, schema_editor):
         from django.contrib.auth.models import User
 
-        DJANGO_DB_NAME = os.environ.get('DJANGO_DB_NAME', "astone_db")
+        DJANGO_DB_NAME = os.environ.get('SQL_NAME', "")
         DJANGO_SU_NAME = os.environ.get('DJANGO_SU_NAME')
         DJANGO_SU_EMAIL = os.environ.get('DJANGO_SU_EMAIL')
         DJANGO_SU_PASSWORD = os.environ.get('DJANGO_SU_PASSWORD')
@@ -18,7 +19,9 @@ class Migration(migrations.Migration):
         superuser = User.objects.create_superuser(
             username=DJANGO_SU_NAME,
             email=DJANGO_SU_EMAIL,
-            password=DJANGO_SU_PASSWORD)
+            password=DJANGO_SU_PASSWORD,
+            last_login=timezone.now()
+            )
 
         superuser.save()
 
