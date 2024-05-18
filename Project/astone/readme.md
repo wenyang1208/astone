@@ -18,7 +18,10 @@ docker-compose build
 docker-compose up
 
 
-3. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.
+3. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.\
+
+Note that simply navigating to http://localhost:8000/ in your web browser will lead to a 404 page\
+
 
 4. **Admin Interface**: Access the Django admin page at `http://localhost:8000/admin/` to manage entities. Use the following credentials:
 - Username: admin

@@ -8,6 +8,9 @@ UI library used is [Material UI](https://mui.com/material-ui/)
 First, ensure [http://localhost:8000](http://localhost:8000) is running, refer to [backend](./Project/astone) for information on setup and running.\
 
 
+## How to start React app
+[Cloning and starting the app](https://www.geeksforgeeks.org/how-to-download-a-react-project-from-github-and-run-in-my-pc/)\
+
 You can make requests to implemented django REST APIs by using implemented API urls with axios.\
 
 Some examples of api requests are in the /src/services directory\
