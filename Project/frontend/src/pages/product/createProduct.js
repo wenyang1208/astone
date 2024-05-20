@@ -1,30 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { ProductService } from '../../services/ProductService';
-import { Formik, Form, Field, ErrorMessage, useFormik  } from 'formik';
+import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage, useFormik, prepareDataForValidation  } from 'formik';
 import { ChromePicker } from 'react-color';
 import tinycolor from 'tinycolor2';
+import { alignProperty } from '@mui/material/styles/cssUtils';
 
 function CreateProduct() {
-  const [details, setDetails] = useState([]);
+  const [product, setProducts] = useState([]);
 
+  const navigate = useNavigate();
+
+  const productService = new ProductService();
 
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
-      category:'',
+      category: [],
       colors: [],
       sizes: [],
       currency: 'MYR',
       price: 0.00,
       stock: 0
     },
-    onSubmit: (values, actions) => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values, actions) => {
+      try {
+        const response = await productService.createProduct(values);
+        if (response) {
+          alert('Product created successfully !');
+          navigate('/products'); // Redirect to ProductView
+        }
+      } catch (error) {
+        console.error('Error creating product:', error);
+        alert('Failed to create product');
+      } finally {
         actions.setSubmitting(false);
-      }, 1000);
+      }
     },
+    
     validate: values => {
       const errors = {};
 
@@ -41,6 +55,14 @@ function CreateProduct() {
     }
   });
 
+  const handleCategoryChange = event => {
+    const selectedOptions = Array.from(event.target.selectedOptions, option => ({
+      name: option.value,
+      code: option.dataset.code
+    }));
+    formik.setFieldValue('categories', selectedOptions);
+  };
+
   const handleSizeSelectChange = event => {
     const selectedOptions = Array.from(event.target.selectedOptions, option => ({
       name: option.value,
@@ -50,12 +72,12 @@ function CreateProduct() {
   };
 
   return (
-    <div>
+    <div style= {{margin:'20px'}}>
       <h1>Create Product</h1>
 
       <form onSubmit={formik.handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
+        <div style={{margin: '10px'}}>
+          <label htmlFor="name" style={{margin: '10px'}}>Name:</label>
           <input
             id="name"
             name="name"
@@ -65,8 +87,8 @@ function CreateProduct() {
           />
           {formik.errors.name && <div>{formik.errors.name}</div>}
         </div>
-        <div>
-          <label htmlFor="description">Description:</label>
+        <div style={{margin: '10px'}}>
+          <label htmlFor="description" style={{margin: '10px'}}>Description:</label>
           <input
             id="description"
             name="description"
@@ -76,19 +98,17 @@ function CreateProduct() {
           />
           {formik.errors.description && <div>{formik.errors.description}</div>}
         </div>
-        <div>
-          <label htmlFor="category">Category:</label>
-          <input
-            id="category"
-            name="category"
-            type="text"
-            onChange={formik.handleChange}
-            value={formik.values.category}
-          />
-          {formik.errors.category && <div>{formik.errors.category}</div>}
+        <div style={{margin: '10px'}}>
+          <label htmlFor="categories" style={{margin: '10px'}}>Category:</label>
+          <select multiple name="categories" onChange={handleCategoryChange} value={formik.values.categories}>
+              <option value="Unisex" data-code="unisex">Unisex</option>
+              <option value="Men" data-code=",men">Men</option>
+              <option value="Women" data-code="women">Women</option>
+              <option value="Kids" data-code="kids">Kids</option>
+            </select>
         </div>
-        <div>
-          <label htmlFor="color">Color:</label>
+        <div style={{margin: '10px'}}>
+          <label htmlFor="color"style={{margin: '10px'}}>Color:</label>
           <ChromePicker
               id="description"
               name="description"
@@ -96,8 +116,8 @@ function CreateProduct() {
               onChange={color => formik.setFieldValue('color', [{name: tinycolor(color).toName(), code: color.hex}])}
           />
         </div>
-        <div>
-            <label htmlFor="sizes">Sizes:</label>
+        <div style={{margin: '10px'}}>
+            <label htmlFor="sizes" style={{margin: '10px'}}>Sizes:</label>
             <select multiple name="sizes" onChange={handleSizeSelectChange} value={formik.values.sizes}>
               <option value="Small" data-code="S">Small</option>
               <option value="Medium" data-code="M">Medium</option>
@@ -105,7 +125,7 @@ function CreateProduct() {
               <option value="Extra Large" data-code="XL">Extra Large</option>
             </select>
           </div>
-        <div>
+        <div style={{margin: '10px'}}>
           <label htmlFor="currency">Currency:</label>
           <input
             id="currency"
@@ -116,8 +136,8 @@ function CreateProduct() {
           />
           {formik.errors.currency && <div>{formik.errors.currency}</div>}
         </div>
-        <div>
-          <label htmlFor="price">Price:</label>
+        <div style={{margin: '10px'}}>
+          <label htmlFor="price" >Price:</label>
           <input
             id="price"
             name="price"
@@ -127,8 +147,8 @@ function CreateProduct() {
           />
           {formik.errors.price && <div>{formik.errors.price}</div>}
         </div>
-        <div>
-          <label htmlFor="stock">Stock:</label>
+        <div style={{margin: '10px'}}>
+          <label htmlFor="stock" style={{margin: '10px'}}>Stock:</label>
           <input
             id="stock"
             name="stock"
@@ -138,7 +158,7 @@ function CreateProduct() {
           />
           {formik.errors.stock && <div>{formik.errors.stock}</div>}
         </div>
-        <button type="submit" disabled={formik.isSubmitting}>Submit</button>
+        <button type="submit" disabled={formik.isSubmitting} style={{ backgroundColor: '#007bff', '&:hover': { backgroundColor: '#0056b3' }, color: 'white' }}>Submit</button>
       </form>
     </div>
   );

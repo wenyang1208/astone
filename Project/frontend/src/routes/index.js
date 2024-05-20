@@ -16,7 +16,7 @@ const routes = [
     // other mappings ...
     { path: PathConstants.ABOUT, element: <About /> },
     { path: PathConstants.PRODUCTS, element: <ProductView /> },
-    { path: PathConstants.CREATE_PODUCT, element: <CreateProduct /> },
+    { path: PathConstants.CREATE_PRODUCT, element: <CreateProduct /> },
     { path: PathConstants.WOMEN, element: <Women /> },
     { path: PathConstants.MEN, element: <Men /> },
     { path: PathConstants.UNISEX, element: <Unisex /> },
