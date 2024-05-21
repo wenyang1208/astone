@@ -1,9 +1,9 @@
 - model: astoneapp.product  # Replace `astoneapp.product` with your app name and model name
   pk: 1
   fields:
-    name: "Product 1"
-    description: "Description of Product 1"
-    category: "Category 1"
+    name: "Men's long sleeve over shirt"
+    description: "Lightweight over shirt for the summer"
+    category: "Men's"
     colors: '[{"name": "Red", "hex": "#FF0000"}, {"name": "Blue", "hex": "#0000FF"}]'
     sizes: '[{"name": "Small", "code": "S"}, {"name": "Medium", "code": "M"}, {"name": "Large", "code": "L"}]'
     currency: "MYR"
@@ -13,11 +13,23 @@
 - model: astoneapp.product
   pk: 2
   fields:
-    name: "Product 2"
-    description: "Description of Product 2"
-    category: "Category 2"
+    name: "Men's crew neck shirt"
+    description: "Basic but versatile crew neck"
+    category: "Men's"
     colors: '[{"name": "Green", "hex": "#00FF00"}, {"name": "Yellow", "hex": "#FFFF00"}]'
     sizes: '[{"name": "Medium", "code": "M"}, {"name": "Large", "code": "L"}]'
-    currency: "USD"
+    currency: "MYR"
     price: "19.99"
     stock: 50
+
+- model: astoneapp.producttoimage
+  pk: 1
+  fields:
+    product: 1
+    url: "https://drive.google.com/file/d/15LaU33HylTqQsSVyDUWNs9E9bEq8h8K-/view?usp=drive_link"
+
+- model: astoneapp.producttoimage
+  pk: 2
+  fields:
+    product: 2
+    url: "https://drive.google.com/file/d/1L13OgtTXfphsa7a62SY_n6y0Z6WloT-d/view?usp=sharing"

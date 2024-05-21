@@ -11,8 +11,10 @@ import {
   Toolbar,
   Typography,
   MenuItem,
-  Chip
+  Chip,
+  TextField,
 } from '@mui/material';
+import Rating from '@mui/material/Rating';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import MyAppBar from '../../components/appBar';
 
@@ -44,11 +46,11 @@ function ProductView() {
   }, []);
 
   const product = {
-    name: 'Stylish Jacket',
-    description: 'A stylish and comfortable jacket perfect for the winter season.',
-    price: '$99.99',
-    imageUrl: 'https://example.com/jacket.jpg', // Replace with actual image URL
-    brand: 'FashionBrand',
+    name: "Men's V neck T-Shirt",
+    description: 'A stylish and comfortable shirt perfect for the summer.',
+    price: 'MYR 99.99',
+    imageUrl: 'https://drive.google.com/file/d/15LaU33HylTqQsSVyDUWNs9E9bEq8h8K-/preview', // Replace with actual image URL
+    brand: 'Uniqlo',
     sizes: [
       { name: 'small', code: 'S' },
       { name: 'medium', code: 'M' },
@@ -62,14 +64,15 @@ function ProductView() {
       { name: 'Yellow', hex: '#FFFF00' },
       { name: 'Orange', hex: '#FFA500' },
     ],
-    tags: ['winter', 'jacket', 'stylish'],
-    brand: 'FashionBrand',
-    dateAdded: '2023-05-20',
+    tags: ['summer', 'stylish'],
+    dateAdded: '20/5/2023',
   };
 
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState('');
   const [color, setColor] = useState('');
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
 
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
@@ -83,6 +86,21 @@ function ProductView() {
     setColor(value);
   };
 
+  const handleRatingChange = (event, newValue) => {
+    setRating(newValue);
+  };
+
+  const handleReviewChange = (event) => {
+    setReview(event.target.value);
+  };
+
+  const handleSubmitReview = () => {
+    // Logic to handle review submission
+    console.log('Rating:', rating);
+    console.log('Review:', review);
+    // You can add further logic to send the review data to your server
+  };
+
   // hardcoded
   return (
     <div>
@@ -92,7 +110,7 @@ function ProductView() {
           <Grid item xs={12} md={6}>
             <Paper>
               <img
-                src={product?.imageUrl} // Use optional chaining to prevent errors if product is null
+                src={'https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/469361/sub/goods_469361_sub14.jpg?width=750'} // Use optional chaining to prevent errors if product is null
                 alt={product?.name}
                 style={{ width: '100%', height: 'auto' }}
               />
@@ -116,7 +134,7 @@ function ProductView() {
             </Typography>
             <Typography gutterBottom>
               {product?.tags.map((tag, index) => (
-                <Chip variant="outlined" key={index} label={tag} style={{ margin: '5px' }}/>
+                <Chip color='primary' key={index} label={tag} style={{ margin: '5px' }}/>
               ))}
             </Typography>
             <div>
@@ -156,7 +174,7 @@ function ProductView() {
                   }
                   clickable
                   style={{ margin: '5px' }}
-                  onClick={() => setColor(colorOption.hex)}
+                  onClick={() => handleColorChange(colorOption.hex)}
                   variant={color === colorOption.hex ? 'default' : 'outlined'}
                 />
               ))}
@@ -178,6 +196,38 @@ function ProductView() {
             <div>
               <Button startIcon={<ShoppingCartIcon />} variant='contained'>
                 Add to Cart
+              </Button>
+            </div>
+            <br />
+            <div>
+              <Typography gutterBottom>
+                Rating:
+              </Typography>
+              <Rating
+                name="product-rating"
+                value={rating}
+                onChange={handleRatingChange}
+              />
+            </div>
+            <br />
+            <div>
+              <Typography gutterBottom>
+                Review:
+              </Typography>
+              <TextField
+                label="Write your review"
+                multiline
+                rows={4}
+                value={review}
+                onChange={handleReviewChange}
+                variant="outlined"
+                fullWidth
+              />
+            </div>
+            <br />
+            <div>
+              <Button variant="contained" color="primary" onClick={handleSubmitReview}>
+                Submit Review
               </Button>
             </div>
           </Grid>
