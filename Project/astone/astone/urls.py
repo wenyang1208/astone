@@ -24,4 +24,5 @@ urlpatterns = [
     # path('products/', GetCreateUpdateProductView),
     path('products/create/', CreateProductView),
     path('products/', GetProductView),
+    path('products/images/', GetProductImagesView),
 ]

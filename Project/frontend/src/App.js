@@ -6,6 +6,8 @@ import {
 // ...
 import NotFound from './pages/404';
 import routes from './routes';
+import { ThemeProvider } from '@mui/material';
+import theme from './styles/theme';
 function App() {
   // initialize a browser router
   const router = createBrowserRouter([
@@ -22,9 +24,12 @@ function App() {
   ])
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-        <RouterProvider router={router} />
-    </Suspense>
+    <ThemeProvider theme={theme}>
+      <Suspense fallback={<div>Loading...</div>}>
+          <RouterProvider router={router} />
+      </Suspense>
+    </ThemeProvider>
+
   )
 }
 

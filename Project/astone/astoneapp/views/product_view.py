@@ -4,6 +4,7 @@ from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework import status
 from astoneapp.models.product import Product # import model
+from astoneapp.models.product_to_image import ProductToImage # import model
 from rest_framework.response import Response
 from astoneapp.serializers.product_serializer import * # import serializer
 
@@ -116,7 +117,11 @@ def CreateProductView(request):
 # @api_view(['POST']) # request type
 # def UpdateProductView(request):
 #     # Create product
-    
+@api_view(['GET']) # request type    
+def GetProductImagesView(request):
+            product_images = ProductToImage.objects.all()
+            serializer = ProductImageSerializer(product_images, many=True)
+            return Response(serializer.data)   
     
     
 #     # Create product image
