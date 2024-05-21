@@ -3,6 +3,7 @@ import json
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework import status
+from rest_framework.views import APIView
 from astoneapp.models.product import Product # import model
 from rest_framework.response import Response
 from astoneapp.serializers.product_serializer import * # import serializer
@@ -41,28 +42,47 @@ from astoneapp.serializers.product_serializer import * # import serializer
 #             except Exception as e:
 #                 return Response('Error creating product', status=404)
 
+# Added by Wen Yang, this is the class of the ProductView for urls used, can connect to the admin
+class ProductView(APIView): 
+    def get(self, request):
+                output = [{"name": output.name,
+                           "description": output.description,
+                           "category": output.category,
+                           "colors":output.colors,
+                           "sizes": output.sizes,
+                           "currency": output.currency,
+                           "price": output.price,
+                           "stock":output.stock}
+                           for output in Product.objects.all()]
+                return Response(output)
+    
+    
+    def post(self, request):
+            serializer = ProductSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data)
+
 @api_view(['GET']) # request type    
 def GetProductView(request):
-            products = Product.objects.all()
-            serializer = ProductSerializer(products, many=True)
-            return Response(serializer.data)
-        
-#     if request.method == 'PUT':
-#         pk = request.data.get('id', '')
-#         try:
-#             name = request.get('name')
-#             currency = request.get('currency')
-#             price = request.get('price')
-#             quantity = request.get('quantity')
+    if request.method == 'PUT':
+        pk = request.data.get('id', '')
+        try:
+            name = request.get('name')
+            currency = request.get('currency')
+            price = request.get('price')
+            quantity = request.get('quantity')
             
-#             product_instance, changes = product_instance.update(name, currency, price, quantity)
+            product_instance, changes = product_instance.update(name, currency, price, quantity)
 
-#             return Response(f"Product updated successfully with changes: {changes}")
+            return Response(f"Product updated successfully with changes: {changes}")
                 
-#         except Exception:
-#             return Response(f"Product with id {pk} does not exist", status=404)
-
-
+        except Exception:
+            return Response(f"Product with id {pk} does not exist", status=404)
+    products = Product.objects.all()
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+            
 @api_view(['POST']) # request type
 def CreateProductView(request):
     try:
