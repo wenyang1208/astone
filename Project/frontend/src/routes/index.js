@@ -10,6 +10,7 @@ const Men = React.lazy(() => import("../pages/men"));
 const Sell = React.lazy(() => import("../pages/sell"));
 const Unisex = React.lazy(() => import("../pages/unisex"));
 const Support = React.lazy(() => import("../pages/support"));
+const Login = React.lazy(() => import("../pages/login"));
 
 const routes = [
     { path: PathConstants.HOME, element: <Home /> },
@@ -22,7 +23,8 @@ const routes = [
     { path: PathConstants.UNISEX, element: <Unisex /> },
     { path: PathConstants.SUPPORT, element: <Support /> },
     { path: PathConstants.SELL, element: <Sell /> },
-
+    { path: PathConstants.LOGIN, element: <Login /> },
+    
 ]
 
 export default routes
