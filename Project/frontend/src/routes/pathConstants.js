@@ -9,7 +9,8 @@ const PathConstants = {
     UNISEX: "unisex",
     SUPPORT: "support",
     SELL: "sell",
-    LOGIN: "login"
+    LOGIN: "login",
+    SIGNUP: "signup"
 
 }
 

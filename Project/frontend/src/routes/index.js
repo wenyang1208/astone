@@ -11,6 +11,7 @@ const Sell = React.lazy(() => import("../pages/sell"));
 const Unisex = React.lazy(() => import("../pages/unisex"));
 const Support = React.lazy(() => import("../pages/support"));
 const Login = React.lazy(() => import("../pages/login"));
+const SignUp = React.lazy(() => import("../pages/signup"));
 
 const routes = [
     { path: PathConstants.HOME, element: <Home /> },
@@ -24,6 +25,7 @@ const routes = [
     { path: PathConstants.SUPPORT, element: <Support /> },
     { path: PathConstants.SELL, element: <Sell /> },
     { path: PathConstants.LOGIN, element: <Login /> },
+    { path: PathConstants.SIGNUP, element: <SignUp /> }
     
 ]
 
