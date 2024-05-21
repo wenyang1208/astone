@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { ProductService } from '../../services/ProductService';
-import "../../components/productstyle.css";
+import {
+  AppBar,
+  Button,
+  Container,
+  Grid,
+  IconButton,
+  Paper,
+  Select,
+  Toolbar,
+  Typography,
+  MenuItem,
+  Chip
+} from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MyAppBar from '../../components/appBar';
 
 
 // harcoded 
@@ -11,7 +25,6 @@ const Aston = ({ className, divClassName }) => {
     </div>
   );
 };
-
 
 function ProductView() {
   const [details, setDetails] = useState([]);
@@ -30,98 +43,147 @@ function ProductView() {
       });
   }, []);
 
+  const product = {
+    name: 'Stylish Jacket',
+    description: 'A stylish and comfortable jacket perfect for the winter season.',
+    price: '$99.99',
+    imageUrl: 'https://example.com/jacket.jpg', // Replace with actual image URL
+    brand: 'FashionBrand',
+    sizes: [
+      { name: 'small', code: 'S' },
+      { name: 'medium', code: 'M' },
+      { name: 'large', code: 'L' },
+      { name: 'extra large', code: 'XL' },
+    ],
+    colors: [
+      { name: 'Red', hex: '#FF0000' },
+      { name: 'Green', hex: '#008000' },
+      { name: 'Blue', hex: '#0000FF' },
+      { name: 'Yellow', hex: '#FFFF00' },
+      { name: 'Orange', hex: '#FFA500' },
+    ],
+    tags: ['winter', 'jacket', 'stylish'],
+    brand: 'FashionBrand',
+    dateAdded: '2023-05-20',
+  };
+
+  const [quantity, setQuantity] = useState(1);
+  const [size, setSize] = useState('');
+  const [color, setColor] = useState('');
+
+  const handleQuantityChange = (event) => {
+    setQuantity(event.target.value);
+  };
+
+  const handleSizeChange = (value) => {
+    setSize(value);
+  };
+
+  const handleColorChange = (value) => {
+    setColor(value);
+  };
+
   // hardcoded
   return (
-    <div className="product">
-      <div className="div">
-        <div className="top-bar">
-          <div className="logo">
-            <Aston className="aston-instance" divClassName="design-component-instance-node" />
-          </div>
-          <div className="navbar">
-            <div className="text-wrapper-2">MEN</div>
-            <div className="text-wrapper-3">WOMEN</div>
-            <div className="text-wrapper-4">UNISEX</div>
-            <div className="text-wrapper-5">SUPPORT</div>
-            <div className="text-wrapper-6">SELL</div>
-            <img className="person" alt="Person" src="/img/person-fill0-wght400-grad0-opsz24-1.svg" />
-            <img
-              className="shopping-cart"
-              alt="Shopping cart"
-              src="/img/shopping-cart-fill0-wght400-grad0-opsz24-1.svg"
-            />
-            <div className="ellipse" />
-            <div className="ellipse-2" />
-            <div className="ellipse-3" />
-            <div className="ellipse-4" />
-            <div className="ellipse-5" />
-            <div className="ellipse-6" />
-          </div>
-        </div>
-        <img className="element" alt="Element" src="/img/4238500600-2-6-8-1.png" />
-        <p className="men-clothing-shirts">
-          <span className="span">Men &gt; Clothing &gt; </span>
-          <span className="text-wrapper-7">Shirts</span>
-        </p>
-        <img className="img" alt="Element" src="/img/4238500600-2-1-8.png" />
-        <img className="element-2" alt="Element" src="/img/4238500600-2-2-8.png" />
-        <img className="element-3" alt="Element" src="/img/4238500600-2-3-8.png" />
-        <img className="element-4" alt="Element" src="/img/4238500600-2-4-8.png" />
-        <img className="element-5" alt="Element" src="/img/4238500600-2-8-8.png" />
-        <p className="p">Regular Fit Crew Neck Red T-Shirt</p>
-        <div className="text-wrapper-8">TeeThreads</div>
-        <div className="text-wrapper-9">Size</div>
-        <div className="text-wrapper-10">339 Reviews</div>
-        <div className="text-wrapper-11">4.8</div>
-        <div className="text-wrapper-12">39.90MYR</div>
-        <div className="text-wrapper-13">-32%</div>
-        <img className="grade" alt="Grade" src="/img/grade-fill1-wght400-grad0-opsz24-1.svg" />
-        <img className="verified" alt="Verified" src="/img/verified-fill1-wght400-grad0-opsz24-1.svg" />
-        <div className="text-wrapper-14">59.90MYR</div>
-        <img className="vector" alt="Vector" src="/img/vector-1.svg" />
-        <div className="overlap-group">
-          <img className="XS" alt="Xs" src="/img/xs.png" />
-        </div>
-        <div className="overlap">
-          <div className="ellipse-7" />
-          <div className="text-wrapper-15">S</div>
-        </div>
-        <div className="div-wrapper">
-          <div className="text-wrapper-16">M</div>
-        </div>
-        <div className="overlap-2">
-          <div className="text-wrapper-17">L</div>
-        </div>
-        <div className="overlap-3">
-          <div className="text-wrapper-18">XL</div>
-        </div>
-        <div className="overlap-4">
-          <img
-            className="shopping-cart-fill"
-            alt="Shopping cart"
-            src="/img/shopping-cart-fill0-wght400-grad0-opsz24-2.svg"
-          />
-          <div className="text-wrapper-19">Add to Cart</div>
-        </div>
-        <div className="text-wrapper-20">3.9MYR</div>
-        <img
-          className="local-shipping"
-          alt="Local shipping"
-          src="/img/local-shipping-fill1-wght400-grad0-opsz24-1.svg"
-        />
-        <div className="overlap-5">
-          <div className="overlap-6">
-            <img className="vector-2" alt="Vector" src="/img/vector-2.png" />
-            <img className="mask-group" alt="Mask group" src="/img/mask-group-3.png" />
-            <div className="text-wrapper-21">Details</div>
-          </div>
-          <div className="text-wrapper-22">Reviews</div>
-        </div>
-        <p className="text-wrapper-23">
-          Made from 100% cotton, this shirt is a must-have basic in every man’s wardrobe.
-        </p>
-      </div>
-    </div>
+    <div>
+      <MyAppBar />
+      <Container sx={{ marginTop: '20px' }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Paper>
+              <img
+                src={product?.imageUrl} // Use optional chaining to prevent errors if product is null
+                alt={product?.name}
+                style={{ width: '100%', height: 'auto' }}
+              />
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography variant="h4" gutterBottom>
+              {product?.name}
+            </Typography>
+            <Typography variant="h5" color="textSecondary" gutterBottom>
+              {product?.price}
+            </Typography>
+            <Typography gutterBottom>
+              {product?.description}
+            </Typography>
+            <Typography gutterBottom>
+              Brand: {product?.brand}
+            </Typography>
+            <Typography gutterBottom>
+              Date Added: {product?.dateAdded}
+            </Typography>
+            <Typography gutterBottom>
+              {product?.tags.map((tag, index) => (
+                <Chip variant="outlined" key={index} label={tag} style={{ margin: '5px' }}/>
+              ))}
+            </Typography>
+            <div>
+              <Typography gutterBottom>
+                Size:
+              </Typography>
+              {product?.sizes.map((sizeOption) => (
+                <Chip
+                  key={sizeOption.code}
+                  label={sizeOption.code}
+                  onClick={() => handleSizeChange(sizeOption.code)}
+                  color={size === sizeOption.code ? 'primary' : 'default'}
+                  style={{ margin: '5px' }}
+                />
+              ))}
+            </div>
+            <br />
+            <div>
+              <Typography gutterBottom>
+                Color:
+              </Typography>
+              {product?.colors.map((colorOption, index) => (
+                <Chip
+                  key={index}
+                  label={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <span style={{ marginRight: 8 }}>{colorOption.name}</span>
+                      <div
+                        style={{
+                          backgroundColor: colorOption.hex,
+                          width: '16px',
+                          height: '16px',
+                          borderRadius: '50%',
+                        }}
+                      />
+                    </div>
+                  }
+                  clickable
+                  style={{ margin: '5px' }}
+                  onClick={() => setColor(colorOption.hex)}
+                  variant={color === colorOption.hex ? 'default' : 'outlined'}
+                />
+              ))}
+            </div>
+            <br />
+            <div>
+              <Typography gutterBottom>
+                Order Quantity:
+              </Typography>
+              <Select value={quantity} onChange={handleQuantityChange}>
+                {[...Array(10).keys()].map((value) => (
+                  <MenuItem key={value} value={value + 1}>
+                    {value + 1}
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
+            <br />
+            <div>
+              <Button startIcon={<ShoppingCartIcon />} variant='contained'>
+                Add to Cart
+              </Button>
+            </div>
+          </Grid>
+        </Grid>
+      </Container>
+  </div>
 
     // <div>
     //   <header>Astone</header>
