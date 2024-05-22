@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
-import Typography, { IconButton, Input, Toolbar } from '@mui/material';
+import { IconButton, Toolbar, Autocomplete} from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import backgroundImage from '../assets/mask-group-2.png';
 
@@ -50,7 +50,7 @@ const Search = styled('div')(({ theme }) => ({
     },
   }));
 
-  // search input style
+  // input style
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
@@ -75,34 +75,98 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     justifyContent: 'center',
   }));
 
+const StyledSearchIcon = styled(SearchIcon)(({ theme }) => ({
+    color: 'purple'// Change the color here
+}));
+
+// mock data
+// hardcode to display, need to be changed
+const suggestions = [
+    'Men',
+    'Women',
+    'Unisex' ,
+    'Support',
+    'Sell',
+    'About',
+  ];
+
+
 
 // simple search bar
 // need to change in the further to make it more dyamic
 function SearchBar () {
 
+    const [inputValue, setInput] = useState("");
+    
+    // need to fectch data from database
+    // current is mock data from api
+    const fetchData = (value) => {
+        fetch("https://jsonplaceholder.typicode.com/users")
+            .then((response) => response.json())
+            .then((json) => {
+            const results = json.filter((user) =>{
+                // check mock user exist
+                return (
+                    value &&
+                    user && 
+                    user.name && 
+                    user.name.toLowerCase().includes(value)
+                );
+            });
+            console.log(results);
+            });
+    }
+
+    // Handle input change
+     const handleInputChange = (value) => {
+        setInput(value);
+        // fetchData(value);
+    }
+
+    // need to change
+    let dataSearch = suggestions.filter((item) => {
+        return item.toLowerCase().includes(inputValue.toLowerCase());
+    });
+
     return (
 
         <Toolbar>
+             {/* search bar*/}
             <Search>
+                {/* Decorate search icon */}
+                <SearchIconWrapper>
+                    <StyledSearchIcon /> 
+                </SearchIconWrapper>
 
-            <SearchIconWrapper>
-                <SearchIcon /> 
-                <IconButton/>
-            </SearchIconWrapper>
+                {/* <Autocomplete
+                    freeSolo
+                    options={filteredSuggestions}
+                    renderInput={(params) => (
+                        <StyledInputBase
+                            {...params}
+                            placeholder="Search by name.…"
+                            inputProps = {{ ...params.inputProps, 'aria-label': 'search' }}
+                            value = {inputValue}
+                            onChange = {(e) => handleInputChange(e.target.value)}
+                        />
+                    )}
+                /> */}
 
-            <StyledInputBase
-              placeholder="Search by name.…"
-              // arial-label: accessible label for screen readers
-              inputProps={{ 'arial-label': 'search'}}
-               
-            />
+                {/*Decorate search input*/}
+                <StyledInputBase
+                    placeholder="Search by name.…"
+                    // aria-label: accessible label for screen readers
+                    inputProps={{ 'aria-label': 'search'}}
+                    /* obtain input value */
+                    value = {inputValue}
+                    onChange = {(e) => handleInputChange(e.target.value)}
+                />
 
-        </Search>
+            </Search>
         </Toolbar>
 
         );
-        
-    }
+    };
 
     export default SearchBar;
 
