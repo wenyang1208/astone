@@ -43,25 +43,25 @@ from astoneapp.serializers.product_serializer import * # import serializer
 #                 return Response('Error creating product', status=404)
 
 # Added by Wen Yang, this is the class of the ProductView for urls used, can connect to the admin
-# class ProductView(APIView):
+class ProductView(APIView):
     
-#     def get(self, request):
-#         output = [{"name": output.name,
-#                     "description": output.description,
-#                     "category": output.category,
-#                     "colors":output.colors,
-#                     "sizes": output.sizes,
-#                     "currency": output.currency,
-#                     "price": output.price,
-#                     "stock":output.stock}
-#                     for output in Product.objects.all()]
-#         return Response(output)  
+    def get(self, request):
+        output = [{"name": output.name,
+                    "description": output.description,
+                    "category": output.category,
+                    "colors":output.colors,
+                    "sizes": output.sizes,
+                    "currency": output.currency,
+                    "price": output.price,
+                    "stock":output.stock}
+                    for output in Product.objects.all()]
+        return Response(output)  
        
-#     def post(self, request):
-#             serializer = ProductSerializer(data=request.data)
-#             if serializer.is_valid(raise_exception=True):
-#                     serializer.save()
-#                     return Response(serializer.data)
+    def post(self, request):
+            serializer = ProductSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                    serializer.save()
+                    return Response(serializer.data)
 
 @api_view(['GET']) # request type    
 def GetProductView(request):
