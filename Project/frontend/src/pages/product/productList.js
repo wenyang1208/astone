@@ -66,6 +66,10 @@ function ProductList() {
         }
     };
 
+    const handleProductClick = (productId) => {
+        navigate(`/products/${productId}`);
+    };
+
     return (
       <div style={{backgroundColor: '#eedafe'}}>
       <div sx= {{position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100}}>
@@ -100,38 +104,42 @@ function ProductList() {
       </div>
       
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '28px', paddingLeft: '30px'}}>
-        {products.map((output, id) => (
-            <Box 
-                key={output.id} 
-                sx={{ 
-                    padding: '30px', 
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 7px #babcbb', 
-                    minWidth: '280px',
-                    maxWidth: '350px',
-                    backgroundColor: '#f9f9f9',
-                    marginBottom: '0px',
-                    position: 'relative',
-                    '&:hover': { backgroundColor: '#cbcccb' }, 
-                }}
-                onMouseEnter={() => handleMouseEnter(output.id)}
-                onMouseLeave={handleMouseLeave}
-            >
-                <Typography variant="h6" sx={{fontSize: '14px'}}>
-                    {`Product ID: ast${String(output.id).padStart(9, '0')}`}<br />
-                    {`Name: ${output.name}`}<br />
-                    {`Price: ${output.currency} ${output.price}`}<br />
-                    {`Stock: ${output.stock}`}
-                </Typography>
-                        {hoveredProductId === output.id && (
-                            <DeleteIcon
-                                style={{ position: 'absolute', top: '12px', right: '15px', cursor: 'pointer' }}
-                                onClick={() => handleOpenDialog(output.id)}
-                            />
-                        )}
-                    </Box>
-                ))}
-            </div>
+            {products.map((output, id) => (
+                <Box 
+                    key={output.id} 
+                    sx={{ 
+                        padding: '30px', 
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 7px #babcbb', 
+                        minWidth: '280px',
+                        maxWidth: '350px',
+                        backgroundColor: '#f9f9f9',
+                        marginBottom: '0px',
+                        position: 'relative',
+                        '&:hover': { backgroundColor: '#cbcccb' }, 
+                    }}
+                    onMouseEnter={() => handleMouseEnter(output.id)}
+                    onMouseLeave={handleMouseLeave}
+                    onClick={() => handleProductClick(output.id)}
+                >
+                    <Typography variant="h6" sx={{fontSize: '14px'}}>
+                        {`Product ID: ast${String(output.id).padStart(9, '0')}`}<br />
+                        {`Name: ${output.name}`}<br />
+                        {`Price: ${output.currency} ${output.price}`}<br />
+                        {`Stock: ${output.stock}`}
+                    </Typography>
+                    {hoveredProductId === output.id && (
+                        <DeleteIcon
+                            style={{ position: 'absolute', top: '12px', right: '15px', cursor: 'pointer' }}
+                            onClick={(e) => {
+                                e.stopPropagation(); // Prevent the onClick of the Box from triggering
+                                handleOpenDialog(output.id);
+                            }}
+                        />
+                    )}
+                </Box>
+            ))}
+        </div>
 
             <Dialog
                 open={openDialog}

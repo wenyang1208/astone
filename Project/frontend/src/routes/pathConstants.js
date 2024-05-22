@@ -2,6 +2,7 @@ const PathConstants = {
     HOME: "/",
     // other pages's paths...
     PRODUCTS:"products",
+    SELLERPRODUCTVIEW: "products/:id",
     PRODUCTSLIST: "productlist",
     CREATE_PRODUCT: "product/create",
     ABOUT: "about",

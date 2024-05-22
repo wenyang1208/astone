@@ -21,6 +21,16 @@ export class ProductService {
         }
     }
 
+    async getProductById(id) {
+        try {
+            const res = await axios.get(`http://localhost:8000/products/${id}/`);
+            return res;
+        } catch (error) {
+            console.error(`Error getting product ${id}:`, error);
+            return null;
+        }
+    }
+
     async createProduct (data) {
     try {
         const name = data.name

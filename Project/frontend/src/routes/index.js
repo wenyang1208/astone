@@ -1,9 +1,9 @@
-import React from "react"
-import PathConstants from "./pathConstants"
+import React from "react";
+import PathConstants from "./pathConstants";
 
 const Home = React.lazy(() => import("../pages/home"));
 const About = React.lazy(() => import("../pages/about"));
-const ProductView = React.lazy(() => import("../pages/product/productView"));
+const SellerProductView = React.lazy(() => import("../pages/product/sellerProductView"));
 const ProductList = React.lazy(() => import("../pages/product/productList"));
 const CreateProduct = React.lazy(() => import("../pages/product/createProduct"));
 const Women = React.lazy(() => import("../pages/women"));
@@ -14,9 +14,8 @@ const Support = React.lazy(() => import("../pages/support"));
 
 const routes = [
     { path: PathConstants.HOME, element: <Home /> },
-    // other mappings ...
     { path: PathConstants.ABOUT, element: <About /> },
-    { path: PathConstants.PRODUCTS, element: <ProductView /> },
+    { path: `${PathConstants.PRODUCTS}/:id`, element: <SellerProductView /> },
     { path: PathConstants.PRODUCTSLIST, element: <ProductList /> },
     { path: PathConstants.CREATE_PRODUCT, element: <CreateProduct /> },
     { path: PathConstants.WOMEN, element: <Women /> },
@@ -24,7 +23,6 @@ const routes = [
     { path: PathConstants.UNISEX, element: <Unisex /> },
     { path: PathConstants.SUPPORT, element: <Support /> },
     { path: PathConstants.SELL, element: <Sell /> },
+];
 
-]
-
-export default routes
+export default routes;
