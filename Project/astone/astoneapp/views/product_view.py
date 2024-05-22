@@ -155,7 +155,7 @@ def DeleteProductView(request, pk):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['PUT', 'PATCH','GET'])
+@api_view(['PUT', 'PATCH', 'GET'])
 def UpdateProductView(request, pk):
     try:
         product = get_object_or_404(Product, pk=pk)
