@@ -132,31 +132,23 @@ def CreateProductView(request):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-# Get specific product
-@api_view(['GET'])
-def GetProductDetailView(request, pk):
-    try:
+class ProductDetailView(APIView):
+    
+    def get(self, request, pk):
         product = get_object_or_404(Product, pk=pk)
         serializer = ProductSerializer(product)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# Delete specific product
-@api_view(['DELETE','GET'])
-def DeleteProductView(request, pk):
-    try:
+       
+    def delete(self, request,pk):
         product = get_object_or_404(Product, pk=pk)
         product.delete()
-        return Response({'message': 'Product deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(status=status.HTTP_200_OK)
 
 
 # @api_view(['POST']) # request type
 # def UpdateProductView(request):
 #     # Create product
-    
+
     
     
 #     # Create product image

@@ -102,7 +102,7 @@ function ProductList() {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '28px', paddingLeft: '30px'}}>
         {products.map((output, id) => (
             <Box 
-                key={id} 
+                key={output.id} 
                 sx={{ 
                     padding: '30px', 
                     borderRadius: '8px',
@@ -114,7 +114,7 @@ function ProductList() {
                     position: 'relative',
                     '&:hover': { backgroundColor: '#cbcccb' }, 
                 }}
-                onMouseEnter={() => handleMouseEnter(id)}
+                onMouseEnter={() => handleMouseEnter(output.id)}
                 onMouseLeave={handleMouseLeave}
             >
                 <Typography variant="h6" sx={{fontSize: '14px'}}>
@@ -123,10 +123,10 @@ function ProductList() {
                     {`Price: ${output.currency} ${output.price}`}<br />
                     {`Stock: ${output.stock}`}
                 </Typography>
-                        {hoveredProductId === id && (
+                        {hoveredProductId === output.id && (
                             <DeleteIcon
                                 style={{ position: 'absolute', top: '12px', right: '15px', cursor: 'pointer' }}
-                                onClick={() => handleOpenDialog(id)}
+                                onClick={() => handleOpenDialog(output.id)}
                             />
                         )}
                     </Box>

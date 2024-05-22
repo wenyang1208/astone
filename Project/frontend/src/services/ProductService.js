@@ -3,7 +3,7 @@ import axios from 'axios';
 export class ProductService {
     async getProducts() {
         try {
-            const res = await axios.get('http://localhost:8000/products/list/')
+            const res = await axios.get('http://localhost:8000/products/')
             return res;
         } catch (error) {
             console.error('Error getting products:', error);
@@ -23,7 +23,6 @@ export class ProductService {
 
     async createProduct (data) {
     try {
-        console.log('Original data:', data);
         const name = data.name
         const description = data.description
         const categories = data.categories
@@ -56,7 +55,8 @@ export class ProductService {
 
     async deleteProduct(productId) {
         try {
-            const res = await axios.delete(`http://localhost:8000/products/${productId}/delete`);
+            const res = await axios.delete(`http://localhost:8000/products/${productId}/`);
+            
             return res;
         } catch (error) {
             console.error('Error deleting product:', error);
