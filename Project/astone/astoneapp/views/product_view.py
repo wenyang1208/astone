@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 import json
 from django.db import transaction
 from rest_framework.decorators import api_view
@@ -43,20 +43,7 @@ from astoneapp.serializers.product_serializer import * # import serializer
 #                 return Response('Error creating product', status=404)
 
 # Added by Wen Yang, this is the class of the ProductView for urls used, can connect to the admin
-class ProductView(APIView): 
-    def get(self, request):
-                output = [{"name": output.name,
-                           "description": output.description,
-                           "category": output.category,
-                           "colors":output.colors,
-                           "sizes": output.sizes,
-                           "currency": output.currency,
-                           "price": output.price,
-                           "stock":output.stock}
-                           for output in Product.objects.all()]
-                return Response(output)
-    
-    
+class ProductView(APIView):     
     def post(self, request):
             serializer = ProductSerializer(data=request.data)
             if serializer.is_valid(raise_exception=True):
@@ -129,6 +116,26 @@ def CreateProductView(request):
             serializer = ProductCreateResponseSerializer({'message': 'Product created successfully'})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
     
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+# Get specific product
+@api_view(['GET'])
+def GetProductDetailView(request, pk):
+    try:
+        product = get_object_or_404(Product, pk=pk)
+        serializer = ProductSerializer(product)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# Delete specific product
+@api_view(['DELETE','GET'])
+def DeleteProductView(request, pk):
+    try:
+        product = get_object_or_404(Product, pk=pk)
+        product.delete()
+        return Response({'message': 'Product deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
