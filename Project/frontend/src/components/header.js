@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 
 function Header() {
-  const title = 'Astone'; // Hardcoded title
+  const title = 'Astoné'; // Hardcoded title
 
   // Hardcoded sections
   const sections = [
