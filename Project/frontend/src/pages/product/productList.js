@@ -10,7 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import Rating from '@mui/lab/Rating';
+import { Rating } from '@mui/material';
 
 function ProductList() {
     const [products, setProducts] = useState([]);
