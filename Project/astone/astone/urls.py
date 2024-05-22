@@ -25,5 +25,5 @@ urlpatterns = [
     path('products/create/', CreateProductView),
     path('products/', GetProductView),
     # Added by Wen Yang, this Python Django can get and post
-    path('products/view/',ProductView.as_view(),name="Product")
+    path('products/list/',ProductView.as_view(),name="Product")
 ]

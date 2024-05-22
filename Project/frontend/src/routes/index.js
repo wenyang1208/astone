@@ -4,6 +4,7 @@ import PathConstants from "./pathConstants"
 const Home = React.lazy(() => import("../pages/home"));
 const About = React.lazy(() => import("../pages/about"));
 const ProductView = React.lazy(() => import("../pages/product/productView"));
+const ProductList = React.lazy(() => import("../pages/product/productList"));
 const CreateProduct = React.lazy(() => import("../pages/product/createProduct"));
 const Women = React.lazy(() => import("../pages/women"));
 const Men = React.lazy(() => import("../pages/men"));
@@ -16,6 +17,7 @@ const routes = [
     // other mappings ...
     { path: PathConstants.ABOUT, element: <About /> },
     { path: PathConstants.PRODUCTS, element: <ProductView /> },
+    { path: PathConstants.PRODUCTSLIST, element: <ProductList /> },
     { path: PathConstants.CREATE_PRODUCT, element: <CreateProduct /> },
     { path: PathConstants.WOMEN, element: <Women /> },
     { path: PathConstants.MEN, element: <Men /> },

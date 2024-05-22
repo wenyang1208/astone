@@ -29,7 +29,7 @@ function CreateProduct() {
         const response = await productService.createProduct(values);
         if (response) {
           alert('Product created successfully !');
-          navigate('/products'); // Redirect to ProductView
+          navigate('/productlist'); // Redirect to ProductView
         }
       } catch (error) {
         console.error('Error creating product:', error);

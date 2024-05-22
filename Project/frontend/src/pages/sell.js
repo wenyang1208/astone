@@ -12,7 +12,7 @@ const Sell = () => {
       <Typography variant="h1" sx={{ color: '#333', fontSize: '2rem', marginBottom: '20px' }}>
         Sell
       </Typography>
-      <Link to="/products" style={{ textDecoration: 'none' }}>
+      <Link to="/productlist" style={{ textDecoration: 'none' }}>
         <Button variant="contained" sx={{ backgroundColor: '#A020F0', '&:hover': { backgroundColor: '#7D0DC3' }, color: 'white' }}>
           Log in
         </Button>
