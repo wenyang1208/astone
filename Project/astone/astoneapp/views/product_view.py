@@ -155,23 +155,12 @@ def UpdateProductView(request, pk):
             serializer = ProductSerializer(product, data=request.data)
         elif request.method == 'PATCH':
             serializer = ProductSerializer(product, data=request.data, partial=True)
-        
+        else:
+            return Response({'error': 'Method not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-# @api_view(['POST']) # request type
-# def UpdateProductView(request):
-#     # Create product
-
-    
-    
-#     # Create product image
-#     body = request.body.decode('utf-8')
-#     data = json.loads(body)
-
-# @api_view(['POST'])
-# def SearchProductView(request):

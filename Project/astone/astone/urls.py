@@ -25,6 +25,7 @@ urlpatterns = [
     path('products/create/', CreateProductView),
     path('products/', GetProductView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
+    path('products/<int:pk>/edit', UpdateProductView),
     # Added by Wen Yang, this Python Django can get and post
     path('products/list/',ProductView.as_view(),name="Product")
 ]

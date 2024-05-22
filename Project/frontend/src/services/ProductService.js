@@ -31,6 +31,10 @@ export class ProductService {
         }
     }
 
+    async editProduct(id, productData) {
+        return axios.put(`http://localhost:8000/products/${id}/edit`, productData);
+    }
+
     async createProduct (data) {
     try {
         const name = data.name
