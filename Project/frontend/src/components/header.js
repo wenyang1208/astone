@@ -25,7 +25,7 @@ function Header() {
       <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <IconButton>
           <ShoppingCartIcon />
-        </IconButton>        
+        </IconButton>
         <Typography
           component={Link}
           to="/"
@@ -40,8 +40,13 @@ function Header() {
         <IconButton>
           <SearchIcon />
         </IconButton>
-        <Button variant="outlined" size="small">
-          Sign up
+        <Button
+          component={Link}
+          to="/login"
+          variant="outlined"
+          size="small"
+        >
+          Log In
         </Button>
       </Toolbar>
       <Toolbar
