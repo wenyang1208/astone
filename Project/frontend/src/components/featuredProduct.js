@@ -11,31 +11,23 @@ function FeaturedProduct(props) {
   const { product } = props;
   console.log(props);
   return (
-    <Grid item xs={12} md={6}>
+    <Grid item xs={12} md={3}>
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography component="h2" variant="h5">
-              {product.title}
-            </Typography>
-            <Typography variant="subtitle1" color="text.secondary">
-              {product.date}
-            </Typography>
-            <Typography variant="subtitle1" paragraph>
-              {product.description}
-            </Typography>
-            <Typography variant="subtitle1" color="primary">
-              Continue reading...
-            </Typography>
-          </CardContent>
           <CardMedia
             component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            sx={{ height: 350, margin: 'auto', alignItems: 'center', justifyContent: 'center', display: { xs: 'none', sm: 'block' }}}
             image={product.image}
             alt={product.imageLabel}
           />
         </Card>
       </CardActionArea>
+      <Typography component="h1" variant="h5" sx={{ marginTop: 1, textAlign: 'center', fontWeight: 'bold' }}>
+        {product.price}
+      </Typography>
+      <Typography component="h1" variant="h5" sx={{ marginTop: 'auto', textAlign: 'center'}}>
+        {product.name}
+      </Typography>
     </Grid>
   );
 }
@@ -46,8 +38,10 @@ FeaturedProduct.propTypes = {
     description: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     imageLabel: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+
 
 export default FeaturedProduct;
