@@ -53,4 +53,14 @@ export class ProductService {
             return null;
         }
     }
+
+    async deleteProduct(productId) {
+        try {
+            const res = await axios.delete(`http://localhost:8000/products/${productId}/delete`);
+            return res;
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            return null;
+        }
+    }
 }
