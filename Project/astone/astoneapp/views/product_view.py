@@ -72,8 +72,8 @@ def GetProductView(request):
             currency = request.get('currency')
             price = request.get('price')
             quantity = request.get('quantity')
-            
-            product_instance, changes = product_instance.update(name, currency, price, quantity)
+            rating = request.get('rating')
+            product_instance, changes = product_instance.update(name, currency, price, quantity, rating)
 
             return Response(f"Product updated successfully with changes: {changes}")
                 

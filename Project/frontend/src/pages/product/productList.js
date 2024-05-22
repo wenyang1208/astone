@@ -127,7 +127,8 @@ function ProductList() {
                         {`Product ID: ast${String(output.id).padStart(8, '0')}`}<br />
                         {`Name: ${output.name}`}<br />
                         {`Price: ${output.currency} ${output.price}`}<br />
-                        {`Stock: ${output.stock}`}
+                        {`Stock: ${output.stock}`}<br />
+                        {/* {`Rating: ${output.rating}`} */}
                     </Typography>
                     <Rating 
                             value={output.rating || 0} 
