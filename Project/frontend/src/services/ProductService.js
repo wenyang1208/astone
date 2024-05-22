@@ -11,15 +11,15 @@ export class ProductService {
         }
     } 
 
-    async updateProduct(data) {
-        try {
-        const res = await axios.put('http://localhost:8000/products/list/',data);
-        return res;
-        } catch (error) {
-            console.error('Error updating product:', error);
-            return null;
-        }
-    }
+    // async updateProduct(data) {
+    //     try {
+    //     const res = await axios.put('http://localhost:8000/products/list/',data);
+    //     return res;
+    //     } catch (error) {
+    //         console.error('Error updating product:', error);
+    //         return null;
+    //     }
+    // }
 
     async getProductById(id) {
         try {
