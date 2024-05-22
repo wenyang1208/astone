@@ -9,6 +9,7 @@ class Product(models.Model):
     currency = models.CharField(max_length = 30, null=False, default='MYR', help_text="currency of the product's price")
     price = models.DecimalField(max_digits=10, null=False, default=0.00, decimal_places=2, help_text="price of the product")
     stock = models.PositiveBigIntegerField(null=False, default=0, help_text="available stock of the product")
+    rating = models.PositiveBigIntegerField(null=False, default=0, help_text="available rating of the product")
 
     def __str__(self):
         return self.name

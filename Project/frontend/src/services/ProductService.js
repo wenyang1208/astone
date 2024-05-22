@@ -45,6 +45,7 @@ export class ProductService {
         const currency = data.currency
         const price = data.price
         const stock = data.stock
+        const rating = data.rating
 
         // Default data structure
         const productData = {
@@ -55,7 +56,8 @@ export class ProductService {
             sizes: sizes,
             currency: currency,
             price: price,
-            stock: stock
+            stock: stock,
+            rating: rating
         };
 
         console.log('Final data being sent:', productData);

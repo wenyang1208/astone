@@ -72,8 +72,8 @@ def GetProductView(request):
             currency = request.get('currency')
             price = request.get('price')
             quantity = request.get('quantity')
-            
-            product_instance, changes = product_instance.update(name, currency, price, quantity)
+            rating = request.get('rating')
+            product_instance, changes = product_instance.update(name, currency, price, quantity, rating)
 
             return Response(f"Product updated successfully with changes: {changes}")
                 
@@ -95,6 +95,7 @@ def CreateProductView(request):
             currency = request.data.get('currency')
             price = request.data.get('price')
             stock = request.data.get('stock')
+            rating = request.data.get('rating')
             
             # key = request.data.get('public_id')
             # url = request.data.get('secure_url')
@@ -116,7 +117,8 @@ def CreateProductView(request):
                 sizes=sizes,
                 currency=currency,
                 price=price,
-                stock=stock
+                stock=stock,
+                rating=rating
             )    
             
             # Create product image

@@ -10,6 +10,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Rating from '@mui/lab/Rating';
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -58,7 +59,7 @@ function ProductList() {
                 const productService = new ProductService();
                 await productService.deleteProduct(selectedProductId);
                 setProducts(products.filter(product => product.id !== selectedProductId));
-                handleCloseDialog();
+                handleCloseDialog(); 
                 
             } catch (error) {
                 console.error('Error deleting product:', error);
@@ -71,25 +72,25 @@ function ProductList() {
     };
 
     return (
-      <div style={{backgroundColor: '#eedafe'}}>
+      <div style={{backgroundColor: '#eedafe', minHeight: '100vh'}}>
       <div sx= {{position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100}}>
-        <header style={{fontSize: '30px', paddingLeft: '20px'}}>Shop name</header>
+        <header style={{fontSize: '30px', padding: '20px'}}>Shop name</header>
         <hr/>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', width: '98%'}}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', width: '95%'}}>
           <p style={{ paddingLeft: '30px', fontSize: '32px', fontWeight: 'bold'}}>Products</p>
           <Box>
             <Link to="/product/create" style={{ textDecoration: 'none' }}>
               <Button 
                 variant="contained"
                 sx={{ 
-                  backgroundColor: '#A020F0', 
+                  backgroundColor: '#ba68ff', 
                   '&:hover': { backgroundColor: '#7D0DC3' }, 
                   color: 'white', 
                   borderRadius: '50%', 
-                  height: '40px', 
-                  width: '41px', 
+                  height: '60px', 
+                  width: '60px', 
                   minWidth: '40px', 
-                  fontSize: '25px',
+                  fontSize: '45px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -123,11 +124,31 @@ function ProductList() {
                     onClick={() => handleProductClick(output.id)}
                 >
                     <Typography variant="h6" sx={{fontSize: '14px'}}>
-                        {`Product ID: ast${String(output.id).padStart(9, '0')}`}<br />
+                        {`Product ID: ast${String(output.id).padStart(8, '0')}`}<br />
                         {`Name: ${output.name}`}<br />
                         {`Price: ${output.currency} ${output.price}`}<br />
-                        {`Stock: ${output.stock}`}
+                        {`Stock: ${output.stock}`}<br />
+                        {/* {`Rating: ${output.rating}`} */}
                     </Typography>
+                    <Rating 
+                            value={output.rating || 0} 
+                            readOnly 
+                            sx={{
+                                position: 'absolute',
+                                bottom: '10px',
+                                right: '10px',
+                                color: 'gold',
+                                '& .MuiRating-iconFilled': {
+                                    color: 'gold',
+                                },
+                                '& .MuiRating-iconEmpty': {
+                                    color: 'lightgrey',
+                                },
+                                '& .MuiRating-iconHover': {
+                                    color: 'darkgoldenrod',
+                                }
+                            }}
+                        />
                     {hoveredProductId === output.id && (
                         <DeleteIcon
                             style={{ position: 'absolute', top: '12px', right: '15px', cursor: 'pointer' }}
@@ -148,7 +169,7 @@ function ProductList() {
                 <DialogTitle>Confirm Deletion</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Are you sure you want to remove this product?
+                        Are you sure you want to remove this product from your shop?
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
