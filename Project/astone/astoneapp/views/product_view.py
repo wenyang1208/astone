@@ -43,25 +43,25 @@ from astoneapp.serializers.product_serializer import * # import serializer
 #                 return Response('Error creating product', status=404)
 
 # Added by Wen Yang, this is the class of the ProductView for urls used, can connect to the admin
-class ProductView(APIView):
+# class ProductView(APIView):
     
-    def get(self, request):
-        output = [{"name": output.name,
-                    "description": output.description,
-                    "category": output.category,
-                    "colors":output.colors,
-                    "sizes": output.sizes,
-                    "currency": output.currency,
-                    "price": output.price,
-                    "stock":output.stock}
-                    for output in Product.objects.all()]
-        return Response(output)  
+#     def get(self, request):
+#         output = [{"name": output.name,
+#                     "description": output.description,
+#                     "category": output.category,
+#                     "colors":output.colors,
+#                     "sizes": output.sizes,
+#                     "currency": output.currency,
+#                     "price": output.price,
+#                     "stock":output.stock}
+#                     for output in Product.objects.all()]
+#         return Response(output)  
        
-    def post(self, request):
-            serializer = ProductSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                    serializer.save()
-                    return Response(serializer.data)
+#     def post(self, request):
+#             serializer = ProductSerializer(data=request.data)
+#             if serializer.is_valid(raise_exception=True):
+#                     serializer.save()
+#                     return Response(serializer.data)
 
 @api_view(['GET']) # request type    
 def GetProductView(request):
@@ -96,15 +96,17 @@ def CreateProductView(request):
             price = request.data.get('price')
             stock = request.data.get('stock')
             
-            key = request.data.get('public_id')
-            url = request.data.get('secure_url')
-            width = request.data.get('width')
-            height = request.data.get('height')
-            format = request.data.get('format')
-            file_name = request.data.get('original_filename')
+            # key = request.data.get('public_id')
+            # url = request.data.get('secure_url')
+            # width = request.data.get('width')
+            # height = request.data.get('height')
+            # format = request.data.get('format')
+            # file_name = request.data.get('original_filename')
 
             # Validate request
-            if not all([name, description, currency, price, key, url, width, height, format, file_name]):
+            # if not all([name, description, currency, price, key, url, width, height, format, file_name]):
+            #     return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+            if not all([name, description, currency, price]):
                 return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
             product = Product.objects.create(
@@ -118,13 +120,13 @@ def CreateProductView(request):
             )    
             
             # Create product image
-            product.add_image(
-                key=key, 
-                url=url, 
-                name=file_name, 
-                width=width, 
-                height=height, 
-                format=format)
+            # product.add_image(
+            #     key=key, 
+            #     url=url, 
+            #     name=file_name, 
+            #     width=width, 
+            #     height=height, 
+            #     format=format)
 
             serializer = ProductCreateResponseSerializer({'message': 'Product created successfully'})
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -152,6 +154,22 @@ def DeleteProductView(request, pk):
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+@api_view(['PUT', 'PATCH','GET'])
+def UpdateProductView(request, pk):
+    try:
+        product = get_object_or_404(Product, pk=pk)
+        if request.method == 'PUT':
+            serializer = ProductSerializer(product, data=request.data)
+        elif request.method == 'PATCH':
+            serializer = ProductSerializer(product, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # @api_view(['POST']) # request type
 # def UpdateProductView(request):

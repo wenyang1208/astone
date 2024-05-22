@@ -3,7 +3,7 @@ import axios from 'axios';
 export class ProductService {
     async getProducts() {
         try {
-            const res = await axios.get('http://localhost:8000/products/list/')
+            const res = await axios.get('http://localhost:8000/products/')
             return res;
         } catch (error) {
             console.error('Error getting products:', error);
@@ -13,7 +13,7 @@ export class ProductService {
 
     async updateProduct(data) {
         try {
-        const res = await axios.put(`http://localhost:8000/products/list/`, data);
+        const res = await axios.put('http://localhost:8000/products/list/',data);
         return res;
         } catch (error) {
             console.error('Error updating product:', error);
@@ -46,7 +46,7 @@ export class ProductService {
         };
 
         console.log('Final data being sent:', productData);
-        const res = await axios.post('http://localhost:8000/products/list/', productData);
+        const res = await axios.post('http://localhost:8000/products/create/', productData);
         return res;
         } catch (error) {
             console.error('Error creating product:', error);
