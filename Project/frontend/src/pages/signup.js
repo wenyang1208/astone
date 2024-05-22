@@ -149,6 +149,9 @@ const Signup = () => {
             >
               Next
             </Button>
+            <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 1 }}>
+              Already have an account? <Link to="/login" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
+            </Typography>
           </Box>
         );
       case 1:
