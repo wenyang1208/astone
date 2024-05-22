@@ -19,7 +19,7 @@ function MyAppBar() {
     <StyledAppBar position="static">
       <Toolbar>
         <Typography sx={{ flexGrow: 1 }} variant="h6">
-            Astone       
+          Astoné       
         </Typography>
         <Button color="inherit">Home</Button>
         <Button color="inherit">Shop</Button>
