@@ -23,7 +23,6 @@ export class ProductService {
 
     async createProduct (data) {
     try {
-        console.log('Original data:', data);
         const name = data.name
         const description = data.description
         const categories = data.categories
@@ -50,6 +49,17 @@ export class ProductService {
         return res;
         } catch (error) {
             console.error('Error creating product:', error);
+            return null;
+        }
+    }
+
+    async deleteProduct(productId) {
+        try {
+            const res = await axios.delete(`http://localhost:8000/products/${productId}/`);
+            
+            return res;
+        } catch (error) {
+            console.error('Error deleting product:', error);
             return null;
         }
     }
