@@ -95,6 +95,7 @@ def CreateProductView(request):
             currency = request.data.get('currency')
             price = request.data.get('price')
             stock = request.data.get('stock')
+            rating = request.data.get('rating')
             
             # key = request.data.get('public_id')
             # url = request.data.get('secure_url')
@@ -116,7 +117,8 @@ def CreateProductView(request):
                 sizes=sizes,
                 currency=currency,
                 price=price,
-                stock=stock
+                stock=stock,
+                rating=rating
             )    
             
             # Create product image

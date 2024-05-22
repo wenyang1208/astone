@@ -22,7 +22,8 @@ function CreateProduct() {
       sizes: [],
       currency: 'MYR',
       price: 0.00,
-      stock: 0
+      stock: 0,
+      rating: 0
     },
     onSubmit: async (values, actions) => {
       try {
