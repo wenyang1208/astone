@@ -4,7 +4,7 @@ import { BrowserRouter as Router, useNavigate } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage, useFormik, prepareDataForValidation  } from 'formik';
 import { ChromePicker } from 'react-color';
 import tinycolor from 'tinycolor2';
-import { alignProperty } from '@mui/material/styles/cssUtils';
+
 
 function CreateProduct() {
   const [product, setProducts] = useState([]);

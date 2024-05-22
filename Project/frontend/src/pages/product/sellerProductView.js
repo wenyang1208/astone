@@ -79,17 +79,22 @@ function SellerProductView() {
     }
 
     return (
-        <Box sx={{ padding: '30px' }}>
-            <Typography variant="h4">{product.name}</Typography>
-            <Typography variant="body1">{product.description}</Typography>
-            <Typography variant="body1">{`Category: ${product.category}`}</Typography>
-            <Typography variant="body1">{`Colors: ${product.colors.name}`}</Typography>
-            <Typography variant="body1">{`Sizes: ${product.sizes.code}`}</Typography>
-            <Typography variant="body1">{`Price: ${product.currency} ${product.price}`}</Typography>
-            <Typography variant="body1">{`Stock: ${product.stock}`}</Typography>
-            <Button variant="contained" color="primary" onClick={handleEditOpen}>
-                Edit
-            </Button>
+      <div style={{ 
+          padding: '30px',
+          backgroundColor: '#f3e5f5', // Set background color
+          minHeight: '100vh',
+          margin: 'auto', // Center the component horizontally
+      }}>
+          <Typography variant="h4" style={{ marginBottom: '20px' }}>{product.name}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Description: ${product.description}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.categories}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Colors: ${product.color}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Sizes: ${product.sizes}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Price: ${product.currency} ${product.price}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '20px' }}>{`Stock: ${product.stock}`}</Typography>
+          <Button variant="contained" color="primary" onClick={handleEditOpen} style={{ marginRight: '10px' }}>
+              Edit
+          </Button>
             <Dialog open={editOpen} onClose={handleEditClose}>
                 <DialogTitle>Edit Product</DialogTitle>
                 <DialogContent>
@@ -139,7 +144,7 @@ function SellerProductView() {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+      </div>
     );
 }
 
