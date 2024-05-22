@@ -118,7 +118,7 @@ function ProductList() {
                 onMouseLeave={handleMouseLeave}
             >
                 <Typography variant="h6" sx={{fontSize: '14px'}}>
-                    {`Product ID: ast234567890`}<br />
+                    {`Product ID: ast${String(output.id).padStart(9, '0')}`}<br />
                     {`Name: ${output.name}`}<br />
                     {`Price: ${output.currency} ${output.price}`}<br />
                     {`Stock: ${output.stock}`}
