@@ -8,6 +8,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import image from './/crew-neck.png';
+import { Box } from '@mui/material';
 
 function SellerProductView() {
     const { id } = useParams();
@@ -85,6 +87,9 @@ function SellerProductView() {
           minHeight: '100vh',
           margin: 'auto', // Center the component horizontally
       }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <Box sx={{flex: '1'}}><img src={image} alt="Product Photo" style={{ width: '300px' }} /></Box>
+          <Box sx={{flex: '1'}}>
           <Typography variant="h4" style={{ marginBottom: '20px' }}>{product.name}</Typography>
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Description: ${product.description}`}</Typography>
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.category.replace(/[\[\]']+/g, '').split(', ').join(', ')}`}</Typography>
@@ -144,6 +149,8 @@ function SellerProductView() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            </Box>
+        </Box>
       </div>
     );
 }

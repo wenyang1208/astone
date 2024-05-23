@@ -11,6 +11,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Rating } from '@mui/material';
+import image from './/crew-neck.png';
 
 function ProductList() {
     const [products, setProducts] = useState([]);
@@ -123,6 +124,7 @@ function ProductList() {
                     onMouseLeave={handleMouseLeave}
                     onClick={() => handleProductClick(output.id)}
                 >
+                    <img src={image} alt="Product Photo" style={{ width: '200px' }} />
                     <Typography variant="h6" sx={{fontSize: '14px'}}>
                         {`Product ID: ast${String(output.id).padStart(8, '0')}`}<br />
                         {`Name: ${output.name}`}<br />
