@@ -10,16 +10,25 @@ To ease setup and deployment, Docker is used to containerize dependencies and pr
 
 1. **Prerequisites**: Ensure Docker Desktop is installed and running with administrator permissions. [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-2. **Building and Running**: Navigate to the project directory and run the following commands:
-cd /path/to/astone
+2. **Building and Running**: Navigate to the project directory and run the following commands:  
 
-docker-compose build
+cd Project/astone  
+
+docker-compose build 
 
 docker-compose up
 
 If getting the follwing error after running 'docker-compose up': "not found    | ./start.sh: 2:", it is caused by a file formatiing error.
 Refer to the screenshot below on how to resolve this:
+
 ![Alt text](<Screenshot 2024-05-19 005259.jpg>)
+
+Another way of resolving this issue would be by running the following commands in your terminal:
+
+cd Project/astone  
+
+dos2unix ./start.sh  
+
 
 
 3. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.
