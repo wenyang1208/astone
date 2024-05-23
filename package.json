@@ -5,3 +5,8 @@
     "@mui/material": "^5.15.18"
   }
 }
+{
+  "dependencies": {
+    "react-select": "^5.8.0"
+  }
+}

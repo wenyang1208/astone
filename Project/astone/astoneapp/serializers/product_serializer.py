@@ -7,6 +7,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+        # fields = ['name','description','category','colors','sizes','currency','price']
 
 class ProductCreateResponseSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
