@@ -47,11 +47,12 @@ export class ProductService {
         const stock = data.stock
         const rating = data.rating
 
+        const categoryNames = categories.map(category => category.name)
         // Default data structure
         const productData = {
             name: name,
             description: description,
-            categories: categories,
+            category: categoryNames,
             colors: color,
             sizes: sizes,
             currency: currency,

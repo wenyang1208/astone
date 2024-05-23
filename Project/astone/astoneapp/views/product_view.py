@@ -73,7 +73,7 @@ def GetProductView(request):
             price = request.get('price')
             quantity = request.get('quantity')
             rating = request.get('rating')
-            product_instance, changes = product_instance.update(name, currency, price, quantity, rating)
+            product_instance, changes = product_instance.update(name, currency, price, quantity)
 
             return Response(f"Product updated successfully with changes: {changes}")
                 
@@ -90,6 +90,7 @@ def CreateProductView(request):
             # Create product
             name = request.data.get('name')
             description = request.data.get('description')
+            category = request.data.get('category')
             colors = request.data.get('colors')
             sizes = request.data.get('sizes')
             currency = request.data.get('currency')
@@ -113,6 +114,7 @@ def CreateProductView(request):
             product = Product.objects.create(
                 name=name,
                 description=description,
+                category = category,
                 colors=colors,
                 sizes=sizes,
                 currency=currency,

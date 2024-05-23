@@ -24,6 +24,7 @@ function SellerProductView() {
             const productService = new ProductService();
             try {
                 const res = await productService.getProductById(id);
+                console.log(res)
                 if (res && res.data) {
                     setProduct(res.data);
                     setEditProduct({
@@ -86,9 +87,9 @@ function SellerProductView() {
       }}>
           <Typography variant="h4" style={{ marginBottom: '20px' }}>{product.name}</Typography>
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Description: ${product.description}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.categories}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Colors: ${product.color}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Sizes: ${product.sizes}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.category.replace(/[\[\]']+/g, '').split(', ').join(', ')}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Colors: ${product.colors.map(color => color.name.charAt(0).toUpperCase() + color.name.slice(1)).join(', ')}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Sizes: ${product.sizes.map(size => size.label).join(', ')}`}</Typography>
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Price: ${product.currency} ${product.price}`}</Typography>
           <Typography variant="body1" style={{ marginBottom: '20px' }}>{`Stock: ${product.stock}`}</Typography>
           <Button variant="contained" color="primary" onClick={handleEditOpen} style={{ marginRight: '10px' }}>
