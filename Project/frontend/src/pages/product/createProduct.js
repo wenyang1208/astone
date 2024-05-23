@@ -156,7 +156,7 @@ function CreateProduct() {
               padding: '20px',
               textAlign: 'center',
               marginRight: '20px',
-              marginTop: '15px',
+              marginTop: '15px', 
             }}
           >
             <Typography variant="h6">Add Image</Typography>

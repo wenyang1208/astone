@@ -32,7 +32,8 @@ function SellerProductView() {
                     setEditProduct({
                         name: res.data.name,
                         description: res.data.description,
-                        price: res.data.price
+                        price: res.data.price,
+                        stock: res.data.stock
                     });
                 }
             } catch (error) {
@@ -88,8 +89,8 @@ function SellerProductView() {
           margin: 'auto', // Center the component horizontally
       }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Box sx={{flex: '1'}}><img src={image} alt="Product Photo" style={{ width: '300px' }} /></Box>
-          <Box sx={{flex: '1'}}>
+          <Box sx={{flex: '1'}}><img src={image} alt="Product Photo" style={{ width: '450px', paddingLeft: '60px', paddingTop: '30px'}} /></Box>
+          <Box sx={{flex: '1', paddingTop: '50px'}}>
           <Typography variant="h4" style={{ marginBottom: '20px' }}>{product.name}</Typography>
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Description: ${product.description}`}</Typography>
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.category.replace(/[\[\]']+/g, '').split(', ').join(', ')}`}</Typography>
