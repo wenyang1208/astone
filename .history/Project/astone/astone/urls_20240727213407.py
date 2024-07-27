@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from astoneapp.views.product_view import * # Add necessary imports
 from astoneapp.views.seller_view import *
+from rest_framework_simp
 
 # Add urls as needed, usually one for each view function
 urlpatterns = [
@@ -28,6 +29,6 @@ urlpatterns = [
     path('products/images/', GetProductImagesView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
     path('products/<int:pk>/edit', UpdateProductView),
-    path('seller/register/', RegisterView.as_view(), name='register_seller'),
+
     # path('products/list/',ProductView.as_view(),name="Product")
 ]

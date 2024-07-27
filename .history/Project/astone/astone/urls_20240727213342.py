@@ -28,6 +28,6 @@ urlpatterns = [
     path('products/images/', GetProductImagesView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
     path('products/<int:pk>/edit', UpdateProductView),
-    path('seller/register/', RegisterView.as_view(), name='register_seller'),
+
     # path('products/list/',ProductView.as_view(),name="Product")
 ]
