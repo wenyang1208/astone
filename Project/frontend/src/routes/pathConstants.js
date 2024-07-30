@@ -12,7 +12,9 @@ const PathConstants = {
     SUPPORT: "support",
     SELL: "sell",
     LOGIN: "login",
-    SIGNUP: "signup"
+    SIGNUP: "signup",
+    LOGIN_SELLER: "loginSeller",
+    SIGNUP_SELLER: "signupSeller"
 
 }
 

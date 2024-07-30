@@ -6,7 +6,7 @@ import Header2 from '../components/header2'; // Adjust the import path if necess
 
 const defaultTheme = createTheme();
 
-const Sell = () => {
+const Login = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -68,6 +68,4 @@ const Sell = () => {
   );
 };
 
-
-
-export default Sell;
+export default Login;

@@ -69,7 +69,7 @@ const Signup = () => {
       if (response.ok) {
         // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
         console.log('Signup successful');
-        navigate('/login'); // Redirect to login page after successful signup
+        navigate('/loginseller'); // Redirect to login page after successful signup
       } else {
         // Handle errors from the API
         console.log('Signup failed');
