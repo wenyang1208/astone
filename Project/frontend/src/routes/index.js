@@ -16,6 +16,7 @@ const Login = React.lazy(() => import("../pages/login"));
 const SignUp = React.lazy(() => import("../pages/signup"));
 const LoginSeller = React.lazy(() => import("../pages/loginSeller"));
 const SignUpSeller = React.lazy(() => import("../pages/signupSeller"));
+const SellerProfileView = React.lazy(() => import("../pages/sellerProfileView"));
 
 const routes = [
     { path: PathConstants.HOME, element: <Home /> },
@@ -32,7 +33,8 @@ const routes = [
     { path: PathConstants.LOGIN, element: <Login /> },
     { path: PathConstants.SIGNUP, element: <SignUp /> },
     { path: PathConstants.LOGIN_SELLER, element: <LoginSeller /> },
-    { path: PathConstants.SIGNUP_SELLER, element: <SignUpSeller /> }
+    { path: PathConstants.SIGNUP_SELLER, element: <SignUpSeller /> },
+    { path: `${PathConstants.SELLER}/:id`, element: <SellerProfileView /> },
     
 ]
 
