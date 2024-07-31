@@ -11,19 +11,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Image',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('key', models.CharField(help_text='The public id of the uploaded file', max_length=100)),
-                ('url', models.CharField(max_length=100)),
-                ('name', models.CharField(help_text='The original name of the uploaded image', max_length=100)),
-                ('width', models.IntegerField(help_text='Width in pixels')),
-                ('height', models.IntegerField(help_text='Height in pixels')),
-                ('format', models.CharField(max_length=10)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-            ],
-        ),
         migrations.RemoveField(
             model_name='product',
             name='quantity',
@@ -67,13 +54,5 @@ class Migration(migrations.Migration):
             model_name='product',
             name='price',
             field=models.DecimalField(decimal_places=2, default=0.0, help_text='price of the product', max_digits=10),
-        ),
-        migrations.CreateModel(
-            name='ProductImage',
-            fields=[
-                ('image_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='astoneapp.image')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='astoneapp.product')),
-            ],
-            bases=('astoneapp.image',),
-        ),
+        )
     ]

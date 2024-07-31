@@ -19,6 +19,7 @@ function ProductList() {
     const [hoveredProductId, setHoveredProductId] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
+    const BASE_URL = 'http://localhost:8000';
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -124,7 +125,15 @@ function ProductList() {
                     onMouseLeave={handleMouseLeave}
                     onClick={() => handleProductClick(output.id)}
                 >
-                    <img src={image} alt="Product Photo" style={{ width: '200px' }} />
+                    {output.images.length > 0 && output.images[0].image_url ?
+                            <img 
+                                src={`${BASE_URL}${output.images[0].image_url}`}                                 
+                                alt="Product Photo" 
+                                style={{ width: '200px' }} 
+                            />
+                        :
+                            <img src={image} alt="Product Photo" style={{ width: '200px' }} />
+                    }
                     <Typography variant="h6" sx={{fontSize: '14px'}}>
                         {`Product ID: ast${String(output.id).padStart(8, '0')}`}<br />
                         {`Name: ${output.name}`}<br />

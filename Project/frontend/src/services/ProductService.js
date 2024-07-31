@@ -35,35 +35,39 @@ export class ProductService {
         return axios.put(`http://localhost:8000/products/${id}/edit`, productData);
     }
 
-    async createProduct (data) {
-    try {
-        const name = data.name
-        const description = data.description
-        const categories = data.categories
-        const color = data.color
-        const sizes = data.sizes
-        const currency = data.currency
-        const price = data.price
-        const stock = data.stock
-        const rating = data.rating
-
-        const categoryNames = categories.map(category => category.name)
-        // Default data structure
-        const productData = {
-            name: name,
-            description: description,
-            category: categoryNames,
-            colors: color,
-            sizes: sizes,
-            currency: currency,
-            price: price,
-            stock: stock,
-            rating: rating
-        };
-
-        console.log('Final data being sent:', productData);
-        const res = await axios.post('http://localhost:8000/products/create/', productData);
-        return res;
+    async createProduct(data) {
+        try {
+            const { name, description, categories, color, sizes, currency, price, stock, rating, images } = data;
+    
+            const categoryNames = categories.map(category => category.name);
+    
+            // Create FormData object
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('category', categoryNames);
+            formData.append('colors', color);
+            formData.append('sizes', sizes);
+            formData.append('currency', currency);
+            formData.append('price', price);
+            formData.append('stock', stock);
+            formData.append('rating', rating);
+            
+            console.log(images)
+            // Append images to FormData
+            images.forEach((image, index) => {
+                formData.append('images', image);
+            });
+            for (var pair of formData.entries()) {
+                console.log(pair[0]+ ', ' + pair[1]); 
+            }
+    
+            const res = await axios.post('http://localhost:8000/products/create/', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return res;
         } catch (error) {
             console.error('Error creating product:', error);
             return null;

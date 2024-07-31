@@ -15,7 +15,9 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf import settings
 from django.urls import path, include
+from django.conf.urls.static import static
 from astoneapp.views.product_view import * # Add necessary imports
 
 # Add urls as needed, usually one for each view function
@@ -24,8 +26,7 @@ urlpatterns = [
     # path('products/', GetCreateUpdateProductView),
     path('products/create/', CreateProductView),
     path('products/', GetProductView),
-    path('products/images/', GetProductImagesView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
     path('products/<int:pk>/edit', UpdateProductView),
     # path('products/list/',ProductView.as_view(),name="Product")
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

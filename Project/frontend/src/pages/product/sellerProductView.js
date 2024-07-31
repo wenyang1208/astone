@@ -18,8 +18,11 @@ function SellerProductView() {
     const [editProduct, setEditProduct] = useState({
         name: '',
         description: '',
-        price: ''
+        price: '',
+        stock: '',
+        images: []
     });
+    const [existingImages, setExistingImages] = useState(editProduct.images || []);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -33,8 +36,10 @@ function SellerProductView() {
                         name: res.data.name,
                         description: res.data.description,
                         price: res.data.price,
-                        stock: res.data.stock
+                        stock: res.data.stock,
+                        images: res.data.images
                     });
+                    setExistingImages(res.data.images);
                 }
             } catch (error) {
                 console.error('Error fetching product:', error);
@@ -53,30 +58,40 @@ function SellerProductView() {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setEditProduct({ ...editProduct, [name]: value });
+        const { name, value, files } = e.target;
+        if (name === 'images') {
+            setEditProduct({ ...editProduct, images: Array.from(files) });
+        } else {
+            setEditProduct({ ...editProduct, [name]: value });
+        }
     };
-
+    
     const handleSaveChanges = async () => {
-      const productService = new ProductService();
-      try {
-          const updatedProduct = {
-              name: editProduct.name,
-              description: editProduct.description,
-              price: editProduct.price,
-              stock: editProduct.stock,
-              // Add any other necessary fields
-          };
-          const res = await productService.editProduct(id, updatedProduct);
-          if (res && res.status === 200) {
-              setProduct(res.data);
-              handleEditClose();
-          }
-      } catch (error) {
-          console.error('Error updating product:', error);
-      }
-  };
-  
+        const productService = new ProductService();
+        try {
+            const formData = new FormData();
+            formData.append('name', editProduct.name);
+            formData.append('description', editProduct.description);
+            formData.append('price', editProduct.price);
+            formData.append('stock', editProduct.stock);
+    
+            if (editProduct.images && editProduct.images.length > 0) {
+                editProduct.images.forEach((image, index) => {
+                    formData.append(`images[${index}]`, image);
+                });
+            }
+    
+            const res = await productService.editProduct(id, formData);
+            if (res && res.status === 200) {
+                setProduct(res.data);
+                handleEditClose();
+            }
+        } catch (error) {
+            console.error('Error updating product:', error);
+        }
+    };
+    
+
     if (!product) {
         return <div>Loading...</div>;
     }
@@ -89,13 +104,28 @@ function SellerProductView() {
           margin: 'auto', // Center the component horizontally
       }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Box sx={{flex: '1'}}><img src={image} alt="Product Photo" style={{ width: '450px', paddingLeft: '60px', paddingTop: '30px'}} /></Box>
+          {/* <Box sx={{flex: '1'}}><img src={image} alt="Product Photo" style={{ width: '450px', paddingLeft: '60px', paddingTop: '30px'}} /></Box> */}
+          <Box>
+                        <Typography variant="h6">Existing Images</Typography>
+                        {console.log(existingImages)}
+                        <Box display="flex" flexWrap="wrap" gap="10px">
+                            {existingImages.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={`http://localhost:8000${image.image_url}`}
+                                    alt={`Product Image ${index}`}
+                                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                                />
+                            ))}
+                        </Box>
+            </Box>
+            <br></br>
           <Box sx={{flex: '1', paddingTop: '50px'}}>
           <Typography variant="h4" style={{ marginBottom: '20px' }}>{product.name}</Typography>
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Description: ${product.description}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.category.replace(/[\[\]']+/g, '').split(', ').join(', ')}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Colors: ${product.colors.map(color => color.name.charAt(0).toUpperCase() + color.name.slice(1)).join(', ')}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Sizes: ${product.sizes.map(size => size.label).join(', ')}`}</Typography>
+          {/* <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.category.replace(/[\[\]']+/g, '').split(', ').join(', ')}`}</Typography>
+          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Colors: ${product.colors.map(color => color.name.charAt(0).toUpperCase() + color.name.slice(1)).join(', ')}`}</Typography> */}
+          {/* <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Sizes: ${product.sizes.map(size => size.label).join(', ')}`}</Typography> */}
           <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Price: ${product.currency} ${product.price}`}</Typography>
           <Typography variant="body1" style={{ marginBottom: '20px' }}>{`Stock: ${product.stock}`}</Typography>
           <Button variant="contained" color="primary" onClick={handleEditOpen} style={{ marginRight: '10px' }}>
@@ -138,6 +168,13 @@ function SellerProductView() {
                         type="number"
                         fullWidth
                         value={editProduct.stock}
+                        onChange={handleInputChange}
+                    />
+                    <input
+                        id="images"
+                        name="images"
+                        type="file"
+                        multiple
                         onChange={handleInputChange}
                     />
                 </DialogContent>
