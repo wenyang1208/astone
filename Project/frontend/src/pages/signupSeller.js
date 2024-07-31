@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
 
 const defaultTheme = createTheme();
@@ -58,21 +59,44 @@ const Signup = () => {
     event.preventDefault();
     if (validateStep(2)) {
       // Send form data to the API
-      const response = await fetch('http://localhost:8000/seller/register/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-      });
-      console.log(response);
-      if (response.ok) {
-        // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
-        console.log('Signup successful');
-        navigate('/loginseller'); // Redirect to login page after successful signup
-      } else {
-        // Handle errors from the API
-        console.log('Signup failed');
+      // const response = await fetch('http://localhost:8000/seller/register/', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formValues),
+      // });
+      // console.log(response);
+      // if (response.ok) {
+      //   // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
+      //   console.log('Signup successful');
+      //   navigate('/loginseller'); // Redirect to login page after successful signup
+      // } else {
+      //   // Handle errors from the API
+      //   console.log('Signup failed');
+      // }
+      try {
+        const response = await axios.post('http://localhost:8000/seller/register/', {
+          user: {
+            username: formValues.firstName + formValues.lastName,
+            first_name: formValues.firstName,
+            last_name: formValues.lastName,
+            password: formValues.password,
+            email: formValues.email,
+          },
+          gender: formValues.gender,
+          phone_number: formValues.phone,
+          address: formValues.address,
+        });
+
+        if (response.status === 201) {
+          console.log('Signup successful');
+          navigate('/login');
+        } else {
+          console.error('Signup failed', response.data);
+        }
+      } catch (error) {
+        console.error('Signup error', error.response.data);
       }
     }
   };

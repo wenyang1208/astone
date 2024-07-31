@@ -4,7 +4,7 @@ export class SellerService{
 
     async registerSeller(data){
         try{
-            const res = await axios.post('http://localhost:8000/sellers/',data);
+            const res = await axios.post('http://localhost:8000/seller/register/',data);
             return res;
         }catch(error){
             console.error('Error registering seller:', error);
