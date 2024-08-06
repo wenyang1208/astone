@@ -35,6 +35,7 @@ const routes = [
     { path: PathConstants.LOGIN_SELLER, element: <LoginSeller /> },
     { path: PathConstants.SIGNUP_SELLER, element: <SignUpSeller /> },
     { path: `${PathConstants.SELLER}/:id`, element: <SellerProfile /> },
+    { path: PathConstants.SELLERPROFILEVIEW, element: <SellerProfile /> },
     
 ]
 

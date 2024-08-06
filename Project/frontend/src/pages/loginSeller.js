@@ -1,16 +1,17 @@
-import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Box, TextField, Button, Typography, CssBaseline, Grid } from '@mui/material';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { SellerService } from '../services/SellerService';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
-
 
 const defaultTheme = createTheme();
 
 const LoginSeller = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
   const sellerService = new SellerService();
 
   const handleSubmit = async (event) => {
@@ -19,9 +20,13 @@ const LoginSeller = () => {
     const response = await sellerService.loginSeller(data);
     if (response) {
       console.log('Login successful:', response.data);
-      // Handle successful login (e.g., redirect to dashboard, store token, etc.)
+      navigate('/productlist');
+      // Handle successful login 
     } else {
       console.error('Login failed');
+      setError('Incorrect username or password. Please try again.');
+      setUsername('');
+      setPassword('');
       // Handle login failure (e.g., show error message)
     }
   };
@@ -40,10 +45,15 @@ const LoginSeller = () => {
                 alignItems: 'center',
               }}
             >
-              <Typography component="h1" variant="h5">
-                Login
+              <Typography component="h1" variant="h4" sx={{mb: 1}}>
+                Log In
               </Typography>
-              <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}> 
+              {error && (
+                <Alert severity="error" sx={{ width: '100%' }}>
+                  {error}
+                </Alert>
+              )}
+              <Box component="form" onSubmit={handleSubmit}>
                 <TextField
                   margin="normal"
                   required
@@ -53,7 +63,6 @@ const LoginSeller = () => {
                   name="email"
                   autoComplete="email"
                   autoFocus
-                  // add these 2 lines by wy
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
