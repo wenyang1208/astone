@@ -33,6 +33,5 @@ class SellerSerializer(serializers.ModelSerializer):
         )
         return seller
 
-    
 class SellerResponseSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)

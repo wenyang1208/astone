@@ -91,7 +91,7 @@ const Signup = () => {
 
         if (response.status === 201) {
           console.log('Signup successful');
-          navigate('/login');
+          navigate('/loginSeller');
         } else {
           console.error('Signup failed', response.data);
         }
@@ -174,7 +174,7 @@ const Signup = () => {
               Next
             </Button>
             <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 1 }}>
-              Already have an account? <Link to="/login" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
+              Already have an account? <Link to="/loginSeller" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
             </Typography>
           </Box>
         );

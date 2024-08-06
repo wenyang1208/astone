@@ -14,10 +14,11 @@ export class SellerService{
 
     async loginSeller(data){
         try{
-            const res = await axios.post('http://localhost:8000/sellers/login/',data);
+            const res = await axios.post('http://localhost:8000/seller/token/',data);
             return res;
         }catch(error){
-            console.error('Error logging in seller:', error);
+            console.log(data);
+            console.error('Error logging in seller:',  error.response?.data || error.message);
             return null;
         }
     }

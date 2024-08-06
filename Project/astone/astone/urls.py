@@ -18,16 +18,20 @@ from django.contrib import admin
 from django.urls import path, include
 from astoneapp.views.product_view import * # Add necessary imports
 from astoneapp.views.seller_view import *
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 # Add urls as needed, usually one for each view function
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('products/', GetCreateUpdateProductView),
     path('products/create/', CreateProductView),
-    path('products/', GetProductView),
+    path('products/', GetProductView, name='products'),
     path('products/images/', GetProductImagesView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
     path('products/<int:pk>/edit', UpdateProductView),
     path('seller/register/', SellerRegisterView.as_view(), name='sign_up_seller'),
+    path('seller/token/', TokenObtainPairView.as_view(), name='get_token'), # act as permissions/authentication everytime we access a website, make request
+    path('seller/token/refresh', TokenRefreshView.as_view(), name='refresh'),
+    path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
+    # path('seller/login/', SellerLoginView.as_view(), name='log_in_seller'),
     # path('products/list/',ProductView.as_view(),name="Product")
 ]
