@@ -4,10 +4,10 @@ import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepp
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
-import { SellerService } from '../services/SellerService'; // Adjust the import path if necessary
+
 
 const defaultTheme = createTheme();
-const sellerService = new SellerService();
+
 
 const SignupSeller = () => {
   const [activeStep, setActiveStep] = useState(0);

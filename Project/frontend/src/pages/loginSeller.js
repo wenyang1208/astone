@@ -1,15 +1,31 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { SellerService } from '../services/SellerService';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
-import { SellerService } from '../services/SellerService'; // Adjust the import path if necessary
+
 
 const defaultTheme = createTheme();
-const sellerService = new SellerService();
 
-const Login = () => {
+const LoginSeller = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const sellerService = new SellerService();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const data = { username, password };
+    const response = await sellerService.loginSeller(data);
+    if (response) {
+      console.log('Login successful:', response.data);
+      // Handle successful login (e.g., redirect to dashboard, store token, etc.)
+    } else {
+      console.error('Login failed');
+      // Handle login failure (e.g., show error message)
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -27,7 +43,7 @@ const Login = () => {
               <Typography component="h1" variant="h5">
                 Login
               </Typography>
-              <Box component="form" sx={{ mt: 1 }}>
+              <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}> 
                 <TextField
                   margin="normal"
                   required
@@ -37,6 +53,9 @@ const Login = () => {
                   name="email"
                   autoComplete="email"
                   autoFocus
+                  // add these 2 lines by wy
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
                 <TextField
                   margin="normal"
