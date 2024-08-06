@@ -1,29 +1,15 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { SellerService } from '../services/SellerService';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
+import { SellerService } from '../services/SellerService'; // Adjust the import path if necessary
 
 const defaultTheme = createTheme();
 const sellerService = new SellerService();
 
-const LoginSeller = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      await sellerService.loginSeller({ email, password });
-      navigate('/sellerDashboard'); // Replace with the appropriate route after successful login
-    } catch (err) {
-      setError('Login failed. Please check your credentials and try again.');
-    }
-  };
-
+const Login = () => {
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -41,12 +27,7 @@ const LoginSeller = () => {
               <Typography component="h1" variant="h5">
                 Login
               </Typography>
-              {error && (
-                <Typography color="error" sx={{ mt: 1 }}>
-                  {error}
-                </Typography>
-              )}
-              <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+              <Box component="form" sx={{ mt: 1 }}>
                 <TextField
                   margin="normal"
                   required
@@ -56,8 +37,6 @@ const LoginSeller = () => {
                   name="email"
                   autoComplete="email"
                   autoFocus
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <TextField
                   margin="normal"

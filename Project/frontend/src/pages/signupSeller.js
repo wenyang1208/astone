@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import axios from 'axios';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
 import { SellerService } from '../services/SellerService'; // Adjust the import path if necessary
 
@@ -59,13 +60,45 @@ const SignupSeller = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateStep(2)) {
+      // Send form data to the API
+      // const response = await fetch('http://localhost:8000/seller/register/', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formValues),
+      // });
+      // console.log(response);
+      // if (response.ok) {
+      //   // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
+      //   console.log('Signup successful');
+      //   navigate('/loginseller'); // Redirect to login page after successful signup
+      // } else {
+      //   // Handle errors from the API
+      //   console.log('Signup failed');
+      // }
       try {
-        await sellerService.registerSeller(formValues);
-        console.log('Signup successful');
-        navigate('/loginseller'); // Redirect to login page after successful signup
+        const response = await axios.post('http://localhost:8000/seller/register/', {
+          user: {
+            username: formValues.firstName + formValues.lastName,
+            first_name: formValues.firstName,
+            last_name: formValues.lastName,
+            password: formValues.password,
+            email: formValues.email,
+          },
+          gender: formValues.gender,
+          phone_number: formValues.phone,
+          address: formValues.address,
+        });
+
+        if (response.status === 201) {
+          console.log('Signup successful');
+          navigate('/loginSeller');
+        } else {
+          console.error('Signup failed', response.data);
+        }
       } catch (error) {
-        console.error('Signup failed', error);
-        // Handle errors (e.g., show error messages to the user)
+        console.error('Signup error', error.response.data);
       }
     }
   };
@@ -143,7 +176,7 @@ const SignupSeller = () => {
               Next
             </Button>
             <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 1 }}>
-              Already have an account? <Link to="/login" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
+              Already have an account? <Link to="/loginSeller" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
             </Typography>
           </Box>
         );
