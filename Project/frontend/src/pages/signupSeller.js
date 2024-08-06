@@ -3,10 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
+import { SellerService } from '../services/SellerService'; // Adjust the import path if necessary
 
 const defaultTheme = createTheme();
+const sellerService = new SellerService();
 
-const Signup = () => {
+const SignupSeller = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [formValues, setFormValues] = useState({
     firstName: '',
@@ -57,22 +59,13 @@ const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateStep(2)) {
-      // Send form data to the API
-      const response = await fetch('http://localhost:8000/seller/register/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-      });
-      console.log(response);
-      if (response.ok) {
-        // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
+      try {
+        await sellerService.registerSeller(formValues);
         console.log('Signup successful');
         navigate('/loginseller'); // Redirect to login page after successful signup
-      } else {
-        // Handle errors from the API
-        console.log('Signup failed');
+      } catch (error) {
+        console.error('Signup failed', error);
+        // Handle errors (e.g., show error messages to the user)
       }
     }
   };
@@ -243,7 +236,6 @@ const Signup = () => {
             />
             <Button
               type="submit"
-              onSubmit={handleSubmit}
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
@@ -295,4 +287,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupSeller;
