@@ -107,7 +107,11 @@ const SignupSeller = () => {
     switch (step) {
       case 0:
         return (
-          <Box component="form" sx={{ mt: 1 }}>
+          <Box component="form" sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -167,14 +171,19 @@ const SignupSeller = () => {
               error={!!formErrors.emailConfirm}
               helperText={formErrors.emailConfirm}
             />
-            <Button
-              onClick={handleNext}
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Next
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <Button
+                onClick={handleNext}
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 2, mb: 2, pt:1.2, pb: 1.2, borderRadius: '30px', backgroundColor: '#A020F0',
+                  '&:hover': { backgroundColor: '#7D0DC3' }, color: 'white', width: '40%'
+                }}
+              >
+                Next
+              </Button>
+            </Box>
             <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 1 }}>
               Already have an account? <Link to="/loginSeller" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
             </Typography>
@@ -218,22 +227,32 @@ const SignupSeller = () => {
               value={formValues.address}
               onChange={handleChange}
             />
-            <Button
-              onClick={handleNext}
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Next
-            </Button>
-            <Button
-              onClick={handleBack}
-              fullWidth
-              variant="text"
-              sx={{ mb: 2 }}
-            >
-              Back
-            </Button>
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <Button
+                onClick={handleNext}
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 2, mb: 2, pt:1.2, pb: 1.2, borderRadius: '30px', backgroundColor: '#A020F0',
+                  '&:hover': { backgroundColor: '#7D0DC3' }, color: 'white', width: '40%'
+                }}
+              >
+                Next
+              </Button>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%'}}>
+              <Button
+                onClick={handleBack}
+                fullWidth
+                variant="text"
+                sx={{
+                  mt: 1, mb: 1, pt:1.2, pb: 1.2, borderRadius: '30px', color: '#A020F0',
+                  width: '40%'
+                }}
+              >
+                Back
+              </Button>
+            </Box>
           </Box>
         );
       case 2:
