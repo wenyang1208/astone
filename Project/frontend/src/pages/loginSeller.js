@@ -8,7 +8,7 @@ import Header2 from '../components/header2'; // Adjust the import path if necess
 const defaultTheme = createTheme();
 
 const LoginSeller = () => {
-  const [user, setUser] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const LoginSeller = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = { user, password };
+    const data = { username, password };
     const response = await sellerService.loginSeller(data);
     if (response) {
       console.log('Login successful:', response.data);
@@ -63,8 +63,8 @@ const LoginSeller = () => {
                   name="user"
                   autoComplete="username"
                   autoFocus
-                  value={user}
-                  onChange={(e) => setUser(e.target.value)}
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
                 />
                 <TextField
                   margin="normal"
