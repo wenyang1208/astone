@@ -18,8 +18,8 @@ const SignUp = React.lazy(() => import("../pages/signup"));
 const routes = [
     { path: PathConstants.HOME, element: <Home /> },
     { path: PathConstants.ABOUT, element: <About /> },
+    { path: `${PathConstants.BUYERPRODUCTVIEW}/:id`, element: <ProductView /> },
     { path: `${PathConstants.PRODUCTS}/:id`, element: <SellerProductView /> },
-    { path: PathConstants.PRODUCTS, element: <ProductView /> },
     { path: PathConstants.PRODUCTSLIST, element: <ProductList /> },
     { path: PathConstants.CREATE_PRODUCT, element: <CreateProduct /> },
     { path: PathConstants.WOMEN, element: <Women /> },

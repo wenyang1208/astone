@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { ProductService } from '../../services/ProductService';
 import {
   AppBar,
@@ -31,42 +32,48 @@ const Aston = ({ className, divClassName }) => {
 function ProductView() {
   const [details, setDetails] = useState([]);
 
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+
   useEffect(() => {
-    const productService = new ProductService();
+    const fetchProduct = async () => {
+        const productService = new ProductService();
+        try {
+            const res = await productService.getProductById(id);
+            console.log(res)
+            if (res && res.data) {
+                setProduct(res.data);
+            }
+        } catch (error) {
+            console.error('Error fetching product:', error);
+        }
+    };
 
-    // Call the getProducts method from ProductService
-    productService.getProducts()
-      .then(res => {
-        console.log(res);
-        setDetails(res.data);
-      })
-      .catch(err => {
-        console.error('Error fetching products:', err);
-      });
-  }, []);
+    fetchProduct();
+  }, [id]);
 
-  const product = {
-    name: "Men's V neck T-Shirt",
-    description: 'A stylish and comfortable shirt perfect for the summer.',
-    price: 'MYR 99.99',
-    imageUrl: 'https://drive.google.com/file/d/15LaU33HylTqQsSVyDUWNs9E9bEq8h8K-/preview', // Replace with actual image URL
-    brand: 'Uniqlo',
-    sizes: [
-      { name: 'small', code: 'S' },
-      { name: 'medium', code: 'M' },
-      { name: 'large', code: 'L' },
-      { name: 'extra large', code: 'XL' },
-    ],
-    colors: [
-      { name: 'Red', hex: '#FF0000' },
-      { name: 'Green', hex: '#008000' },
-      { name: 'Blue', hex: '#0000FF' },
-      { name: 'Yellow', hex: '#FFFF00' },
-      { name: 'Orange', hex: '#FFA500' },
-    ],
-    tags: ['summer', 'stylish'],
-    dateAdded: '20/5/2023',
-  };
+  // const product = {
+  //   name: "Men's V neck T-Shirt",
+  //   description: 'A stylish and comfortable shirt perfect for the summer.',
+  //   price: 'MYR 99.99',
+  //   imageUrl: 'https://drive.google.com/file/d/15LaU33HylTqQsSVyDUWNs9E9bEq8h8K-/preview', // Replace with actual image URL
+  //   brand: 'Uniqlo',
+  //   sizes: [
+  //     { name: 'small', code: 'S' },
+  //     { name: 'medium', code: 'M' },
+  //     { name: 'large', code: 'L' },
+  //     { name: 'extra large', code: 'XL' },
+  //   ],
+  //   colors: [
+  //     { name: 'Red', hex: '#FF0000' },
+  //     { name: 'Green', hex: '#008000' },
+  //     { name: 'Blue', hex: '#0000FF' },
+  //     { name: 'Yellow', hex: '#FFFF00' },
+  //     { name: 'Orange', hex: '#FFA500' },
+  //   ],
+  //   tags: ['summer', 'stylish'],
+  //   dateAdded: '20/5/2023',
+  // };
 
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState('');
