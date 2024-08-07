@@ -45,7 +45,7 @@ const LoginSeller = () => {
                 alignItems: 'center',
               }}
             >
-              <Typography component="h1" variant="h4" sx={{mb: 1}}>
+              <Typography component="h1" variant="h4" sx={{ mb: 1 }}>
                 Log In
               </Typography>
               {error && (
@@ -78,14 +78,18 @@ const LoginSeller = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign In
-                </Button>
+                <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      mt: 2, mb: 2, pt:1.2, pb: 1.2, borderRadius: '30px', backgroundColor: '#A020F0',
+                      '&:hover': { backgroundColor: '#7D0DC3' }, color: 'white', width: '30%'
+                    }}
+                  >
+                    Sign In
+                  </Button>
+                </Box>
                 <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 1 }}>
                   Don't have an account? <Link to="/signupSeller" style={{ textDecoration: 'none', color: 'blue' }}>Sign Up</Link>
                 </Typography>
