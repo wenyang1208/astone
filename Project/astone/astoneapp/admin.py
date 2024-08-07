@@ -4,9 +4,8 @@ from django.contrib.auth.admin import UserAdmin
 from .models.product import Product
 
 from .models.product_to_image import ProductToImage
-from .models.seller import Seller, CustomUser
+from .models.seller import Seller
 
-admin.site.register(CustomUser, UserAdmin)
 admin.site.register(Product)
 admin.site.register(ProductToImage)
 admin.site.register(Seller)

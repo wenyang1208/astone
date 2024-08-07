@@ -1,17 +1,17 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from astoneapp.models.seller import Seller, CustomUser
+from astoneapp.models.seller import Seller
 
 # Use User as the Django contains user authentication features
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser
+        model = User
         fields = ['username', 'first_name', 'last_name', 'password', 'email']
         # Only accept password, but not returning the password
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = CustomUser.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
         return user
 
 class SellerSerializer(serializers.ModelSerializer):

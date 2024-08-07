@@ -8,7 +8,7 @@ import Header2 from '../components/header2'; // Adjust the import path if necess
 const defaultTheme = createTheme();
 
 const LoginSeller = () => {
-  const [email, setEmail] = useState('');
+  const [user, setUser] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const LoginSeller = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = { email, password };
+    const data = { user, password };
     const response = await sellerService.loginSeller(data);
     if (response) {
       console.log('Login successful:', response.data);
@@ -25,7 +25,7 @@ const LoginSeller = () => {
     } else {
       console.error('Login failed');
       setError('Incorrect username or password. Please try again.');
-      setEmail('');
+      setUser('');
       setPassword('');
       // Handle login failure (e.g., show error message)
     }
@@ -58,13 +58,13 @@ const LoginSeller = () => {
                   margin="normal"
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
+                  id="user"
+                  label="Username"
+                  name="user"
+                  autoComplete="username"
                   autoFocus
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={user}
+                  onChange={(e) => setUser(e.target.value)}
                 />
                 <TextField
                   margin="normal"
