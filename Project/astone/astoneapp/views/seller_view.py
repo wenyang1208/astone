@@ -12,7 +12,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 class SellerRegisterView(generics.CreateAPIView):
-        queryset = User.objects.all() # make sure do not create existing user
+        queryset = CustomUser.objects.all() # make sure do not create existing user
         serializer_class = SellerSerializer
         permission_classes = [AllowAny] # allow anyone to create a  
 
