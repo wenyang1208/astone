@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { SellerService } from '../services/SellerService';
-import Header2 from '../components/header2'; // Adjust the import path if necessary
+import { SellerService } from '../../services/SellerService';
+import Header2 from '../../components/header2'; // Adjust the import path if necessary
 
 const defaultTheme = createTheme();
 
@@ -25,7 +25,7 @@ const LoginSeller = () => {
     } else {
       console.error('Login failed');
       setError('Incorrect username or password. Please try again.');
-      setUser('');
+      setUsername('');
       setPassword('');
       // Handle login failure (e.g., show error message)
     }

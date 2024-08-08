@@ -6,7 +6,7 @@ echo "Applying database migrations"
 python manage.py makemigrations
 python manage.py migrate
 
-python manage.py loaddata ./db_yaml/products.yaml
+# python manage.py loaddata ./db_yaml/products.yaml
 
 
 # echo "

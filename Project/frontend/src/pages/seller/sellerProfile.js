@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button } from '@mui/material';
-import { SellerService } from '../services/SellerService'; // Adjust the import path if necessary
+import { SellerService } from '../../services/SellerService'; // Adjust the import path if necessary
 
 const sellerService = new SellerService();
 

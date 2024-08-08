@@ -12,12 +12,18 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 class SellerRegisterView(generics.CreateAPIView):
-        queryset = User.objects.all() # make sure do not create existing user
-        serializer_class = SellerSerializer
-        permission_classes = [AllowAny] # allow anyone to create a  
+    queryset = User.objects.all() # make sure do not create existing user
+    serializer_class = SellerSerializer
+    permission_classes = [AllowAny] # allow anyone to create a  
 
-        def create(self, request, *args, **kwargs):
-                response = super().create(request, *args, **kwargs)
-                response.data = {'message': 'Seller created successfully'}
-                return response
+    def create(self, request, *args, **kwargs):
+            response = super().create(request, *args, **kwargs)
+            response.data = {'message': 'Seller created successfully'}
+            return response
+        
+    def get(self, request, pk):
+            seller = Seller.objects.get(pk=pk)
+            serializer = SellerSerializer(seller)
+            return Response(serializer.data)
+
 
