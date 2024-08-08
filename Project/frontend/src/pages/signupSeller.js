@@ -80,7 +80,7 @@ const SignupSeller = () => {
       try {
         const response = await axios.post('http://localhost:8000/seller/register/', {
           user: {
-            username: formValues.firstName + formValues.lastName,
+            username: formValues.email,
             first_name: formValues.firstName,
             last_name: formValues.lastName,
             password: formValues.password,
