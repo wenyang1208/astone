@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Header2 from '../components/header2'; // Adjust the import path if necessary
+import Header2 from '../../components/header2'; // Adjust the import path if necessary
 
 const defaultTheme = createTheme();
 

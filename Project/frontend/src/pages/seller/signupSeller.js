@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
-import Header2 from '../components/header2'; // Adjust the import path if necessary
+import Header2 from '../../components/header2'; // Adjust the import path if necessary
 
 
 const defaultTheme = createTheme();

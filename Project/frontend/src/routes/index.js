@@ -5,18 +5,18 @@ const Home = React.lazy(() => import("../pages/home"));
 const About = React.lazy(() => import("../pages/about"));
 const ProductView = React.lazy(() => import("../pages/product/productView"));
 const SellerProductView = React.lazy(() => import("../pages/product/sellerProductView"));
-const ProductList = React.lazy(() => import("../pages/product/productList"));
+const ProductList = React.lazy(() => import("../pages/seller/productList"));
 const CreateProduct = React.lazy(() => import("../pages/product/createProduct"));
 const Women = React.lazy(() => import("../pages/women"));
 const Men = React.lazy(() => import("../pages/men"));
-const Sell = React.lazy(() => import("../pages/sell"));
+const Sell = React.lazy(() => import("../pages/seller/sell"));
 const Unisex = React.lazy(() => import("../pages/unisex"));
 const Support = React.lazy(() => import("../pages/support"));
 const Login = React.lazy(() => import("../pages/login"));
 const SignUp = React.lazy(() => import("../pages/signup"));
-const LoginSeller = React.lazy(() => import("../pages/loginSeller"));
-const SignUpSeller = React.lazy(() => import("../pages/signupSeller"));
-const SellerProfile = React.lazy(() => import("../pages/sellerProfile"));
+const LoginSeller = React.lazy(() => import("../pages/seller/loginSeller"));
+const SignUpSeller = React.lazy(() => import("../pages/seller/signupSeller"));
+const SellerProfile = React.lazy(() => import("../pages/seller/sellerProfile"));
 
 const routes = [
     { path: PathConstants.HOME, element: <Home /> },
