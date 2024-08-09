@@ -1,5 +1,6 @@
 import React from "react";
 import PathConstants from "./pathConstants"; 
+import ProtectedRoute from "../services/ProtectedRoute";
 
 const Home = React.lazy(() => import("../pages/home"));
 const About = React.lazy(() => import("../pages/about"));
@@ -22,8 +23,8 @@ const routes = [
     { path: PathConstants.HOME, element: <Home /> },
     { path: PathConstants.ABOUT, element: <About /> },
     { path: `${PathConstants.PRODUCTS}/:id`, element: <SellerProductView /> },
-    { path: PathConstants.PRODUCTS, element: <ProductView /> },
-    { path: PathConstants.PRODUCTSLIST, element: <ProductList /> },
+    { path: PathConstants.PRODUCTS, element: <ProductView />},
+    { path: PathConstants.PRODUCTSLIST, element: <ProtectedRoute><ProductList /></ProtectedRoute> },
     { path: PathConstants.CREATE_PRODUCT, element: <CreateProduct /> },
     { path: PathConstants.WOMEN, element: <Women /> },
     { path: PathConstants.MEN, element: <Men /> },

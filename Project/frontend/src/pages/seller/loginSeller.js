@@ -4,6 +4,7 @@ import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Alert
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { SellerService } from '../../services/SellerService';
 import Header2 from '../../components/header2'; // Adjust the import path if necessary
+import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constant';
 
 const defaultTheme = createTheme();
 
@@ -20,6 +21,8 @@ const LoginSeller = () => {
     const response = await sellerService.loginSeller(data);
     if (response) {
       console.log('Login successful:', response.data);
+      localStorage.setItem(ACCESS_TOKEN, response.data.access);
+      localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
       navigate('/productlist');
       // Handle successful login 
     } else {

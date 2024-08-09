@@ -1,5 +1,6 @@
 from django.db import models, transaction
 from astoneapp.models.images import ProductImage
+from astoneapp.models.seller import Seller;
 class Product(models.Model):
     name = models.CharField(max_length = 30, null=False, default='', help_text="name of the product")    
     description = models.CharField(max_length = 100, null=False, default='', help_text="description of the product")    
@@ -10,6 +11,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, null=False, default=0.00, decimal_places=2, help_text="price of the product")
     stock = models.PositiveBigIntegerField(null=False, default=0, help_text="available stock of the product")
     rating = models.PositiveBigIntegerField(null=False, default=0, help_text="available rating of the product")
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name="products")
 
     def __str__(self):
         return self.name
