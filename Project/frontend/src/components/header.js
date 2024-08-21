@@ -15,6 +15,7 @@ function Header() {
     { title: 'Men', url: '/men' },
     { title: 'Women', url: '/women' },
     { title: 'Unisex', url: '/unisex' },
+    { title: 'Compare', url: '/compare' },  
     { title: 'Support', url: '/support' },
     { title: 'Sell', url: '/sell' },
     { title: 'About', url: '/about' },

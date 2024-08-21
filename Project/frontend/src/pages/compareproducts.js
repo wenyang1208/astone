@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ProductService } from '../services/ProductService'; 
 
-// const BASE_URL = 'http://localhost:3000';
+const BASE_URL = 'http://localhost:3000';
 
 const CompareProducts = () => {
   const [products, setProducts] = useState([]); 

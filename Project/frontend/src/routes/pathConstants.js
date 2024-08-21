@@ -13,7 +13,7 @@ const PathConstants = {
     SELL: "sell",
     LOGIN: "login",
     SIGNUP: "signup",
-    COMPARE_PRODUCTS: "/compare", 
+    COMPARE_PRODUCTS: "compare", 
 
 }
 

@@ -17,16 +17,16 @@ import Button from '@mui/material/Button';
 import PathConstants from '../routes/pathConstants';
 
 
-const sections = [
-  { title: 'Men', url: '#' },
-  { title: 'Women', url: '#' },
-  { title: 'Unisex', url: '#' },
-  { title: 'Support', url: '#' },
-  { title: 'Sell', url: '#' },
-  { title: 'About', url: '#' },
-  { title: 'Compare Products', url: PathConstants.COMPARE_PRODUCTS },  
+// const sections = [
+//   { title: 'Men', url: '#' },
+//   { title: 'Women', url: '#' },
+//   { title: 'Unisex', url: '#' },
+//   { title: 'Support', url: '#' },
+//   { title: 'Sell', url: '#' },
+//   { title: 'About', url: '#' },
+//   { title: 'Compare Products', url: '#' },  
 
-];
+// ];
 
 const mainBanner = {
   title: 'SALE!',
