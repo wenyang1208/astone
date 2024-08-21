@@ -14,6 +14,8 @@ import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import PathConstants from '../routes/pathConstants';
+
 
 const sections = [
   { title: 'Men', url: '#' },
@@ -22,6 +24,8 @@ const sections = [
   { title: 'Support', url: '#' },
   { title: 'Sell', url: '#' },
   { title: 'About', url: '#' },
+  { title: 'Compare Products', url: PathConstants.COMPARE_PRODUCTS },  
+
 ];
 
 const mainBanner = {
