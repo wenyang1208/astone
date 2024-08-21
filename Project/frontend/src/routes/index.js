@@ -1,6 +1,7 @@
 import React from "react";
 import PathConstants from "./pathConstants"; 
 
+
 const Home = React.lazy(() => import("../pages/home"));
 const About = React.lazy(() => import("../pages/about"));
 const ProductView = React.lazy(() => import("../pages/product/productView"));
@@ -14,6 +15,8 @@ const Unisex = React.lazy(() => import("../pages/unisex"));
 const Support = React.lazy(() => import("../pages/support"));
 const Login = React.lazy(() => import("../pages/login"));
 const SignUp = React.lazy(() => import("../pages/signup"));
+const CompareProducts = React.lazy(() => import("../pages/compareproducts"));
+
 
 const routes = [
     { path: PathConstants.HOME, element: <Home /> },
@@ -28,8 +31,9 @@ const routes = [
     { path: PathConstants.SUPPORT, element: <Support /> },
     { path: PathConstants.SELL, element: <Sell /> },
     { path: PathConstants.LOGIN, element: <Login /> },
-    { path: PathConstants.SIGNUP, element: <SignUp /> }
-    
+    { path: PathConstants.SIGNUP, element: <SignUp /> },
+    { path: PathConstants.COMPARE_PRODUCTS, element: <CompareProducts /> }
+
 ]
 
 export default routes
