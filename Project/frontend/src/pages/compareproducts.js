@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
-import products from '../data/products'; // need to import products data
+import React, { useState, useEffect } from 'react';
+import { ProductService } from '../services/ProductService'; 
+
+// const BASE_URL = 'http://localhost:3000';
 
 const CompareProducts = () => {
+  const [products, setProducts] = useState([]); 
   const [product1, setProduct1] = useState(null);
   const [product2, setProduct2] = useState(null);
 
+  useEffect(() => {
+    const productService = new ProductService();
+
+    //get products from the backend
+    productService.getProducts()
+      .then(res => {
+        setProducts(res.data);
+      })
+      .catch(err => {
+        console.error('Error fetching products:', err);
+      });
+  }, []);
+
   const handleCompare = () => {
-    // need to put the comparison logic here
+    // the comparison logic
   };
 
   return (
@@ -33,11 +49,23 @@ const CompareProducts = () => {
       {product1 && product2 && (
         <div style={{ display: 'flex', justifyContent: 'space-around', marginTop: '30px' }}>
           <div style={{ width: '45%', textAlign: 'center' }}>
-            <img src={products.find(p => p.id === product1).image} alt={product1} style={{ width: '100%', height: 'auto' }} />
+            <img 
+              src={products.find(p => p.id === product1).images.length > 0 
+                ? `${BASE_URL}${products.find(p => p.id === product1).images[0].image_url}` 
+                : 'https://via.placeholder.com/140'} 
+              alt={product1} 
+              style={{ width: '100%', height: 'auto' }} 
+            />
             <p>{products.find(p => p.id === product1).description}</p>
           </div>
           <div style={{ width: '45%', textAlign: 'center' }}>
-            <img src={products.find(p => p.id === product2).image} alt={product2} style={{ width: '100%', height: 'auto' }} />
+            <img 
+              src={products.find(p => p.id === product2).images.length > 0 
+                ? `${BASE_URL}${products.find(p => p.id === product2).images[0].image_url}` 
+                : 'https://via.placeholder.com/140'} 
+              alt={product2} 
+              style={{ width: '100%', height: 'auto' }} 
+            />
             <p>{products.find(p => p.id === product2).description}</p>
           </div>
         </div>
