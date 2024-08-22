@@ -19,8 +19,6 @@ import Rating from '@mui/material/Rating';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import MyAppBar from '../../components/appBar';
 
-
-// harcoded 
 const Aston = ({ className, divClassName }) => {
   return (
     <div className={`aston ${className}`}>
@@ -30,56 +28,35 @@ const Aston = ({ className, divClassName }) => {
 };
 
 function ProductView() {
-  const [details, setDetails] = useState([]);
-
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-        const productService = new ProductService();
-        try {
-            const res = await productService.getProductById(id);
-            console.log(res)
-            if (res && res.data) {
-                setProduct(res.data);
-            }
-        } catch (error) {
-            console.error('Error fetching product:', error);
-        }
-    };
-
-    fetchProduct();
-  }, [id]);
-
-  // const product = {
-  //   name: "Men's V neck T-Shirt",
-  //   description: 'A stylish and comfortable shirt perfect for the summer.',
-  //   price: 'MYR 99.99',
-  //   imageUrl: 'https://drive.google.com/file/d/15LaU33HylTqQsSVyDUWNs9E9bEq8h8K-/preview', // Replace with actual image URL
-  //   brand: 'Uniqlo',
-  //   sizes: [
-  //     { name: 'small', code: 'S' },
-  //     { name: 'medium', code: 'M' },
-  //     { name: 'large', code: 'L' },
-  //     { name: 'extra large', code: 'XL' },
-  //   ],
-  //   colors: [
-  //     { name: 'Red', hex: '#FF0000' },
-  //     { name: 'Green', hex: '#008000' },
-  //     { name: 'Blue', hex: '#0000FF' },
-  //     { name: 'Yellow', hex: '#FFFF00' },
-  //     { name: 'Orange', hex: '#FFA500' },
-  //   ],
-  //   tags: ['summer', 'stylish'],
-  //   dateAdded: '20/5/2023',
-  // };
-
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState('');
   const [color, setColor] = useState('');
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const productService = new ProductService();
+      try {
+        const res = await productService.getProductById(id);
+        if (res && res.data) {
+          const productData = res.data;
+          // Parse colors and sizes fields
+          productData.colors = JSON.parse(productData.colors);
+          productData.sizes = JSON.parse(productData.sizes);
+          console.log(productData);
+
+          setProduct(productData);
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value);
@@ -102,13 +79,10 @@ function ProductView() {
   };
 
   const handleSubmitReview = () => {
-    // Logic to handle review submission
     console.log('Rating:', rating);
     console.log('Review:', review);
-    // You can add further logic to send the review data to your server
   };
 
-  // hardcoded
   return (
     <div>
       <MyAppBar />
@@ -117,7 +91,7 @@ function ProductView() {
           <Grid item xs={12} md={6}>
             <Paper>
               <img
-                src={'https://image.uniqlo.com/UQ/ST3/AsianCommon/imagesgoods/469361/sub/goods_469361_sub14.jpg?width=750'} // Use optional chaining to prevent errors if product is null
+                src={product?.images[0]?.image_url ? `http://localhost:8000${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
                 alt={product?.name}
                 style={{ width: '100%', height: 'auto' }}
               />
@@ -140,7 +114,7 @@ function ProductView() {
               Date Added: {product?.dateAdded}
             </Typography>
             <Typography gutterBottom>
-              {product?.tags.map((tag, index) => (
+              {product?.tags?.map((tag, index) => (
                 <Chip color='primary' key={index} label={tag} style={{ margin: '5px' }}/>
               ))}
             </Typography>
@@ -148,12 +122,12 @@ function ProductView() {
               <Typography gutterBottom>
                 Size:
               </Typography>
-              {product?.sizes.map((sizeOption) => (
+              {product?.sizes?.map((sizeOption) => (
                 <Chip
-                  key={sizeOption.code}
-                  label={sizeOption.code}
-                  onClick={() => handleSizeChange(sizeOption.code)}
-                  color={size === sizeOption.code ? 'primary' : 'default'}
+                  key={sizeOption.value}
+                  label={sizeOption.value}
+                  onClick={() => handleSizeChange(sizeOption.value)}
+                  color={size === sizeOption.value ? 'primary' : 'default'}
                   style={{ margin: '5px' }}
                 />
               ))}
@@ -163,15 +137,14 @@ function ProductView() {
               <Typography gutterBottom>
                 Color:
               </Typography>
-              {product?.colors.map((colorOption, index) => (
+              {product?.colors?.map((colorOption, index) => (
                 <Chip
                   key={index}
                   label={
                     <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <span style={{ marginRight: 8 }}>{colorOption.name}</span>
                       <div
                         style={{
-                          backgroundColor: colorOption.hex,
+                          backgroundColor: colorOption.code,
                           width: '16px',
                           height: '16px',
                           borderRadius: '50%',
@@ -181,8 +154,8 @@ function ProductView() {
                   }
                   clickable
                   style={{ margin: '5px' }}
-                  onClick={() => handleColorChange(colorOption.hex)}
-                  variant={color === colorOption.hex ? 'default' : 'outlined'}
+                  onClick={() => handleColorChange(colorOption.code)}
+                  variant={color === colorOption.code ? 'default' : 'outlined'}
                 />
               ))}
             </div>
@@ -240,23 +213,8 @@ function ProductView() {
           </Grid>
         </Grid>
       </Container>
-  </div>
-
-    // <div>
-    //   <header>Astone</header>
-    //   <h1>Products</h1>
-    //   {/* Map over the details array in state to render product information */}
-    //   {details.map((output, id) => (
-    //     <div key={id}>
-    //       <h2>{`Product name: ${output.name}`}</h2>
-    //       <h2>{`Product price: ${output.currency + ' ' + output.price}`}</h2>
-    //       <h2>{`Product quantity: ${output.stock}`}</h2>
-    //       <br />
-    //     </div>
-    //   ))}
-    // </div>
+    </div>
   );
-
 }
 
 export default ProductView;

@@ -1,5 +1,6 @@
 import React from 'react';
 import AppBar from '@mui/material/AppBar';
+import { Link } from 'react-router-dom';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -14,6 +15,15 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundPosition: 'center',
 }));
 
+const sections = [
+  { title: 'Home', url:'/'},
+  { title: 'Men', url: '/men' },
+  { title: 'Women', url: '/women' },
+  { title: 'Unisex', url: '/unisex' },
+  { title: 'Compare', url: '/compare' },  
+  { title: 'Support', url: '/support' },
+];
+
 function MyAppBar() {
   return (
     <StyledAppBar position="static">
@@ -21,9 +31,20 @@ function MyAppBar() {
         <Typography sx={{ flexGrow: 1 }} variant="h6">
           Astoné       
         </Typography>
-        <Button color="inherit">Home</Button>
-        <Button color="inherit">Shop</Button>
-        <Button color="inherit">Contact</Button>
+        {sections.map((section, index) => (
+          <Link
+            key={index}
+            to={section.url}
+            style={{ textDecoration: 'none', color: 'inherit' }}
+          >
+            <Typography
+              variant="body2"
+              sx={{ p: 1, flexShrink: 0 }}
+            >
+              {section.title}
+            </Typography>
+          </Link>
+        ))}
         <IconButton color="inherit">
           <ShoppingCartIcon />
         </IconButton>

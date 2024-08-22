@@ -14,6 +14,7 @@ import {
   InputAdornment, 
   IconButton,
   Popover,
+  Chip
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import { ProductService } from '../../services/ProductService';
@@ -29,7 +30,7 @@ function CreateProduct() {
       name: '',
       description: '',
       categories: [],
-      color: [],
+      color: [], 
       sizes: [],
       currency: 'MYR',
       price: 0.00,
@@ -39,7 +40,14 @@ function CreateProduct() {
     },
     onSubmit: async (values, actions) => {
       try {
-        const response = await productService.createProduct(values);
+        // Serialize colors and sizes to JSON strings
+        const payload = {
+          ...values,
+          color: JSON.stringify(values.color),
+          sizes: JSON.stringify(values.sizes),
+        };
+
+        const response = await productService.createProduct(payload);
         if (response) {
           alert('Product created successfully!');
           navigate('/productlist');
@@ -88,13 +96,14 @@ function CreateProduct() {
     { value: 'NA', label: 'Free Size' },
   ];
 
+  const genderOptions = [
+    { value: 'M', label: 'Male' },
+    { value: 'F', label: 'Female' },
+    { value: 'U', label: 'Unisex' },
+  ];
+
   const handleCategoryChange = selectedOptions => {
     formik.setFieldValue('categories', selectedOptions.map(option => ({ code: option.value, name: option.label })));
-  };
-
-  const handleColorChange = color => {
-    const selectedColor = { code: color.hex, name: tinycolor(color.hex).toName() };
-    formik.setFieldValue('colors', [selectedColor]);
   };
 
   const handleSizeChange = selectedOptions => {
@@ -204,14 +213,32 @@ function CreateProduct() {
               />
             </FormControl>
             <FormControl fullWidth margin="normal">
-              <Typography>Color</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography>Colors</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
               <ChromePicker
-                id="description"
-                name="description"
-                color={formik.values.colors}
-                onChange={color => formik.setFieldValue('color', [{name: tinycolor(color).toName(), code: color.hex}])}
+                id="color"
+                name="color"
+                color={formik.values.color}
+                onChangeComplete={color => {
+                  if (color && color.hex !== '#000000') {
+                    const colorName = tinycolor(color.hex).toName() || color.hex;
+                    const newColor = { name: colorName, code: color.hex };
+                    console.log(newColor);
+                    formik.setFieldValue('color', [...formik.values.color, newColor]);
+                  }
+                }}
               />
+                {formik.values.color.map((color, index) => (
+                  <Chip
+                    key={index}
+                    label={color.name}
+                    style={{ backgroundColor: color.code, color: '#fff', margin: '5px' }}
+                    onDelete={() => {
+                      const newColors = formik.values.color.filter((_, i) => i !== index);
+                      formik.setFieldValue('color', newColors);
+                    }}
+                  />
+                ))}
               </Box>
             </FormControl>
             <FormControl fullWidth margin="normal">
