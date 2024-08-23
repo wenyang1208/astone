@@ -20,7 +20,8 @@ class SellerRegisterView(generics.CreateAPIView):
             response = super().create(request, *args, **kwargs)
             response.data = {'message': 'Seller created successfully'}
             return response
-        
+    
+class SellerGetView(APIView):     
     def get(self, request, pk):
             seller = Seller.objects.get(pk=pk)
             serializer = SellerSerializer(seller)

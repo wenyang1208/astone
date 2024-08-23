@@ -31,7 +31,7 @@ urlpatterns = [
     path('seller/register/', SellerRegisterView.as_view(), name='sign_up_seller'),
     path('seller/token/', TokenObtainPairView.as_view(), name='get_token'), # act as permissions/authentication everytime we access a website, make request
     path('seller/token/refresh', TokenRefreshView.as_view(), name='refresh'),
-    path('seller/<int:pk>/', SellerRegisterView.as_view(), name='get_seller'),
+    path('seller/<int:pk>/', SellerGetView.as_view(), name='get_seller'),
     path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
     # path('seller/login/', SellerLoginView.as_view(), name='log_in_seller'),
     # path('products/list/',ProductView.as_view(),name="Product")
