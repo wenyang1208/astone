@@ -4,7 +4,7 @@ import { SellerService } from '../../services/SellerService'; // Adjust the impo
 
 const sellerService = new SellerService();
 
-const SellerProfile = ({ sellerId }) => {
+const Seller = ({ sellerId }) => {
   const [seller, setSeller] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -110,13 +110,13 @@ const SellerProfile = ({ sellerId }) => {
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
         <Grid container spacing={3}>
-          <Grid item xs={12} sm={4}>
+          {/* <Grid item xs={12} sm={4}>
             <Avatar
               alt={`${seller.firstName} ${seller.lastName}`}
               src="/path-to-avatar.jpg" // You might want to add an avatar field to your seller data
               sx={{ width: 150, height: 150, margin: 'auto' }}
             />
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={8}>
             <Typography variant="h4" gutterBottom>
               {seller.firstName} {seller.lastName}
@@ -147,4 +147,4 @@ const SellerProfile = ({ sellerId }) => {
   );
 };
 
-export default SellerProfile;
+export default Seller;

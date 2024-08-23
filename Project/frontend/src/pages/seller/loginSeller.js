@@ -62,7 +62,7 @@ const LoginSeller = () => {
                   required
                   fullWidth
                   id="user"
-                  label="Username"
+                  label="Email Address"
                   name="user"
                   autoComplete="username"
                   autoFocus
