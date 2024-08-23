@@ -19,6 +19,8 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 from astoneapp.views.product_view import * # Add necessary imports
+from astoneapp.views.cart_view import *
+from astoneapp.views.order_view import *
 
 # Add urls as needed, usually one for each view function
 urlpatterns = [
@@ -28,5 +30,9 @@ urlpatterns = [
     path('products/', GetProductView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
     path('products/<int:pk>/edit', UpdateProductView),
+    path('add_to_cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
+    path('cart/', cart_detail, name='cart_detail'),
+    path('place_order/', place_order, name='place_order'),
+    path('order/<int:order_id>/', order_detail, name='order_detail'),
     # path('products/list/',ProductView.as_view(),name="Product")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

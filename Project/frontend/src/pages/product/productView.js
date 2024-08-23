@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { ProductService } from '../../services/ProductService';
+import { OrderService } from '../../services/OrderService';
 import {
   AppBar,
   Button,
@@ -14,6 +15,8 @@ import {
   MenuItem,
   Chip,
   TextField,
+  Snackbar,
+  Alert,
 } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -35,6 +38,8 @@ function ProductView() {
   const [color, setColor] = useState('');
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -83,9 +88,32 @@ function ProductView() {
     console.log('Review:', review);
   };
 
+  const handleAddToCart = async () => {
+    if (!size || !color) {
+      setSnackbarMessage('Please select both size and color.');
+      setOpenSnackbar(true);
+      return;
+    }
+
+    const orderService = new OrderService();
+    try {
+      const res = await orderService.addToCart(id, size, color);
+      if (res && res.data) {
+        console.log('Product added to cart:', res.data);
+        window.location.reload()
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <div>
-      <MyAppBar />
+      <MyAppBar/>
       <Container sx={{ marginTop: '20px' }}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
@@ -102,7 +130,7 @@ function ProductView() {
               {product?.name}
             </Typography>
             <Typography variant="h5" color="textSecondary" gutterBottom>
-              {product?.price}
+              {product?.currency} {product?.price}
             </Typography>
             <Typography gutterBottom>
               {product?.description}
@@ -124,10 +152,10 @@ function ProductView() {
               </Typography>
               {product?.sizes?.map((sizeOption) => (
                 <Chip
-                  key={sizeOption.value}
-                  label={sizeOption.value}
-                  onClick={() => handleSizeChange(sizeOption.value)}
-                  color={size === sizeOption.value ? 'primary' : 'default'}
+                  key={sizeOption.code}
+                  label={sizeOption.code}
+                  onClick={() => handleSizeChange(sizeOption.code)}
+                  color={size === sizeOption.code ? 'primary' : 'default'}
                   style={{ margin: '5px' }}
                 />
               ))}
@@ -144,7 +172,7 @@ function ProductView() {
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div
                         style={{
-                          backgroundColor: colorOption.code,
+                          backgroundColor: colorOption.hex,
                           width: '16px',
                           height: '16px',
                           borderRadius: '50%',
@@ -154,8 +182,8 @@ function ProductView() {
                   }
                   clickable
                   style={{ margin: '5px' }}
-                  onClick={() => handleColorChange(colorOption.code)}
-                  variant={color === colorOption.code ? 'default' : 'outlined'}
+                  onClick={() => handleColorChange(colorOption.hex)}
+                  variant={color === colorOption.hex ? 'default' : 'outlined'}
                 />
               ))}
             </div>
@@ -174,7 +202,12 @@ function ProductView() {
             </div>
             <br />
             <div>
-              <Button startIcon={<ShoppingCartIcon />} variant='contained'>
+              <Button
+                startIcon={<ShoppingCartIcon />}
+                variant='contained'
+                onClick={handleAddToCart}
+                // disabled={!size || !color}
+              >
                 Add to Cart
               </Button>
             </div>
@@ -213,6 +246,15 @@ function ProductView() {
           </Grid>
         </Grid>
       </Container>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

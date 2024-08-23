@@ -1,13 +1,10 @@
-import React from 'react';
-import AppBar from '@mui/material/AppBar';
+import React, { useState, useEffect } from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Badge, Drawer, List, ListItem, ListItemText, Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { styled } from '@mui/material/styles';
 import backgroundImage from '../assets/mask-group.png'
+import { OrderService } from '../services/OrderService';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundImage: `url(${backgroundImage})`,
@@ -16,40 +13,100 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 }));
 
 const sections = [
-  { title: 'Home', url:'/'},
+  { title: 'Home', url: '/' },
   { title: 'Men', url: '/men' },
   { title: 'Women', url: '/women' },
   { title: 'Unisex', url: '/unisex' },
-  { title: 'Compare', url: '/compare' },  
+  { title: 'Compare', url: '/compare' },
   { title: 'Support', url: '/support' },
 ];
 
 function MyAppBar() {
+  const [cartItemCount, setCartItemCount] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const fetchCartItems = async () => {
+    const orderService = new OrderService();
+    try {
+      const res = await orderService.getCart();
+      if (res && res.data) {
+        const cartItems = res.data.cart_items;
+        const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+        setCartItemCount(itemCount);
+        setCartItems(cartItems);
+        setTotalPrice(res.data.total_price);
+      }
+    } catch (error) {
+      console.error('Error fetching cart items:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCartItems();
+  }, []);
+
+  const handleCartClick = () => {
+    setDrawerOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerOpen(false);
+  };
+
   return (
-    <StyledAppBar position="static">
-      <Toolbar>
-        <Typography sx={{ flexGrow: 1 }} variant="h6">
-          Astoné       
-        </Typography>
-        {sections.map((section, index) => (
-          <Link
-            key={index}
-            to={section.url}
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <Typography
-              variant="body2"
-              sx={{ p: 1, flexShrink: 0 }}
+    <>
+      <StyledAppBar position="static">
+        <Toolbar>
+          <Typography sx={{ flexGrow: 1 }} variant="h6">
+            Astoné
+          </Typography>
+          {sections.map((section, index) => (
+            <Link
+              key={index}
+              to={section.url}
+              style={{ textDecoration: 'none', color: 'inherit' }}
             >
-              {section.title}
-            </Typography>
-          </Link>
-        ))}
-        <IconButton color="inherit">
-          <ShoppingCartIcon />
-        </IconButton>
-      </Toolbar>
-    </StyledAppBar>
+              <Typography
+                variant="body2"
+                sx={{ p: 1, flexShrink: 0 }}
+              >
+                {section.title}
+              </Typography>
+            </Link>
+          ))}
+          <IconButton color="inherit" onClick={handleCartClick}>
+            <Badge badgeContent={cartItemCount} color="secondary">
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+        </Toolbar>
+      </StyledAppBar>
+      <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
+        <Container sx={{ width: 300, padding: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Your Cart
+          </Typography>
+          <List>
+            {cartItems.map((item, index) => (
+              <ListItem key={index}>
+                <ListItemText
+                  primary={`${item.product} - ${item.quantity} x ${item.price}`}
+                  secondary={`Total: ${item.total_price}`}
+                />
+              </ListItem>
+            ))}
+          </List>
+          <Typography variant="h6" gutterBottom>
+            Total Price: {totalPrice}
+          </Typography>
+          <Button variant="contained" color="primary" fullWidth>
+            Checkout
+          </Button>
+        </Container>
+      </Drawer>
+    </>
   );
 }
 
