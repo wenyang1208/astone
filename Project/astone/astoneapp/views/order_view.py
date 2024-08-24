@@ -4,9 +4,10 @@ from django.shortcuts import get_object_or_404
 from astoneapp.models.product import Product 
 from astoneapp.models.order import Order, OrderItem
 from ..serializers.cart_serializer import OrderItemSerializer
+from astoneapp.models.cart import Cart, CartItem
 
 def get_cart(request):
-    cart = request.session.get('cart', {})
+    cart, created = Cart.objects.get_or_create(id=1)
     return cart
 
 def save_cart(request, cart):

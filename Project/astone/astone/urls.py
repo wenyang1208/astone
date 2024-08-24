@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 from astoneapp.views.product_view import * # Add necessary imports
 from astoneapp.views.cart_view import *
 from astoneapp.views.order_view import *
+from astoneapp.views.user_view import *
 
 # Add urls as needed, usually one for each view function
 urlpatterns = [
@@ -34,5 +35,8 @@ urlpatterns = [
     path('cart/', cart_detail, name='cart_detail'),
     path('place_order/', place_order, name='place_order'),
     path('order/<int:order_id>/', order_detail, name='order_detail'),
+    path('register/', register_user, name='register'),
+    path('login/', login_user, name='login'),
+    path('user/<int:user_id>/', get_user_details, name='get_user_details'),
     # path('products/list/',ProductView.as_view(),name="Product")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
