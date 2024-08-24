@@ -14,6 +14,7 @@ import Sidebar from '../components/sidebar';
 import Footer from '../components/footer';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import Footer2 from '../components/footer2';
 
 const sections = [
   { title: 'Men', url: '#' },
@@ -434,7 +435,7 @@ const Home = () => {
           <div style={{ height: '6rem' }} /> {/* Adjust the height as needed */}
         </main>
       </Container>
-      <Footer
+      <Footer2
         title="Footer"
         description="Something here to give the footer a purpose!"
       />
