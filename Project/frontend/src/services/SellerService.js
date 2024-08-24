@@ -25,7 +25,7 @@ export class SellerService{
 
     async getSellerById(id){
         try{
-            const res = await axios.get(`http://localhost:8000/seller/${id}`);
+            const res = await axios.get(`http://localhost:8000/seller/${id}/`);
             return res;
         }catch(error){
             console.error('Error getting seller:', error);

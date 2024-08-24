@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button } from '@mui/material';
 import { SellerService } from '../../services/SellerService'; // Adjust the import path if necessary
+import { ACCESS_TOKEN } from '../../constant';
+import { jwtDecode } from 'jwt-decode';
 
 const sellerService = new SellerService();
-
-const Seller = ({ sellerId }) => {
+const Seller = () => {
   const [seller, setSeller] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
+  const token = localStorage.getItem(ACCESS_TOKEN);
+  const sellerId = jwtDecode(token).seller_id;
+  
   useEffect(() => {
     const fetchSellerData = async () => {
       try {

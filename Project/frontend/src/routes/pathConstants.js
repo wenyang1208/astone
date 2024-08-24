@@ -15,7 +15,7 @@ const PathConstants = {
     SIGNUP: "signup",
     LOGIN_SELLER: "loginSeller",
     SIGNUP_SELLER: "signupSeller",
-    SELLER: "seller/:id",
+    SELLER: "seller",
 
 }
 

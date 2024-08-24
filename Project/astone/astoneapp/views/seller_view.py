@@ -2,14 +2,17 @@ from django.shortcuts import redirect
 from rest_framework import status
 from django.db import transaction
 from rest_framework.views import APIView
-from rest_framework.decorators import api_view
+from rest_framework_simplejwt.views import TokenObtainPairView
 from astoneapp.models.seller import *
 from rest_framework.response import Response
-from astoneapp.serializers.seller_serializer import SellerSerializer
+from astoneapp.serializers.seller_serializer import SellerSerializer, SellerTokenObtainPairSerializer
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
+
+class SellerTokenObtainPairView(TokenObtainPairView):
+    serializer_class = SellerTokenObtainPairSerializer
 
 class SellerRegisterView(generics.CreateAPIView):
     queryset = User.objects.all() # make sure do not create existing user
@@ -17,9 +20,9 @@ class SellerRegisterView(generics.CreateAPIView):
     permission_classes = [AllowAny] # allow anyone to create a  
 
     def create(self, request, *args, **kwargs):
-            response = super().create(request, *args, **kwargs)
-            response.data = {'message': 'Seller created successfully'}
-            return response
+        response = super().create(request, *args, **kwargs)
+        response.data = {'message': 'Seller created successfully'}
+        return response
     
 class SellerGetView(APIView):     
     def get(self, request, pk):

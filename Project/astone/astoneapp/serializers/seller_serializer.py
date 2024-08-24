@@ -1,7 +1,22 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from astoneapp.models.seller import Seller
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+class SellerTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        try:
+            seller = Seller.objects.get(user=user)
+            token['seller_id'] = seller.id
+        except Seller.DoesNotExist:
+            token['seller_id'] = None
+
+        return token
+    
 # Use User as the Django contains user authentication features
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

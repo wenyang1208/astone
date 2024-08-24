@@ -35,7 +35,7 @@ const routes = [
     { path: PathConstants.SIGNUP, element: <SignUp /> },
     { path: PathConstants.LOGIN_SELLER, element: <LoginSeller /> },
     { path: PathConstants.SIGNUP_SELLER, element: <SignUpSeller /> },
-    { path: `${PathConstants.SELLER}/:id`, element: <Seller /> },
+    { path: PathConstants.SELLER, element: <Seller /> },
     // { path: PathConstants.SELLERPROFILEVIEW, element: <SellerProfile /> },
     
 ]
