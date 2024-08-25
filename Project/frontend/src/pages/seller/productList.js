@@ -57,7 +57,7 @@ const ProductList = () => {
   const handleSave = async () => {
     try {
       const response = await sellerService.editSeller(sellerId, {
-        shop_name: formValues.shopName,
+        shop_name: formValues.shopName || seller.shop_name,
         phone_number: seller.phone_number,
         address: seller.address,
       });
@@ -126,8 +126,9 @@ const ProductList = () => {
 
   if (isEditing || !isProfileComplete) {
     return (
+    <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
       <Container maxWidth="md">
-        <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
+          <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
           <Typography variant="h4" gutterBottom>
             {isEditing ? 'Edit Your Profile' : 'Complete Your Profile'}
           </Typography>
@@ -145,14 +146,14 @@ const ProductList = () => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  name="phone"
-                  required
-                  fullWidth
-                  id="phone"
-                  label="Phone Number"
-                  value={seller.phone_number || ''}
-                  onChange={handleChange}
+              <TextField
+                name="phone_number"
+                required
+                fullWidth
+                id="phone"
+                label="Phone Number"
+                value={seller.phone_number || ''}
+                onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -177,12 +178,14 @@ const ProductList = () => {
           </Box>
         </Paper>
       </Container>
+    </Box>
     );
   }
 
   return (
-    <Container maxWidth="lg" sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', py: 4 }}>
-      <Paper elevation={3} sx={{ p: 4, mb: 4, backgroundColor: '#ffffff' }}>
+    <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
+      <Container>
+        <Paper elevation={3} sx={{ p: 4, mb: 4, backgroundColor: '#ffffff' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
           <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>
             {seller.shop_name}
@@ -200,8 +203,8 @@ const ProductList = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Seller Information</Typography>
-            <Typography variant="body1">Name: {seller.firstName} {seller.lastName}</Typography>
-            <Typography variant="body1">Email: {seller.username}</Typography>
+            <Typography variant="body1">Name: {seller.user.first_name} {seller.user.last_name}</Typography>
+            <Typography variant="body1">Email: {seller.user.username}</Typography>
             <Typography variant="body1">Phone: {seller.phone_number}</Typography>
             <Typography variant="body1">Address: {seller.address}</Typography>
           </Grid>
@@ -315,6 +318,7 @@ const ProductList = () => {
         </DialogActions>
       </Dialog>
     </Container>
+    </Box>
   );
 };
 
