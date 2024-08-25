@@ -9,7 +9,7 @@ import Link from '@mui/material/Link';
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="text.secondary">
+    <Typography variant="body2" color="text.secondary" sx={{paddingLeft: '30px' }}>
       {'Copyright © '}
       {/* <Link color="inherit" href="https://mui.com/"> */}
       {/* </Link>{' '} */}
@@ -44,7 +44,15 @@ export default function Footer() {
         >
         <Grid container spacing={2} justifyContent="space-around" marginBottom='50px' marginTop= '10px'>
             <Grid item xs={12} md={3}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom
+                sx={{
+                    textAlign: {
+                        xs: 'left', // Center text on extra-small screens
+                        sm: 'left', // Align text to the center on small and larger screens
+                        fontWeight: 'bold',
+                    },
+                    }}
+                >
                 About Astoné
                 </Typography>
                 <Link href="/about" color="inherit" >
@@ -53,7 +61,14 @@ export default function Footer() {
             </Grid>
 
             <Grid item xs={12} md={3}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom
+                sx={{
+                    textAlign: {
+                        xs: 'left', // Center text on extra-small screens
+                        sm: 'left', // Align text to the center on small and larger screens
+                        fontWeight: 'bold',
+                    },
+                    }}>
                 Help
                 </Typography>
                 <Link href="#" color="inherit" display="block">
@@ -71,7 +86,14 @@ export default function Footer() {
             </Grid>
 
             <Grid item xs={12} md={3}>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6"  
+                sx={{
+                    textAlign: {
+                        xs: 'left', // Center text on extra-small screens
+                        sm: 'left', // Align text to the center on small and larger screens
+                        fontWeight: 'bold',
+                    },
+                    }}gutterBottom>
                 Account
                 </Typography>
                 <Link href="#" color="inherit" display="block">
@@ -101,6 +123,7 @@ export default function Footer() {
                         xs: 'center', // Center text on extra-small screens
                         sm: 'center', // Align text to the center on small and larger screens
                         fontWeight: 'bold',
+                        paddingLeft: '30px',
                     },
                     }}
                 >
