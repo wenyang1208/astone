@@ -21,7 +21,7 @@ class SellerTokenObtainPairSerializer(TokenObtainPairSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'password', 'email']
+        fields = ['username', 'first_name', 'last_name', 'password', 'email', 'date_joined']
         # Only accept password, but not returning the password
         extra_kwargs = {'password': {'write_only': True}}
 
@@ -45,7 +45,7 @@ class SellerSerializer(serializers.ModelSerializer):
             gender=validated_data['gender'],
             phone_number=validated_data['phone_number'],
             address=validated_data['address'],
-            shop_name=validated_data['shop_name']
+            shop_name=validated_data['shop_name'],
         )
         return seller
 
