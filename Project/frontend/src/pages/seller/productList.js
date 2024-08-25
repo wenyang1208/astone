@@ -1,190 +1,321 @@
 import React, { useState, useEffect } from 'react';
+import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Rating } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit'; 
+import Divider from '@mui/material/Divider'; 
+import { SellerService } from '../../services/SellerService';
 import { ProductService } from '../../services/ProductService';
-import { Link , useNavigate} from 'react-router-dom';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import DeleteIcon from '@mui/icons-material/Delete'; 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { Rating } from '@mui/material';
+import { ACCESS_TOKEN } from '../../constant';
+import { jwtDecode } from 'jwt-decode';
 import image from '../product/crew-neck.png';
 
-function ProductList() {
-    const [products, setProducts] = useState([]);
-    const navigate = useNavigate();
-    const [hoveredProductId, setHoveredProductId] = useState(null);
-    const [openDialog, setOpenDialog] = useState(false);
-    const [selectedProductId, setSelectedProductId] = useState(null);
+const sellerService = new SellerService();
+const productService = new ProductService();
 
-    useEffect(() => {
-        const fetchProducts = async () => {
-            const productService = new ProductService();
-            try {
-                const res = await productService.getProducts();
-                if (res && res.data) {
-                    setProducts(res.data);
-                }
-            } catch (error) {
-                console.error('Error fetching products:', error);
-            }
-        };
+const ProductList = () => {
+  const [seller, setSeller] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [hoveredProductId, setHoveredProductId] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
-        fetchProducts();
-    }, []);
+  const navigate = useNavigate();
+  const token = localStorage.getItem(ACCESS_TOKEN);
+  const sellerId = jwtDecode(token).seller_id;
 
-    const handleMouseEnter = (productId) => {
-        setHoveredProductId(productId);
+  const [formValues, setFormValues] = useState({
+    shopName: '',
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const sellerData = await sellerService.getSellerById(sellerId);
+        setSeller(sellerData.data);
+        
+        const productData = await productService.getProducts();
+        setProducts(productData.data);
+        
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load data');
+        setLoading(false);
+      }
     };
 
-    const handleMouseLeave = () => {
-        setHoveredProductId(null);
-    };
+    fetchData();
+  }, [sellerId]);
 
-    const handleOpenDialog = (productId) => {
-        setSelectedProductId(productId);
-        setOpenDialog(true);
-    };
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
 
-    const handleCloseDialog = () => {
-        setOpenDialog(false);
-        setSelectedProductId(null);
-    };
+  const handleSave = async () => {
+    try {
+      const response = await sellerService.editSeller(sellerId, {
+        shop_name: formValues.shopName,
+        phone_number: seller.phone_number,
+        address: seller.address,
+      });
 
-    const handleConfirmRemoveProduct = async () => {
-        if (selectedProductId !== null) {
-            try {
-                const productService = new ProductService();
-                await productService.deleteProduct(selectedProductId);
-                setProducts(products.filter(product => product.id !== selectedProductId));
-                handleCloseDialog(); 
-                
-            } catch (error) {
-                console.error('Error deleting product:', error);
-            }
-        }
-    };
+      if (response.status === 200) {
+        setIsEditing(false);
+        const updatedData = await sellerService.getSellerById(sellerId);
+        setSeller(updatedData.data);
+      } else {
+        setError('Failed to save seller profile');
+      }
+    } catch (err) {
+      setError('Failed to save seller profile');
+    }
+  };
 
-    const handleProductClick = (productId) => {
-        navigate(`/products/${productId}`);
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSeller({ ...seller, [name]: value });
+  };
 
+  const handleShopName = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleMouseEnter = (productId) => {
+    setHoveredProductId(productId);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredProductId(null);
+  };
+
+  const handleOpenDialog = (productId) => {
+    setSelectedProductId(productId);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    setSelectedProductId(null);
+  };
+
+  const handleConfirmRemoveProduct = async () => {
+    if (selectedProductId !== null) {
+      try {
+        await productService.deleteProduct(selectedProductId);
+        setProducts(products.filter(product => product.id !== selectedProductId));
+        handleCloseDialog();
+      } catch (error) {
+        console.error('Error deleting product:', error);
+      }
+    }
+  };
+
+  const handleProductClick = (productId) => {
+    navigate(`/products/${productId}`);
+  };
+
+  if (loading) return <Typography>Loading...</Typography>;
+  if (error) return <Typography color="error">{error}</Typography>;
+  if (!seller) return <Typography>No seller data found</Typography>;
+
+  const isProfileComplete = seller && seller.phone_number && seller.address && seller.shop_name;
+
+  if (isEditing || !isProfileComplete) {
     return (
-      <div style={{backgroundColor: '#eedafe', minHeight: '100vh'}}>
-      <div sx= {{position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100}}>
-        <header style={{fontSize: '30px', padding: '20px'}}>Shop name</header>
-        <hr/>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', width: '95%'}}>
-          <p style={{ paddingLeft: '30px', fontSize: '32px', fontWeight: 'bold'}}>Products</p>
-          <Box>
-            <Link to="/product/create" style={{ textDecoration: 'none' }}>
-              <Button 
-                variant="contained"
-                sx={{ 
-                  backgroundColor: '#ba68ff', 
-                  '&:hover': { backgroundColor: '#7D0DC3' }, 
-                  color: 'white', 
-                  borderRadius: '50%', 
-                  height: '60px', 
-                  width: '60px', 
-                  minWidth: '40px', 
-                  fontSize: '45px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '1px 0 0 1px',
-                }}
-              >
-                +
-              </Button>
-            </Link>
-          </Box>
-        </div>
-      </div>
-      
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '28px', paddingLeft: '30px'}}>
-            {products.map((output, id) => (
-                <Box 
-                    key={output.id} 
-                    sx={{ 
-                        padding: '30px', 
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 7px #babcbb', 
-                        minWidth: '280px',
-                        maxWidth: '350px',
-                        backgroundColor: '#f9f9f9',
-                        marginBottom: '0px',
-                        position: 'relative',
-                        '&:hover': { backgroundColor: '#cbcccb' }, 
-                    }}
-                    onMouseEnter={() => handleMouseEnter(output.id)}
-                    onMouseLeave={handleMouseLeave}
-                    onClick={() => handleProductClick(output.id)}
-                >
-                    <img src={image} alt="Product Photo" style={{ width: '200px' }} />
-                    <Typography variant="h6" sx={{fontSize: '14px'}}>
-                        {`Product ID: ast${String(output.id).padStart(8, '0')}`}<br />
-                        {`Name: ${output.name}`}<br />
-                        {`Price: ${output.currency} ${output.price}`}<br />
-                        {`Stock: ${output.stock}`}<br />
-                        {/* {`Rating: ${output.rating}`} */}
-                    </Typography>
-                    <Rating 
-                            value={output.rating || 0} 
-                            readOnly 
-                            sx={{
-                                position: 'absolute',
-                                bottom: '10px',
-                                right: '10px',
-                                color: 'gold',
-                                '& .MuiRating-iconFilled': {
-                                    color: 'gold',
-                                },
-                                '& .MuiRating-iconEmpty': {
-                                    color: 'lightgrey',
-                                },
-                                '& .MuiRating-iconHover': {
-                                    color: 'darkgoldenrod',
-                                }
-                            }}
-                        />
-                    {hoveredProductId === output.id && (
-                        <DeleteIcon
-                            style={{ position: 'absolute', top: '12px', right: '15px', cursor: 'pointer' }}
-                            onClick={(e) => {
-                                e.stopPropagation(); // Prevent the onClick of the Box from triggering
-                                handleOpenDialog(output.id);
-                            }}
-                        />
-                    )}
-                </Box>
-            ))}
-        </div>
-
-            <Dialog
-                open={openDialog}
-                onClose={handleCloseDialog}
+      <Container maxWidth="md">
+        <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
+          <Typography variant="h4" gutterBottom>
+            {isEditing ? 'Edit Your Profile' : 'Complete Your Profile'}
+          </Typography>
+          <Box component="form" noValidate sx={{ mt: 3 }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  name="shopName"
+                  required
+                  fullWidth
+                  id="shopName"
+                  label="Shop Name"
+                  value={formValues.shopName || seller.shop_name || ''}
+                  onChange={handleShopName}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="phone"
+                  required
+                  fullWidth
+                  id="phone"
+                  label="Phone Number"
+                  value={seller.phone_number || ''}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  name="address"
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  value={seller.address || ''}
+                  onChange={handleChange}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={handleSave}
             >
-                <DialogTitle>Confirm Deletion</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Are you sure you want to remove this product from your shop?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleConfirmRemoveProduct} color="primary">
-                        Confirm
-                    </Button>
-                    <Button onClick={handleCloseDialog} color="primary">
-                        Cancel
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
+              Save Profile
+            </Button>
+          </Box>
+        </Paper>
+      </Container>
     );
-}
+  }
+
+  return (
+    <Container maxWidth="lg" sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', py: 4 }}>
+      <Paper elevation={3} sx={{ p: 4, mb: 4, backgroundColor: '#ffffff' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>
+            {seller.shop_name}
+          </Typography>
+          <Button 
+            variant="outlined" 
+            startIcon={<EditIcon />} 
+            onClick={handleEdit}
+            sx={{ borderColor: '#7D0DC3', color: '#7D0DC3' }}
+          >
+            Edit Profile
+          </Button>
+        </Box>
+        <Divider sx={{ mb: 2 }} />
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Seller Information</Typography>
+            <Typography variant="body1">Name: {seller.firstName} {seller.lastName}</Typography>
+            <Typography variant="body1">Email: {seller.username}</Typography>
+            <Typography variant="body1">Phone: {seller.phone_number}</Typography>
+            <Typography variant="body1">Address: {seller.address}</Typography>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Shop Statistics</Typography>
+            <Typography variant="body1">Total Products: {products.length}</Typography>
+            <Typography variant="body1">Joined: {new Date().toLocaleDateString()}</Typography>
+            {/* Add more shop statistics here */}
+          </Grid>
+        </Grid>
+      </Paper>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>Products</Typography>
+        <Link to="/product/create" style={{ textDecoration: 'none' }}>
+          <Button 
+            variant="contained"
+            sx={{ 
+              backgroundColor: '#7D0DC3', 
+              '&:hover': { backgroundColor: '#5c0992' }, 
+              color: 'white', 
+              borderRadius: '20px', 
+              px: 3,
+            }}
+          >
+            Add New Product
+          </Button>
+        </Link>
+      </Box>
+        
+      <Grid container spacing={3}>
+        {products.map((output) => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={output.id}>
+            <Paper 
+              elevation={2}
+              sx={{ 
+                p: 2, 
+                borderRadius: '8px',
+                backgroundColor: '#ffffff',
+                transition: 'all 0.3s ease-in-out',
+                '&:hover': { 
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 6px 12px rgba(0,0,0,0.15)',
+                }, 
+                position: 'relative',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={() => handleMouseEnter(output.id)}
+              onMouseLeave={handleMouseLeave}
+              onClick={() => handleProductClick(output.id)}
+            >
+              <img src={image} alt="Product Photo" style={{ width: '100%', height: 'auto', marginBottom: '10px' }} />
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{output.name}</Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                ID: ast{String(output.id).padStart(8, '0')}
+              </Typography>
+              <Typography variant="h6" sx={{ color: '#7D0DC3', mb: 1 }}>
+                {output.currency} {output.price}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Stock: {output.stock}
+              </Typography>
+              <Rating 
+                value={output.rating || 0} 
+                readOnly 
+                sx={{
+                  position: 'absolute',
+                  bottom: '10px',
+                  right: '10px',
+                  color: '#FFD700',
+                }}
+              />
+              {hoveredProductId === output.id && (
+                <DeleteIcon
+                  sx={{ 
+                    position: 'absolute', 
+                    top: '10px', 
+                    right: '10px', 
+                    cursor: 'pointer',
+                    color: '#ff4444',
+                    '&:hover': { color: '#cc0000' }
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenDialog(output.id);
+                  }}
+                />
+              )}
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
+
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to remove this product from your shop?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleConfirmRemoveProduct} sx={{ color: '#ff4444' }}>
+            Confirm
+          </Button>
+          <Button onClick={handleCloseDialog} sx={{ color: '#7D0DC3' }}>
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Container>
+  );
+};
 
 export default ProductList;

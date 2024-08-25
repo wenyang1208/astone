@@ -78,9 +78,9 @@ const Seller = () => {
   if (error) return <Typography color="error">{error}</Typography>;
   if (!seller) return <Typography>No seller data found</Typography>;
 
-  const isProfileIncomplete = !seller.phone || !seller.address || !seller.shopName;
+  const isProfileComplete = seller && seller.phone_number && seller.address && seller.shop_name;
 
-  if (isEditing || isProfileIncomplete) {
+  if (isEditing || !isProfileComplete) {
     return (
       <Container maxWidth="md">
         <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
@@ -142,36 +142,33 @@ const Seller = () => {
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          {seller.shop_name}
+        </Typography>
         <Grid container spacing={3}>
-          {/* <Grid item xs={12} sm={4}>
-            <Avatar
-              alt={`${seller.firstName} ${seller.lastName}`}
-              src="/path-to-avatar.jpg" // You might want to add an avatar field to your seller data
-              sx={{ width: 150, height: 150, margin: 'auto' }}
-            />
-          </Grid> */}
-          <Grid item xs={12} sm={8}>
-            <Typography variant="h4" gutterBottom>
-              {seller.firstName} {seller.lastName}
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Seller Information
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              Email: {seller.email}
+            <Typography variant="body1">Name: {seller.firstName} {seller.lastName}</Typography>
+            <Typography variant="body1">Email: {seller.username}</Typography>
+            <Typography variant="body1">Phone: {seller.phone_number}</Typography>
+            <Typography variant="body1">Address: {seller.address}</Typography>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h6" gutterBottom>
+              Shop Details
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              Phone: {seller.phone_number || 'Not provided'}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Address: {seller.address || 'Not provided'}
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{ mt: 3 }}
-              onClick={handleEdit}
-            >
-              Edit Profile
-            </Button>
+            <Typography variant="body1">Shop Name: {seller.shop_name}</Typography>
+            {/* Add more shop details here as needed */}
           </Grid>
         </Grid>
+        <Box sx={{ mt: 3 }}>
+          <Button variant="contained" onClick={handleEdit}>
+            Edit Profile
+          </Button>
+          {/* Add more buttons or actions for the shop page */}
+        </Box>
       </Paper>
     </Container>
   );
