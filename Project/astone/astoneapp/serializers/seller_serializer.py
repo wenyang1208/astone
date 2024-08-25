@@ -34,7 +34,7 @@ class SellerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Seller
         # Specific fields that are not included in the user auth features
-        fields = ['user', 'gender', 'phone_number', 'address']
+        fields = ['user', 'gender', 'phone_number', 'address', 'shop_name']
 
     def create(self, validated_data):
         # Extract nested data for the User model (first name, last name, ...)
@@ -44,7 +44,8 @@ class SellerSerializer(serializers.ModelSerializer):
             user=user,
             gender=validated_data['gender'],
             phone_number=validated_data['phone_number'],
-            address=validated_data['address']
+            address=validated_data['address'],
+            shop_name=validated_data['shop_name']
         )
         return seller
 

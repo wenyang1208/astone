@@ -1,4 +1,4 @@
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from django.db import transaction
 from rest_framework.views import APIView
@@ -29,5 +29,20 @@ class SellerGetView(APIView):
             seller = Seller.objects.get(pk=pk)
             serializer = SellerSerializer(seller)
             return Response(serializer.data)
+    
+    def put(self, request, pk):
+        seller = get_object_or_404(Seller, pk=pk)
+        serializer = SellerSerializer(seller, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Seller updated successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def patch(self, request, pk):
+        seller = get_object_or_404(Seller, pk=pk)
+        serializer = SellerSerializer(seller, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'message': 'Seller partially updated successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
