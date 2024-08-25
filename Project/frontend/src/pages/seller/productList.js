@@ -211,7 +211,7 @@ const ProductList = () => {
           <Grid item xs={12} md={6}>
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Shop Statistics</Typography>
             <Typography variant="body1">Total Products: {products.length}</Typography>
-            <Typography variant="body1">Joined: {new Date().toLocaleDateString()}</Typography>
+            <Typography variant="body1">Joined: {new Date(seller.user.date_joined.substring(0,10)).toLocaleDateString()}</Typography>
             {/* Add more shop statistics here */}
           </Grid>
         </Grid>
