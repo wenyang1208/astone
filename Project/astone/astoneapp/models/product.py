@@ -9,6 +9,7 @@ class Product(models.Model):
     sizes = models.JSONField(default=list, help_text="array of available sizes for the product") # Json object format: {'name': 'Small', 'code': 'S'}
     currency = models.CharField(max_length = 30, null=False, default='MYR', help_text="currency of the product's price")
     price = models.DecimalField(max_digits=10, null=False, default=0.00, decimal_places=2, help_text="price of the product")
+    promotion_price = models.DecimalField(max_digits=10, null=False, default=-1.00, decimal_places=2, help_text="price of the product")
     stock = models.PositiveBigIntegerField(null=False, default=0, help_text="available stock of the product")
     rating = models.PositiveBigIntegerField(null=False, default=0, help_text="available rating of the product")
     seller = models.ForeignKey(Seller, on_delete=models.CASCADE, related_name="products")
