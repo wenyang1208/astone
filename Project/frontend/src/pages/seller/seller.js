@@ -3,6 +3,7 @@ import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button } fr
 import { SellerService } from '../../services/SellerService'; // Adjust the import path if necessary
 import { ACCESS_TOKEN } from '../../constant';
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 
 const sellerService = new SellerService();
 const Seller = () => {
@@ -13,6 +14,12 @@ const Seller = () => {
 
   const token = localStorage.getItem(ACCESS_TOKEN);
   const sellerId = jwtDecode(token).seller_id;
+
+  const [formValues, setFormValues] = useState({
+    shopName: '',
+  });
+
+  const [formErrors, setFormErrors] = useState({});
   
   useEffect(() => {
     const fetchSellerData = async () => {
@@ -37,6 +44,11 @@ const Seller = () => {
     try {
       await sellerService.updateSeller(sellerId, seller);
       setIsEditing(false);
+      const response = await axios.post('http://localhost:8000/seller/',{
+        user: {
+          shop_name: formValues.shopName,
+        },
+      });
     } catch (err) {
       setError('Failed to save seller profile');
     }
@@ -47,11 +59,16 @@ const Seller = () => {
     setSeller({ ...seller, [name]: value });
   };
 
+  const handleShopName = (event) => {
+    const { name, value } = event.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!seller) return <Typography>No seller data found</Typography>;
 
-  const isProfileIncomplete = !seller.phone || !seller.address || !seller.gender;
+  const isProfileIncomplete = !seller.phone || !seller.address || !seller.shopName;
 
   if (isEditing || isProfileIncomplete) {
     return (
@@ -62,6 +79,19 @@ const Seller = () => {
           </Typography>
           <Box component="form" noValidate sx={{ mt: 3 }}>
             <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <TextField
+                  name="shopName"
+                  required
+                  fullWidth
+                  id="shopName"
+                  label="Shop Name"
+                  value={formValues.shopName}
+                  onChange={handleShopName}
+                  error={!!formErrors.shopName}
+                  helperText={formErrors.shopName}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   name="phone"
@@ -70,7 +100,7 @@ const Seller = () => {
                   id="phone"
                   label="Phone Number"
                   autoFocus
-                  value={seller.phone || ''}
+                  value={seller.phone_number || ''}
                   onChange={handleChange}
                 />
               </Grid>
@@ -82,17 +112,6 @@ const Seller = () => {
                   id="address"
                   label="Address"
                   value={seller.address || ''}
-                  onChange={handleChange}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  name="gender"
-                  required
-                  fullWidth
-                  id="gender"
-                  label="Gender"
-                  value={seller.gender || ''}
                   onChange={handleChange}
                 />
               </Grid>
