@@ -32,10 +32,11 @@ class SellerGetView(APIView):
     
     def put(self, request, pk):
         seller = get_object_or_404(Seller, pk=pk)
-        serializer = SellerSerializer(seller, data=request.data)
+        serializer = SellerSerializer(seller, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response({'message': 'Seller updated successfully'}, status=status.HTTP_200_OK)
+        print('Serializer errors:', serializer.errors)  # Add this line
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk):

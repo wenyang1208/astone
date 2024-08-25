@@ -3,7 +3,7 @@ import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button } fr
 import { SellerService } from '../../services/SellerService'; // Adjust the import path if necessary
 import { ACCESS_TOKEN } from '../../constant';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
+
 
 const sellerService = new SellerService();
 const Seller = () => {
@@ -42,14 +42,24 @@ const Seller = () => {
 
   const handleSave = async () => {
     try {
-      await sellerService.updateSeller(sellerId, seller);
-      setIsEditing(false);
-      const response = await axios.post('http://localhost:8000/seller/',{
-        user: {
-          shop_name: formValues.shopName,
-        },
+      const response = await sellerService.editSeller(sellerId, {
+        shop_name: formValues.shopName,
+        phone_number: seller.phone_number,
+        address: seller.address,
       });
+  
+      if (response.status === 200) {
+        console.log('Profile updated successfully');
+        setIsEditing(false);
+        // Refresh seller data
+        const updatedData = await sellerService.getSellerById(sellerId);
+        setSeller(updatedData.data);
+      } else {
+        console.error('Profile update failed', response.data);
+        setError('Failed to save seller profile');
+      }
     } catch (err) {
+      console.error('Error updating profile:', err);
       setError('Failed to save seller profile');
     }
   };
@@ -148,10 +158,7 @@ const Seller = () => {
               Email: {seller.email}
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Phone: {seller.phone || 'Not provided'}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Gender: {seller.gender || 'Not specified'}
+              Phone: {seller.phone_number || 'Not provided'}
             </Typography>
             <Typography variant="body1" gutterBottom>
               Address: {seller.address || 'Not provided'}
