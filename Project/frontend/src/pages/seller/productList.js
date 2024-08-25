@@ -141,7 +141,7 @@ const ProductList = () => {
                   fullWidth
                   id="shopName"
                   label="Shop Name"
-                  value={formValues.shopName || seller.shop_name || ''}
+                  value={formValues.shopName ||''}
                   onChange={handleShopName}
                 />
               </Grid>
