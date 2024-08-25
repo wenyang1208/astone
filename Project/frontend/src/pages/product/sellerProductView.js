@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ProductService } from '../../services/ProductService';
 import { 
   Typography, Button, TextField, Dialog, DialogActions, DialogContent, 
   DialogTitle, Box, Grid, Paper, Chip, Rating, Divider
 } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import EditIcon from '@mui/icons-material/Edit';
 import image from './crew-neck.png';
@@ -14,6 +15,7 @@ function SellerProductView() {
     const [product, setProduct] = useState(null);
     const [editOpen, setEditOpen] = useState(false);
     const [promotionOpen, setPromotionOpen] = useState(false);
+    const navigate = useNavigate();
     const [editProduct, setEditProduct] = useState({
         name: '',
         description: '',
@@ -134,12 +136,25 @@ function SellerProductView() {
         }
     };
 
+    const handleBack = () => {
+        navigate('/productlist'); // This will navigate to the previous page in the history
+    };
+
     if (!product) {
         return <Typography>Loading...</Typography>;
     }
 
     return (
         <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh', py: 4 }}>
+            <Box sx={{ px: 4, mb: 2 }}>
+                <Button
+                    variant="outlined"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={handleBack}
+                >
+                    Back
+                </Button>
+            </Box>
             <Grid container spacing={4} sx={{ px: 4 }}>
                 <Grid item xs={12} md={6}>
                     <Paper elevation={3} sx={{ p: 2 }}>
@@ -161,7 +176,7 @@ function SellerProductView() {
                             </>
                         ) : (
                             <Typography variant="h5" color="primary" gutterBottom>
-                                {product.currency} {product.price}
+                                Price: {product.currency} {product.price}
                             </Typography>
                         )}
                         <Typography variant="body1" paragraph>{product.description}</Typography>
