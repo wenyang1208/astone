@@ -9,6 +9,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import EditIcon from '@mui/icons-material/Edit';
 import image from './crew-neck.png';
+import { PromotionService } from '../../services/PromotionService';
 
 function SellerProductView() {
     const { id } = useParams();
@@ -115,19 +116,23 @@ function SellerProductView() {
 
     const handleApplyPromotion = async () => {
         const productService = new ProductService();
+        const promotionService = new PromotionService();
         try {
             const updatedProduct = {
                 ...product,
                 original_price: product.original_price || product.price,
                 price: afterPromotionPrice,
-                promotion: {
-                    discountPercentage: parseFloat(promotion.discountPercentage),
-                    startDate: promotion.startDate,
-                    endDate: promotion.endDate
-                }
             };
+            console.log(product.id);
+            const addPromotion = {
+                product_id: product.id,
+                discountPercentage: parseFloat(promotion.discountPercentage),
+                startDate: promotion.startDate,
+                endDate: promotion.endDate
+            }
+            const resPromotion = await promotionService.createPromotion(addPromotion);
             const res = await productService.editProduct(id, updatedProduct);
-            if (res && res.status === 200) {
+            if (res && res.status === 200 && resPromotion.status === 200) {
                 setProduct(res.data);
                 handlePromotionClose();
             }

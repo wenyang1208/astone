@@ -89,6 +89,7 @@ const SignupSeller = () => {
           gender: formValues.gender,
           phone_number: formValues.phone,
           address: formValues.address,
+          shop_name: 'shop',
         });
 
         if (response.status === 201) {

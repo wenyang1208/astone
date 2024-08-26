@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from astoneapp.views.product_view import * # Add necessary imports
 from astoneapp.views.seller_view import *
+from astoneapp.views.promotion_view import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 # Add urls as needed, usually one for each view function
@@ -33,6 +34,5 @@ urlpatterns = [
     path('seller/token/refresh', TokenRefreshView.as_view(), name='refresh'),
     path('seller/<int:pk>/', SellerGetView.as_view(), name='get_seller'),
     path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
-    # path('seller/login/', SellerLoginView.as_view(), name='log_in_seller'),
-    # path('products/list/',ProductView.as_view(),name="Product")
+    path('promotions/', PromotionListCreate.as_view(), name='promotions')
 ]

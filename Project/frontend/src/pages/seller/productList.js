@@ -66,6 +66,7 @@ const ProductList = () => {
         setIsEditing(false);
         const updatedData = await sellerService.getSellerById(sellerId);
         setSeller(updatedData.data);
+        navigate(`/productlist/`);
       } else {
         setError('Failed to save seller profile');
       }
