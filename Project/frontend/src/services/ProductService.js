@@ -35,6 +35,7 @@ export class ProductService {
         const color = data.color
         const sizes = data.sizes
         const currency = data.currency
+        const originalPrice = data.price
         const price = data.price
         const stock = data.stock
         const rating = data.rating
@@ -48,6 +49,7 @@ export class ProductService {
             colors: color,
             sizes: sizes,
             currency: currency,
+            original_price: originalPrice,
             price: price,
             stock: stock,
             rating: rating

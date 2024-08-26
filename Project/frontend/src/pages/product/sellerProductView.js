@@ -84,9 +84,9 @@ function SellerProductView() {
     
         if (name === 'discountPercentage' && product) {
             const discountPercentage = parseFloat(value);
-            const originalPrice = parseFloat(product.originalPrice || product.price);
-            if (!isNaN(discountPercentage) && !isNaN(originalPrice) && discountPercentage > 0 && discountPercentage <= 100) {
-                const discountedPrice = originalPrice * (1 - (discountPercentage / 100));
+            const original_price = parseFloat(product.original_price || product.price);
+            if (!isNaN(discountPercentage) && !isNaN(original_price) && discountPercentage > 0 && discountPercentage <= 100) {
+                const discountedPrice = original_price * (1 - (discountPercentage / 100));
                 setAfterPromotionPrice(discountedPrice.toFixed(2));
             } else {
                 setAfterPromotionPrice(null);
@@ -118,7 +118,7 @@ function SellerProductView() {
         try {
             const updatedProduct = {
                 ...product,
-                originalPrice: product.originalPrice || product.price,
+                original_price: product.original_price || product.price,
                 price: afterPromotionPrice,
                 promotion: {
                     discountPercentage: parseFloat(promotion.discountPercentage),
@@ -165,10 +165,10 @@ function SellerProductView() {
                     <Paper elevation={3} sx={{ p: 4 }}>
                         <Typography variant="h4" gutterBottom>{product.name}</Typography>
                         <Rating value={4} readOnly sx={{ mb: 2 }} />
-                        {product.originalPrice ? (
+                        {product.price < product.original_price ? (
                             <>
                                 <Typography variant="h6" color="textSecondary" style={{ textDecoration: 'line-through' }}>
-                                    Original Price: {product.currency} {product.originalPrice}
+                                    Original Price: {product.currency} {product.original_price}
                                 </Typography>
                                 <Typography variant="h5" color="primary" gutterBottom>
                                     Sale Price: {product.currency} {product.price}
@@ -216,7 +216,7 @@ function SellerProductView() {
                                 startIcon={<LocalOfferIcon />}
                                 onClick={handlePromotionOpen}
                             >
-                                {product.originalPrice ? 'Update Promotion' : 'Apply Promotion'}
+                                {product.original_price ? 'Update Promotion' : 'Apply Promotion'}
                             </Button>
                         </Box>
                     </Paper>
@@ -276,7 +276,7 @@ function SellerProductView() {
             </Dialog>
 
             <Dialog open={promotionOpen} onClose={handlePromotionClose}>
-                <DialogTitle>{product.originalPrice ? 'Update Promotion' : 'Apply Promotion'}</DialogTitle>
+                <DialogTitle>{product.original_price ? 'Update Promotion' : 'Apply Promotion'}</DialogTitle>
                 <DialogContent>
                     <TextField
                         margin="dense"
@@ -318,7 +318,7 @@ function SellerProductView() {
                         Cancel
                     </Button>
                     <Button onClick={handleApplyPromotion} color="primary">
-                        {product.originalPrice ? 'Update' : 'Apply'}
+                        {product.original_price ? 'Update' : 'Apply'}
                     </Button>
                 </DialogActions>
             </Dialog>
