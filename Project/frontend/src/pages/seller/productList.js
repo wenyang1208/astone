@@ -131,7 +131,7 @@ const ProductList = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem(ACCESS_TOKEN); // Remove the token from localStorage
+    localStorage.removeItem(ACCESS_TOKEN); // Remove the token from localStora
     navigate('/loginSeller'); // Redirect to the login page
   };
 
@@ -211,20 +211,31 @@ const ProductList = () => {
   return (
     <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
       <Container>
-        <Paper elevation={3} sx={{ p: 4, mb: 4, backgroundColor: '#ffffff' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-          <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>
-            {seller.shop_name}
-          </Typography>
-          <Button 
-            variant="outlined" 
-            startIcon={<EditIcon />} 
-            onClick={handleEdit}
-            sx={{ borderColor: '#7D0DC3', color: '#7D0DC3' }}
-          >
-            Edit Profile
-          </Button>
-        </Box>
+      <Paper elevation={3} sx={{ p: 4, mb: 4, backgroundColor: '#ffffff' }}>
+        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+          <Grid item xs={12} sm={6}>
+            <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>
+              {seller.shop_name}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} container justifyContent="flex-end">
+            <Button 
+              variant="outlined" 
+              startIcon={<EditIcon />} 
+              onClick={handleEdit}
+              sx={{ borderColor: '#7D0DC3', color: '#7D0DC3', mr: 2 }}
+            >
+              Edit Profile
+            </Button>
+            <Button 
+              variant="contained" 
+              color="error" 
+              onClick={handleLogout}
+            >
+              Logout
+            </Button>
+          </Grid>
+        </Grid>
         <Divider sx={{ mb: 2 }} />
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
