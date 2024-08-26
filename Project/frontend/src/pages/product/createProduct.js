@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { ChromePicker } from 'react-color';
 import tinycolor from 'tinycolor2';
 import Select from 'react-select';
+import ntc from 'ntcjs';
 import image from './/image.png';
 import {
   Box,
@@ -23,13 +24,13 @@ function CreateProduct() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popoverOpen, setPopoverOpen] = React.useState(false);
   const productService = new ProductService();
-
+  const [color, setColor] = React.useState('#fff');
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
       categories: [],
-      color: [],
+      colors: [],
       sizes: [],
       currency: 'MYR',
       price: 0.00,
@@ -92,8 +93,12 @@ function CreateProduct() {
   };
 
   const handleColorChange = color => {
-    const selectedColor = { code: color.hex, name: tinycolor(color.hex).toName() };
-    formik.setFieldValue('colors', [selectedColor]);
+    const updatedColors = [{
+      name: ntc.name(color.hex)[1], 
+      hex: color.hex
+    }];
+    console.log(updatedColors);
+    formik.setFieldValue('colors', updatedColors);
   };
 
   const handleSizeChange = selectedOptions => {
@@ -206,10 +211,11 @@ function CreateProduct() {
               <Typography>Color</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <ChromePicker
-                id="description"
-                name="description"
-                color={formik.values.colors}
-                onChange={color => formik.setFieldValue('color', [{name: tinycolor(color).toName(), code: color.hex}])}
+                color={color}
+                onChange={updatedColor => {
+                  setColor(updatedColor.hex);
+                  handleColorChange(updatedColor);
+                }}
               />
               </Box>
             </FormControl>

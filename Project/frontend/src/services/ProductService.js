@@ -32,7 +32,7 @@ export class ProductService {
         const name = data.name
         const description = data.description
         const categories = data.categories
-        const color = data.color
+        const color = data.colors
         const sizes = data.sizes
         const currency = data.currency
         const originalPrice = data.price
