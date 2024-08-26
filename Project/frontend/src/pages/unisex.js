@@ -2,10 +2,16 @@ import React, {useState, useEffect} from 'react';
 import SearchBar from '../components/searchBar';
 import { Typography, Select, MenuItem, InputLabel, FormControl,  Box} from '@mui/material';
 import MyAppBar from '../components/appBar';
+import ProductService from '../services/productService';
 
+
+  // add backend base url
+  const BASE_URL = 'http://localhost:8000';
 
 const Unisex = () => {
 
+  // add backend stuff
+  const [product, setProducts] = useState([]);
 
   // for sorting
   const [sortOption, setSortOption] = useState('price-asc');
@@ -13,12 +19,34 @@ const Unisex = () => {
   // handle dropdown change 
   const handleSortChange = (e) => {
     setSortOption(e.target.value);
-
+    handleSortItems(e.target.value);
   };
 
-  const handleSortItems = () => {
-     // Add sorting logic here if needed
+  // need to change the logic to fetch the backend products data
+  const handleSortItems = (option) => {
+    // Add sorting logic here if needed
+    console.log('Sorting by:', sortOption);
 
+    const sortedItems = new ProductService().getProducts();
+
+    switch (option) {
+      case 'price-asc':
+        sortedItems.sort((a, b) => a.price - b.price);
+        break;
+      case 'price-desc':
+        sortedItems.sort((a, b) => b.price - a.price);
+        break;
+      case 'date-asc':
+        sortedItems.sort((a, b) => new Date(a.date) - new Date(b.date));
+        break;
+      case 'date-desc':
+        sortedItems.sort((a, b) => new Date(b.date) - new Date(a.date));
+        break;
+      default:
+        console.log('Invalid sort option');
+        break;
+    
+    }
   };
 
   return (
