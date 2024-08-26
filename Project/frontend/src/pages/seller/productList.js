@@ -130,6 +130,11 @@ const ProductList = () => {
     navigate(`/products/${productId}`);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem(ACCESS_TOKEN); // Remove the token from localStorage
+    navigate('/loginSeller'); // Redirect to the login page
+  };
+
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!seller) return <Typography>No seller data found</Typography>;
