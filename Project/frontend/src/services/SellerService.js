@@ -40,6 +40,10 @@ export class SellerService {
             return res;
         } catch (error) {
             console.error('Error editing seller:', error.response?.data || error.message);
+            if (error.response && error.response.data && error.response.data.shop_name) {
+                // Return specific error message for shop_name conflict
+                return { error: 'shop_name_conflict', message: error.response.data.shop_name };
+            }
             throw error;
         }
     }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Rating } from '@mui/material';
+import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Rating, FormHelperText } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit'; 
@@ -22,6 +22,8 @@ const ProductList = () => {
   const [hoveredProductId, setHoveredProductId] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [notification, setNotification] = useState(null);
+  const [shopNameError, setShopNameError] = useState('');
 
   const navigate = useNavigate();
   const token = localStorage.getItem(ACCESS_TOKEN);
@@ -68,10 +70,16 @@ const ProductList = () => {
         setSeller(updatedData.data);
         navigate(`/productlist/`);
       } else {
-        setError('Failed to save seller profile');
+        // Specific error for shop name
+        if (response.message && response.message.includes('A seller with this shop name already exists.')) {
+          setShopNameError('Shop name already exists. Please choose a different one.');
+        }else{
+          const errorMessage = response.message || 'Failed to save seller profile';
+          setNotification(errorMessage);
+        }
       }
     } catch (err) {
-      setError('Failed to save seller profile');
+      setNotification('Failed to save seller profile');
     }
   };
 
@@ -129,6 +137,11 @@ const ProductList = () => {
     return (
     <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
       <Container maxWidth="md">
+            {notification && (
+              <Typography color="error" sx={{ mb: 2 }}>
+                  {notification}
+              </Typography>
+            )}
           <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
           <Typography variant="h4" gutterBottom>
             {isEditing ? 'Edit Your Profile' : 'Complete Your Profile'}
@@ -144,7 +157,11 @@ const ProductList = () => {
                   label="Shop Name"
                   value={formValues.shopName ||''}
                   onChange={handleShopName}
+                  error={!!shopNameError}
                 />
+                {shopNameError && (
+                  <FormHelperText error>{shopNameError}</FormHelperText>
+                )}
               </Grid>
               <Grid item xs={12}>
               <TextField
