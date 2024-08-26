@@ -7,20 +7,21 @@ from django.contrib.auth import authenticate, login as django_login
 
 @api_view(['POST'])
 def register_user(request):
-    username = request.data.get('username')
     email = request.data.get('email')
+    first_name = request.data.get('first_name')
+    last_name = request.data.get('last_name')
+    gender = request.data.get('gender')
+    phone_number = request.data.get('phone_number')
+    address = request.data.get('address')
     password = request.data.get('password')
 
-    if not username or not email or not password:
+    if not email or not password:
         return Response({'detail': 'All fields are required.'}, status=status.HTTP_400_BAD_REQUEST)
-
-    if CustomUser.objects.filter(username=username).exists():
-        return Response({'detail': 'Username already exists.'}, status=status.HTTP_400_BAD_REQUEST)
 
     if CustomUser.objects.filter(email=email).exists():
         return Response({'detail': 'Email already exists.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    user = CustomUser.objects.create_user(username=username, email=email, password=password)
+    user = CustomUser.objects.create(email=email, first_name=first_name, last_name=last_name, gender=gender, phone_number=phone_number, address=address, password=password)
     serializer = UserSerializer(user)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 

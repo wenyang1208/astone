@@ -1,12 +1,34 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Box, TextField, Button, Typography, CssBaseline, Grid } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
 
 const defaultTheme = createTheme();
 
 const Login = () => {
+  const location = useLocation();
+  const [showAlert, setShowAlert] = useState(false);
+  const [fade, setFade] = useState(true);
+
+  useEffect(() => {
+    if (location.state?.accountCreated) {
+      setShowAlert(true);
+      const fadeTimer = setTimeout(() => {
+        setFade(false);
+      }, 4000); // Start fading after 4 seconds
+      
+      const hideTimer = setTimeout(() => {
+        setShowAlert(false);
+      }, 5000); // Hide alert after 5 seconds
+
+      return () => {
+        clearTimeout(fadeTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [location.state?.accountCreated]);
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
@@ -63,6 +85,24 @@ const Login = () => {
             </Box>
           </Grid>
         </Grid>
+        {showAlert && (
+          <Alert
+            severity="success"
+            sx={{
+              position: 'fixed',
+              top: 20,
+              right: 20,
+              width: 'fit-content',
+              padding: '8px 24px',
+              textAlign: 'center',
+              opacity: fade ? 1 : 0,
+              transition: 'opacity 1s ease-in-out',
+              boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            Account successfully created! Log in.
+          </Alert>
+        )}
       </Container>
     </ThemeProvider>
   );

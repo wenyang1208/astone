@@ -1,28 +1,50 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header2 from '../components/header2'; // Adjust the import path if necessary
+import { UserService } from '../services/UserService';
 
 const defaultTheme = createTheme();
 
 const Signup = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [formValues, setFormValues] = useState({
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
-    emailConfirm: '',
+    email2: '',
     gender: '',
-    phone: '',
+    phone_number: '',
     address: '',
     password: '',
     passwordConfirm: ''
   });
   const [formErrors, setFormErrors] = useState({});
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [fade, setFade] = useState(true);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const steps = ['Let\'s Begin!', 'Optional', 'Almost There!'];
+
+  useEffect(() => {
+    if (location.state?.accountCreationFailed) {
+      setShowErrorAlert(true);
+      const fadeTimer = setTimeout(() => {
+        setFade(false);
+      }, 4000); // Start fading after 4 seconds
+
+      const hideTimer = setTimeout(() => {
+        setShowErrorAlert(false);
+      }, 5000); // Hide alert after 5 seconds
+
+      return () => {
+        clearTimeout(fadeTimer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [location.state?.accountCreationFailed]);
 
   const handleNext = () => {
     if (validateStep(activeStep)) {
@@ -42,10 +64,10 @@ const Signup = () => {
   const validateStep = (step) => {
     const errors = {};
     if (step === 0) {
-      if (!formValues.firstName) errors.firstName = 'First name is required';
-      if (!formValues.lastName) errors.lastName = 'Last name is required';
+      if (!formValues.first_name) errors.first_name = 'First name is required';
+      if (!formValues.last_name) errors.last_name = 'Last name is required';
       if (!formValues.email) errors.email = 'Email is required';
-      if (formValues.email !== formValues.emailConfirm) errors.emailConfirm = 'Emails do not match';
+      if (formValues.email !== formValues.email2) errors.email2 = 'Emails do not match';
     } else if (step === 2) {
       if (!formValues.password) errors.password = 'Password is required';
       if (formValues.password !== formValues.passwordConfirm) errors.passwordConfirm = 'Passwords do not match';
@@ -57,22 +79,31 @@ const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateStep(2)) {
-      // Send form data to the API
-      const response = await fetch('/api/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formValues),
-      });
-
-      if (response.ok) {
-        // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
-        console.log('Signup successful');
-        navigate('/login'); // Redirect to login page after successful signup
-      } else {
-        // Handle errors from the API
-        console.log('Signup failed');
+      try {
+        const userService = new UserService();
+        const response = await userService.register(
+          formValues.email,
+          formValues.first_name,
+          formValues.last_name,
+          formValues.gender,
+          formValues.phone_number,
+          formValues.address,
+          formValues.password
+        );
+  
+        if (response && response.status === 201) {
+          console.log('Signup successful');
+          navigate('/login', { state: { accountCreated: true } });
+        } else {
+          // Assuming a response might contain an error message or code
+          const errorMessage = response?.data?.message || 'Failed to create account.';
+          console.error('Signup failed:', errorMessage);
+          navigate('/signup', { state: { accountCreationFailed: true } });
+        }
+      } catch (error) {
+        // Handle network errors or unexpected issues
+        console.error('An error occurred:', error);
+        navigate('/signup', { state: { accountCreationFailed: true } });
       }
     }
   };
@@ -88,15 +119,15 @@ const Signup = () => {
                   margin="normal"
                   required
                   fullWidth
-                  id="firstName"
+                  id="first_name"
                   label="First Name"
-                  name="firstName"
+                  name="first_name"
                   autoComplete="given-name"
                   autoFocus
-                  value={formValues.firstName}
+                  value={formValues.first_name}
                   onChange={handleChange}
-                  error={!!formErrors.firstName}
-                  helperText={formErrors.firstName}
+                  error={!!formErrors.first_name}
+                  helperText={formErrors.first_name}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -104,14 +135,14 @@ const Signup = () => {
                   margin="normal"
                   required
                   fullWidth
-                  id="lastName"
+                  id="last_name"
                   label="Last Name"
-                  name="lastName"
+                  name="last_name"
                   autoComplete="family-name"
-                  value={formValues.lastName}
+                  value={formValues.last_name}
                   onChange={handleChange}
-                  error={!!formErrors.lastName}
-                  helperText={formErrors.lastName}
+                  error={!!formErrors.last_name}
+                  helperText={formErrors.last_name}
                 />
               </Grid>
             </Grid>
@@ -132,14 +163,14 @@ const Signup = () => {
               margin="normal"
               required
               fullWidth
-              id="emailConfirm"
+              id="email2"
               label="Confirm Email Address"
-              name="emailConfirm"
+              name="email2"
               autoComplete="email"
-              value={formValues.emailConfirm}
+              value={formValues.email2}
               onChange={handleChange}
-              error={!!formErrors.emailConfirm}
-              helperText={formErrors.emailConfirm}
+              error={!!formErrors.email2}
+              helperText={formErrors.email2}
             />
             <Button
               onClick={handleNext}
@@ -175,11 +206,11 @@ const Signup = () => {
             <TextField
               margin="normal"
               fullWidth
-              id="phone"
+              id="phone_number"
               label="Phone Number"
-              name="phone"
+              name="phone_number"
               autoComplete="tel"
-              value={formValues.phone}
+              value={formValues.phone_number}
               onChange={handleChange}
             />
             <TextField
@@ -278,6 +309,11 @@ const Signup = () => {
                 alignItems: 'center',
               }}
             >
+              {showErrorAlert && (
+                <Alert severity="error" sx={{ width: '100%', mb: 2, opacity: fade ? 1 : 0, transition: 'opacity 1s ease-in-out' }}>
+                  Failed to create account.
+                </Alert>
+              )}
               <Stepper activeStep={activeStep} sx={{ width: '100%', mb: 2 }}>
                 {steps.map((label, index) => (
                   <Step key={index}>
