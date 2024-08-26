@@ -91,6 +91,9 @@ const ProductList = () => {
   const handleShopName = (event) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
+    if (shopNameError) {
+      setShopNameError('');
+    }
   };
 
   const handleMouseEnter = (productId) => {
