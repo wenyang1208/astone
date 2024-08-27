@@ -2,10 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel, Alert } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Header2 from '../components/header2'; // Adjust the import path if necessary
+import MyAppBar2 from '../components/appBar2'; // Import MyAppBar2
 import { UserService } from '../services/UserService';
 
-const defaultTheme = createTheme();
+// Define a purple theme with black text
+const purpleTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#6a1b9a', // Purple color
+    },
+    secondary: {
+      main: '#ab47bc', // Light purple color
+    },
+    background: {
+      default: '#fff', // White background
+    },
+    text: {
+      primary: '#000', // Black text
+    },
+  },
+});
 
 const Signup = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -95,13 +111,11 @@ const Signup = () => {
           console.log('Signup successful');
           navigate('/login', { state: { accountCreated: true } });
         } else {
-          // Assuming a response might contain an error message or code
           const errorMessage = response?.data?.message || 'Failed to create account.';
           console.error('Signup failed:', errorMessage);
           navigate('/signup', { state: { accountCreationFailed: true } });
         }
       } catch (error) {
-        // Handle network errors or unexpected issues
         console.error('An error occurred:', error);
         navigate('/signup', { state: { accountCreationFailed: true } });
       }
@@ -128,6 +142,8 @@ const Signup = () => {
                   onChange={handleChange}
                   error={!!formErrors.first_name}
                   helperText={formErrors.first_name}
+                  InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+                  InputProps={{ style: { color: 'text.primary' } }} // Black text
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -143,6 +159,8 @@ const Signup = () => {
                   onChange={handleChange}
                   error={!!formErrors.last_name}
                   helperText={formErrors.last_name}
+                  InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+                  InputProps={{ style: { color: 'text.primary' } }} // Black text
                 />
               </Grid>
             </Grid>
@@ -158,6 +176,8 @@ const Signup = () => {
               onChange={handleChange}
               error={!!formErrors.email}
               helperText={formErrors.email}
+              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+              InputProps={{ style: { color: 'text.primary' } }} // Black text
             />
             <TextField
               margin="normal"
@@ -171,17 +191,20 @@ const Signup = () => {
               onChange={handleChange}
               error={!!formErrors.email2}
               helperText={formErrors.email2}
+              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+              InputProps={{ style: { color: 'text.primary' } }} // Black text
             />
             <Button
               onClick={handleNext}
               fullWidth
               variant="contained"
+              color="primary"
               sx={{ mt: 3, mb: 2 }}
             >
               Next
             </Button>
-            <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 1 }}>
-              Already have an account? <Link to="/login" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
+            <Typography variant="body2" color="text.primary" align="center" sx={{ mb: 1 }}>
+              Already have an account? <Link to="/login" style={{ textDecoration: 'none', color: purpleTheme.palette.primary.main }}>Log In</Link>
             </Typography>
           </Box>
         );
@@ -212,6 +235,8 @@ const Signup = () => {
               autoComplete="tel"
               value={formValues.phone_number}
               onChange={handleChange}
+              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+              InputProps={{ style: { color: 'text.primary' } }} // Black text
             />
             <TextField
               margin="normal"
@@ -222,11 +247,14 @@ const Signup = () => {
               autoComplete="street-address"
               value={formValues.address}
               onChange={handleChange}
+              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+              InputProps={{ style: { color: 'text.primary' } }} // Black text
             />
             <Button
               onClick={handleNext}
               fullWidth
               variant="contained"
+              color="primary"
               sx={{ mt: 3, mb: 2 }}
             >
               Next
@@ -257,6 +285,8 @@ const Signup = () => {
               onChange={handleChange}
               error={!!formErrors.password}
               helperText={formErrors.password}
+              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+              InputProps={{ style: { color: 'text.primary' } }} // Black text
             />
             <TextField
               margin="normal"
@@ -271,11 +301,14 @@ const Signup = () => {
               onChange={handleChange}
               error={!!formErrors.passwordConfirm}
               helperText={formErrors.passwordConfirm}
+              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
+              InputProps={{ style: { color: 'text.primary' } }} // Black text
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              color="primary"
               sx={{ mt: 3, mb: 2 }}
             >
               Create Account
@@ -296,10 +329,10 @@ const Signup = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={purpleTheme}>
       <CssBaseline />
-      <Container maxWidth="lg">
-        <Header2 />
+      <MyAppBar2 /> {/* Use MyAppBar2 */}
+      <Container maxWidth="lg" sx={{ pt: 8 }}>
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '80vh' }}>
           <Grid item xs={12} sm={8} md={5}>
             <Box
@@ -307,6 +340,10 @@ const Signup = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                backgroundColor: '#fff', // White background
+                borderRadius: '8px', // Smooth corners
+                boxShadow: 3, // Subtle shadow
+                p: 3,
               }}
             >
               {showErrorAlert && (
