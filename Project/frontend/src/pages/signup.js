@@ -15,7 +15,7 @@ const purpleTheme = createTheme({
       main: '#ab47bc', // Light purple color
     },
     background: {
-      default: '#fff', // White background
+      default: '#F0E6FA', // White background
     },
     text: {
       primary: '#000', // Black text

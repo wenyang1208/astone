@@ -15,7 +15,7 @@ const purpleTheme = createTheme({
       main: '#ab47bc', // Light purple color
     },
     background: {
-      default: '#fff', // White background
+      default: '#F0E6FA', // Light pink background
     },
     text: {
       primary: '#000', // Black text
@@ -104,7 +104,7 @@ const Login = () => {
                   p: 4,
                   borderRadius: 2,
                   boxShadow: 3,
-                  bgcolor: 'background.default',
+                  bgcolor: '#fff', // White background for the main component area
                   width: '100%',
                   maxWidth: 400,
                 }}
@@ -183,7 +183,7 @@ const Login = () => {
               opacity: fade ? 1 : 0,
               transition: 'opacity 1s ease-in-out',
               boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-              bgcolor: 'background.default', // White background
+              bgcolor: '#fff', // White background for the alert
               color: 'text.primary' // Black text
             }}
           >

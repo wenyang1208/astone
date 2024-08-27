@@ -62,7 +62,6 @@ const LoginButton = () => {
               'aria-labelledby': 'user-button',
             }}
           >
-            <MenuItem component={Link} to="/sell" onClick={handleClose}>Sell</MenuItem>
             <MenuItem component={Link} to="/support" onClick={handleClose}>Support</MenuItem>
             <MenuItem component={Link} to="/settings" onClick={handleClose}>Settings</MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>

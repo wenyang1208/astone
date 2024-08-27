@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Badge, Drawer, List, ListItem, ListItemText, Button, Container, Box } from '@mui/material';
+import {
+  AppBar, Toolbar, Typography, IconButton, Badge, Drawer, List, ListItem, ListItemText, Button, Container, Box
+} from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { styled } from '@mui/material/styles';
 import backgroundImage from '../assets/mask-group.png';
 import { OrderService } from '../services/OrderService';
-import LoginButton from './loginButton';  // Import the LoginButton component
+import LoginButton from './loginButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
@@ -15,16 +17,15 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundPosition: 'center',
 }));
 
+// Sections displayed in the main navigation bar
 const sections = [
   { title: 'Home', url: '/' },
   { title: 'Men', url: '/men' },
   { title: 'Women', url: '/women' },
   { title: 'Unisex', url: '/unisex' },
   { title: 'Compare', url: '/compare' },
-  { title: 'Support', url: '/support' },
+  { title: 'Sell', url: '/sell' }, // 'Sell' is included in the main navigation bar
 ];
-
-const placeholderImage = 'path/to/placeholder/image.png'; // Path to your placeholder image
 
 function MyAppBar() {
   const [cartItemCount, setCartItemCount] = useState(0);
@@ -65,25 +66,22 @@ function MyAppBar() {
 
   const handleIncrement = async (item) => {
     const orderService = new OrderService();
-    console.log(item);
     try {
-        await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity + 1);
-        fetchCartItems();
+      await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity + 1);
+      fetchCartItems();
     } catch (error) {
-        console.error('Error updating cart item:', error);
+      console.error('Error updating cart item:', error);
     }
   };
 
   const handleDecrement = async (item) => {
-      const orderService = new OrderService();
-      console.log(item);
-
-      try {
-          await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity - 1);
-          fetchCartItems();
-      } catch (error) {
-          console.error('Error updating cart item:', error);
-      }
+    const orderService = new OrderService();
+    try {
+      await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity - 1);
+      fetchCartItems();
+    } catch (error) {
+      console.error('Error updating cart item:', error);
+    }
   };
 
   const handleCheckout = () => {
@@ -125,7 +123,7 @@ function MyAppBar() {
                 <ShoppingCartIcon />
               </Badge>
             </IconButton>
-            <LoginButton />  {/* Use the LoginButton component here */}
+            <LoginButton /> {/* Use the LoginButton component here */}
           </Box>
         </Toolbar>
       </StyledAppBar>
@@ -136,12 +134,13 @@ function MyAppBar() {
           </Typography>
           <List>
             {cartItems.map((item, index) => {
-              console.log(item);
               const colors = item.color;
               const sizes = item.size;
               const selectedColor = colors;
               const selectedSize = sizes;
-              const imageUrl = (item?.product?.images && item?.product?.images.length > 0) ? `${BASE_URL}${item.product.images[0].image_url}` : 'https://via.placeholder.com/140';
+              const imageUrl = (item?.product?.images && item?.product?.images.length > 0) 
+                ? `${BASE_URL}${item.product.images[0].image_url}` 
+                : 'https://via.placeholder.com/140';
 
               return (
                 <ListItem key={index}>
