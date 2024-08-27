@@ -15,7 +15,13 @@ import {
   InputAdornment, 
   IconButton,
   Popover,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton as MuiIconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
 import { ProductService } from '../../services/ProductService';
 
@@ -25,6 +31,7 @@ function CreateProduct() {
   const [popoverOpen, setPopoverOpen] = React.useState(false);
   const productService = new ProductService();
   const [color, setColor] = React.useState('#fff');
+  const [colors, setColors] = React.useState([]);
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -92,15 +99,20 @@ function CreateProduct() {
     formik.setFieldValue('categories', selectedOptions.map(option => ({ code: option.value, name: option.label })));
   };
 
-  const handleColorChange = color => {
-    const updatedColors = [{
-      name: ntc.name(color.hex)[1], 
-      hex: color.hex
-    }];
-    console.log(updatedColors);
+  const handleAddColor = () => {
+    const colorName = ntc.name(color)[1];
+    const newColor = { name: colorName, hex: color };
+    const updatedColors = [...colors, newColor];
+    setColors(updatedColors);
     formik.setFieldValue('colors', updatedColors);
   };
 
+const handleRemoveColor = (index) => {
+  const updatedColors = colors.filter((_, i) => i !== index);
+  setColors(updatedColors);
+  formik.setFieldValue('colors', updatedColors); // Update the formik values when a color is removed
+};
+  
   const handleSizeChange = selectedOptions => {
     // Map selected options to format required by Formik
     const selected = selectedOptions.map(option => ({ value: option.value, label: option.label }));
@@ -210,14 +222,26 @@ function CreateProduct() {
             <FormControl fullWidth margin="normal">
               <Typography>Color</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <ChromePicker
-                color={color}
-                onChange={updatedColor => {
-                  setColor(updatedColor.hex);
-                  handleColorChange(updatedColor);
-                }}
-              />
+                <ChromePicker
+                  color={color}
+                  onChange={(updatedColor) => setColor(updatedColor.hex)}
+                />
+                <Button onClick={handleAddColor} sx={{ marginLeft: 2, backgroundColor: '#b357ff', color: 'white' }}>
+                  Add Color
+                </Button>
               </Box>
+              <List>
+                {colors.map((color, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={color.name} secondary={color.hex} />
+                    <ListItemSecondaryAction>
+                      <MuiIconButton edge="end" onClick={() => handleRemoveColor(index)}>
+                        <DeleteIcon />
+                      </MuiIconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
             </FormControl>
             <FormControl fullWidth margin="normal">
             <Typography sx={{ display: 'flex', alignItems: 'center' }}>Sizes
