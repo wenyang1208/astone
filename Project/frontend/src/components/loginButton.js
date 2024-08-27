@@ -16,7 +16,6 @@ const LoginButton = () => {
       axios.get(`http://localhost:8000/user/${userEmail}/`)
         .then(response => {
           setUserFirstName(response.data.first_name);
-          console.log('User details:', response.data);
         })
         .catch(error => {
           console.error('Error fetching user details:', error);
