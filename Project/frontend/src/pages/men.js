@@ -132,7 +132,6 @@ const Men = () => {
 
   const ProductCard = ({ product }) => (
     <Card style={styles.card} onClick={() => handleCardClick(product.id)}>
-    <Card style={styles.card} onClick={() => handleCardClick(product.id)}>
               <Paper>
                 <img
                   src={(product?.images && product.images.length > 0) ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
@@ -140,18 +139,6 @@ const Men = () => {
                   style={{ width: '100%', height: 'auto' }}
                 />
               </Paper>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {product.name}
-        </Typography>
-        <Typography variant="body2" color="textSecondary" component="p">
-          {product.description}
-        </Typography>
-        <Typography variant="body2" style={styles.price} component="p">
-          {product.currency} {product.price}
-        </Typography>
-      </CardContent>
-    </Card>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
           {product.name}

@@ -152,7 +152,6 @@ const Men = () => {
       </CardContent>
     </Card>
   );
-  
   return (
     <div>
       <MyAppBar />
