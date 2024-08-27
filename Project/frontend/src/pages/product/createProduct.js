@@ -334,6 +334,8 @@ const handleRemoveColor = (index) => {
                 type="file"
                 multiple
                 onChange={(event) => {
+                console.log(event)
+                console.log(Array.from(event.currentTarget.files))
                 formik.setFieldValue("images", Array.from(event.currentTarget.files));
                 }}
              />

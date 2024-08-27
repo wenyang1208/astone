@@ -17,6 +17,7 @@ function SellerProductView() {
     const [editOpen, setEditOpen] = useState(false);
     const [promotionOpen, setPromotionOpen] = useState(false);
     const navigate = useNavigate();
+    const BASE_URL = 'http://localhost:8000';
     const [editProduct, setEditProduct] = useState({
         name: '',
         description: '',
@@ -42,12 +43,13 @@ function SellerProductView() {
             const res = await productService.getProductById(id);
             if (res && res.data) {
                 setProduct(res.data);
+                console.log(res.data);
                 setEditProduct({
                     name: res.data.name,
                     description: res.data.description,
                     price: res.data.price,
                     stock: res.data.stock,
-                    images: res.data.images
+                    images: BASE_URL + res.data.images[0].image_url
                 });
                 setExistingImages(res.data.images);
                 // Initialize promotion if it exists
@@ -124,10 +126,12 @@ function SellerProductView() {
 
             if (editProduct.images && editProduct.images.length > 0) {
                 editProduct.images.forEach((image, index) => {
-                    formData.append(`images[${index}]`, image);
+                    console.log(image);
+                    formData.append('images', image);
                 });
             }
             const res = await productService.editProduct(id, updatedProduct);
+            console.log(res);
             if (res && res.status === 200) {
                 setProduct(res.data);
                 handleEditClose();
@@ -186,7 +190,18 @@ function SellerProductView() {
             <Grid container spacing={4} sx={{ px: 4 }}>
                 <Grid item xs={12} md={6}>
                     <Paper elevation={3} sx={{ p: 2 }}>
-                        <img src={image} alt="Product" style={{ width: '100%', height: 'auto' }} />
+                    {existingImages.length > 0 ? (
+                            existingImages.map((image, index) => (
+                                <img
+                                    key={index}
+                                    src={BASE_URL + image.image_url}
+                                    alt={'Product'}
+                                    style={{ width: '100%', height: 'auto' }}
+                                />
+                            ))
+                        ) : (
+                            <Typography>No images available</Typography>
+                        )}
                     </Paper>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -291,10 +306,10 @@ function SellerProductView() {
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
                         {existingImages.length > 0 ? (
-                            existingImages.map((imageUrl, index) => (
+                            existingImages.map((images, index) => (
                                 <Box key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <img
-                                        src={imageUrl}
+                                        src={BASE_URL + images.image_url}
                                         alt={`Existing Image ${index + 1}`}
                                         style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }}
                                     />

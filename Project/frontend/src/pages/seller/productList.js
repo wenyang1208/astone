@@ -12,7 +12,7 @@ import image from '../product/crew-neck.png';
 
 const sellerService = new SellerService();
 const productService = new ProductService();
-
+const BASE_URL = 'http://localhost:8000';
 const ProductList = () => {
   const [seller, setSeller] = useState(null);
   const [products, setProducts] = useState([]);
@@ -293,7 +293,17 @@ const ProductList = () => {
               onMouseLeave={handleMouseLeave}
               onClick={() => handleProductClick(output.id)}
             >
-              <img src={image} alt="Product Photo" style={{ width: '100%', height: 'auto', marginBottom: '10px' }} />
+              {output.images.length > 0 && output.images[0].image_url ?
+                      <img 
+                          src={output.images[0].image_url}                                 
+                          alt="Product Photo" 
+                          style={{ 
+                            width: '200px'
+                          }} 
+                      />
+                  :
+                      <img src={image} alt="Product Photo" style={{ width: '200px' }} />
+              }
               <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{output.name}</Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                 ID: ast{String(output.id).padStart(8, '0')}
