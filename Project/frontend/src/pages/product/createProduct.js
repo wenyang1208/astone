@@ -329,13 +329,13 @@ const handleRemoveColor = (index) => {
             </FormControl>
             <FormControl fullWidth margin="normal">
             <input
-                        id="images"
-                        name="images"
-                        type="file"
-                        multiple
-                        onChange={(event) => {
-                        formik.setFieldValue("images", Array.from(event.currentTarget.files));
-                        }}
+                id="images"
+                name="images"
+                type="file"
+                multiple
+                onChange={(event) => {
+                formik.setFieldValue("images", Array.from(event.currentTarget.files));
+                }}
              />
             </FormControl>
             <Button

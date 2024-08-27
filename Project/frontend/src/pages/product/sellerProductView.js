@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ProductService } from '../../services/ProductService';
 import { 
@@ -22,8 +22,7 @@ function SellerProductView() {
         description: '',
         price: '',
         stock: '',
-        images: [],
-        stock: ''
+        images: []
     });
     const [promotion, setPromotion] = useState({
         discountPercentage: '',
@@ -48,9 +47,9 @@ function SellerProductView() {
                     description: res.data.description,
                     price: res.data.price,
                     stock: res.data.stock,
-                        images: res.data.images
+                    images: res.data.images
                 });
-                    setExistingImages(res.data.images);
+                setExistingImages(res.data.images);
                 // Initialize promotion if it exists
                 if (res.data.promotion) {
                     setPromotion({
@@ -114,6 +113,15 @@ function SellerProductView() {
                 original_price: editProduct.price,
                 stock: editProduct.stock,
             };
+            const formData = new FormData(); // Create a new FormData instance
+
+            // Append other product fields to formData
+            formData.append('name', updatedProduct.name);
+            formData.append('description', updatedProduct.description);
+            formData.append('price', updatedProduct.price);
+            formData.append('original_price', updatedProduct.original_price);
+            formData.append('stock', updatedProduct.stock);
+
             if (editProduct.images && editProduct.images.length > 0) {
                 editProduct.images.forEach((image, index) => {
                     formData.append(`images[${index}]`, image);

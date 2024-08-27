@@ -1,5 +1,6 @@
 import axios from 'axios';
 import api from '../api';
+import { getInitColorSchemeScript } from '@mui/material';
 
 export class ProductService {
 
@@ -27,9 +28,9 @@ export class ProductService {
         return axios.put(`http://localhost:8000/products/${id}/edit`, productData);
     }
 
-    async createProduct(data) {
+    async createProduct (data) {
         try {
-            const { name, description, categories, color, sizes, currency, price, stock, rating, images } = data;
+            const { name, description, categories, colors, sizes, currency, price, stock, rating, images } = data;
     
             const categoryNames = categories.map(category => category.name);
     
@@ -38,13 +39,13 @@ export class ProductService {
             formData.append('name', name);
             formData.append('description', description);
             formData.append('category', categoryNames);
-            formData.append('colors', color);
-            formData.append('sizes', sizes);
+            formData.append('colors', JSON.stringify(colors));
+            formData.append('sizes', JSON.stringify(sizes));
             formData.append('currency', currency);
             formData.append('price', price);
             formData.append('stock', stock);
             formData.append('rating', rating);
-            
+
             console.log(images)
             // Append images to FormData
             images.forEach((image, index) => {
@@ -53,18 +54,20 @@ export class ProductService {
             for (var pair of formData.entries()) {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
-    
-            const res = await axios.post('http://localhost:8000/products/create/', formData, {
+
+            const res = await api.post('http://localhost:8000/products/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
             return res;
-        } catch (error) {
-            console.error('Error creating product:', error);
-            return null;
         }
-    }
+catch (error) {
+                console.error('Error creating product:', error);
+                return null;
+            }
+        }
+    
 
     async deleteProduct(productId) {
         try {

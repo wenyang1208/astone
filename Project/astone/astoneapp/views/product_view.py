@@ -41,16 +41,19 @@ logger = logging.getLogger(__name__)
 class ProductListCreate(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
-
+    parser_classes = [MultiPartParser, FormParser]
     def get_queryset(self):
         user_id = self.request.user.seller
-        return Product.objects.filter(seller=user_id)
+        return Product.objects.filter(seller=user_id).prefetch_related('images')
 
     def perform_create(self, serializer):
         if serializer.is_valid():
             # Access the user_id directly from the AccessToken object
             user_id = self.request.user.seller.id
-            serializer.save(seller_id=user_id)  # Save using user_id
+            product = serializer.save(seller_id=user_id)  # Save using user_id
+            images = self.request.FILES.getlist('images')
+            for image in images:
+                Image.objects.create(product=product, image_url=image)
         else:
             print(serializer.errors)
 
@@ -61,53 +64,53 @@ def GetProductView(request):
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data)
             
-@api_view(['POST']) # request type
-@parser_classes([MultiPartParser, FormParser])
-def CreateProductView(request):
-    try:
-        with transaction.atomic():
-            print("data")
-            print(request.data)
-            print("files")
-            print(request.FILES)
-            # Create product
-            name = request.data.get('name')
-            description = request.data.get('description')
-            category = request.data.get('category')
-            colors = request.data.get('colors')
-            sizes = request.data.get('sizes')
-            currency = request.data.get('currency')
-            price = request.data.get('price')
-            stock = request.data.get('stock')
-            rating = request.data.get('rating')
-            images = request.FILES.getlist('images')
+# @api_view(['POST']) # request type
+# @parser_classes([MultiPartParser, FormParser])
+# def CreateProductView(request):
+#     try:
+#         with transaction.atomic():
+#             print("data")
+#             print(request.data)
+#             print("files")
+#             print(request.FILES)
+#             # Create product
+#             name = request.data.get('name')
+#             description = request.data.get('description')
+#             category = request.data.get('category')
+#             colors = request.data.get('colors')
+#             sizes = request.data.get('sizes')
+#             currency = request.data.get('currency')
+#             price = request.data.get('price')
+#             stock = request.data.get('stock')
+#             rating = request.data.get('rating')
+#             images = request.FILES.getlist('images')
 
-            # Validate request
-            if not all([name, description, currency, price]):
-                return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
+#             # Validate request
+#             if not all([name, description, currency, price]):
+#                 return Response({'error': 'Missing required fields'}, status=status.HTTP_400_BAD_REQUEST)
 
-            product = Product.objects.create(
-                name=name,
-                description=description,
-                category=category,
-                colors=colors,
-                sizes=sizes,
-                currency=currency,
-                price=price,
-                stock=stock,
-                rating=rating
-            )
-            print(images)
+#             product = Product.objects.create(
+#                 name=name,
+#                 description=description,
+#                 category=category,
+#                 colors=colors,
+#                 sizes=sizes,
+#                 currency=currency,
+#                 price=price,
+#                 stock=stock,
+#                 rating=rating
+#             )
+#             print(images)
 
-            # Create product images
-            for image in images:
-                print(image)
-                Image.objects.create(product=product, image_url=image)
+#             # Create product images
+#             for image in images:
+#                 print(image)
+#                 Image.objects.create(product=product, image_url=image)
 
-            serializer = ProductCreateResponseSerializer({'message': 'Product created successfully'})
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#             serializer = ProductCreateResponseSerializer({'message': 'Product created successfully'})
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#     except Exception as e:
+#         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class ProductDetailView(APIView):
     
