@@ -40,7 +40,7 @@ export class ProductService {
             formData.append('description', description);
             formData.append('category', categoryNames);
             formData.append('colors', JSON.stringify(colors));
-            formData.append('sizes', JSON.stringify(sizes));
+            formData.append('sizes', sizes);
             formData.append('currency', currency);
             formData.append('price', price);
             formData.append('stock', stock);
