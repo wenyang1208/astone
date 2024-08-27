@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Alert } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Container, Box, TextField, Button, Typography, Grid, Alert } from '@mui/material';
 import { SellerService } from '../../services/SellerService';
-import Header2 from '../../components/header2'; // Adjust the import path if necessary
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constant';
 
-const defaultTheme = createTheme();
 
 const LoginSeller = () => {
   const [username, setUsername] = useState('');
@@ -35,10 +32,7 @@ const LoginSeller = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <CssBaseline />
       <Container maxWidth="lg">
-        <Header2 />
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '80vh' }}>
           <Grid item xs={12} sm={8} md={5}>
             <Box
@@ -104,7 +98,6 @@ const LoginSeller = () => {
           </Grid>
         </Grid>
       </Container>
-    </ThemeProvider>
   );
 };
 

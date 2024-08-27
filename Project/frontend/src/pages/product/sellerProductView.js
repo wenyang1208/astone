@@ -222,7 +222,7 @@ function SellerProductView() {
                                 startIcon={<LocalOfferIcon />}
                                 onClick={handlePromotionOpen}
                             >
-                                {product.original_price ? 'Update Promotion' : 'Apply Promotion'}
+                                {product.original_price ? 'Add Promotion' : 'Apply Promotion'}
                             </Button>
                         </Box>
                     </Paper>
