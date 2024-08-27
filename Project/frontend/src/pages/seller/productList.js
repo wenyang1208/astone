@@ -141,7 +141,9 @@ const ProductList = () => {
 
   const isProfileComplete = seller && seller.phone_number && seller.address && seller.shop_name;
 
-  if (isEditing || !isProfileComplete) {
+  if (isEditing) {
+    console.log(`need to edit: ${isEditing}`);
+    console.log(`no need to complete: ${!isProfileComplete}`);
     return (
     <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
       <Container maxWidth="md">

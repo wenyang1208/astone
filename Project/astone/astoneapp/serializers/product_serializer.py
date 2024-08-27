@@ -10,7 +10,7 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
-    default_image = serializers.SerializerMethodField()
+    # default_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -18,10 +18,10 @@ class ProductSerializer(serializers.ModelSerializer):
         # fields = ['id', 'name','description','category','colors','sizes','currency','price', 'rating', 'stock', 'original_price', 'promotion_price','seller','images']
         extra_kwargs = {"seller": {"read_only": True}}
 
-    def get_default_image(self, obj):
-        if obj.images.exists():
-            return obj.images.first().image_url.url
-        return 'path/to/placeholder/image.png'
+    # def get_default_image(self, obj):
+    #     if obj.images.exists():
+    #         return obj.images.first().image_url.url
+    #     return 'path/to/placeholder/image.png'
 
 class ProductCreateResponseSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
