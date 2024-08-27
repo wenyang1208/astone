@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { ProductService } from '../../services/ProductService';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import image from './/crew-neck.png';
-import { Box } from '@mui/material';
+import { 
+  Typography, Button, TextField, Dialog, DialogActions, DialogContent, 
+  DialogTitle, Box, Grid, Paper, Chip, Rating, Divider
+} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import EditIcon from '@mui/icons-material/Edit';
+import image from './crew-neck.png';
+import { PromotionService } from '../../services/PromotionService';
 
 function SellerProductView() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [editOpen, setEditOpen] = useState(false);
+    const [promotionOpen, setPromotionOpen] = useState(false);
+    const navigate = useNavigate();
+    const BASE_URL = 'http://localhost:8000';
     const [editProduct, setEditProduct] = useState({
         name: '',
         description: '',
@@ -22,39 +25,59 @@ function SellerProductView() {
         stock: '',
         images: []
     });
+    const [promotion, setPromotion] = useState({
+        discountPercentage: '',
+        startDate: '',
+        endDate: ''
+    });
+    const [afterPromotionPrice, setAfterPromotionPrice] = useState(null);
     const [existingImages, setExistingImages] = useState(editProduct.images || []);
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            const productService = new ProductService();
-            try {
-                const res = await productService.getProductById(id);
-                console.log(res)
-                if (res && res.data) {
-                    setProduct(res.data);
-                    setEditProduct({
-                        name: res.data.name,
-                        description: res.data.description,
-                        price: res.data.price,
-                        stock: res.data.stock,
-                        images: res.data.images
-                    });
-                    setExistingImages(res.data.images);
-                }
-            } catch (error) {
-                console.error('Error fetching product:', error);
-            }
-        };
-
         fetchProduct();
     }, [id]);
 
-    const handleEditOpen = () => {
-        setEditOpen(true);
+    const fetchProduct = async () => {
+        const productService = new ProductService();
+        try {
+            const res = await productService.getProductById(id);
+            if (res && res.data) {
+                setProduct(res.data);
+                console.log(res.data);
+                setEditProduct({
+                    name: res.data.name,
+                    description: res.data.description,
+                    price: res.data.price,
+                    stock: res.data.stock,
+                    images: BASE_URL + res.data.images[0].image_url
+                });
+                setExistingImages(res.data.images);
+                // Initialize promotion if it exists
+                if (res.data.promotion) {
+                    setPromotion({
+                        discountPercentage: res.data.promotion.discountPercentage.toString(),
+                        startDate: res.data.promotion.startDate,
+                        endDate: res.data.promotion.endDate
+                    });
+                    setAfterPromotionPrice(res.data.price.toString());
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching product:', error);
+        }
     };
 
-    const handleEditClose = () => {
-        setEditOpen(false);
+    const handleEditOpen = () => setEditOpen(true);
+    const handleEditClose = () => setEditOpen(false);
+    const handlePromotionOpen = () => setPromotionOpen(true);
+    const handlePromotionClose = () => {
+        setPromotionOpen(false);
+        setAfterPromotionPrice(null);
+        setPromotion({
+            discountPercentage: '',
+            startDate: '',
+            endDate: ''
+        });
     };
 
     const handleInputChange = (e) => {
@@ -65,23 +88,50 @@ function SellerProductView() {
             setEditProduct({ ...editProduct, [name]: value });
         }
     };
+
+    const handlePromotionChange = (e) => {
+        const { name, value } = e.target;
+        setPromotion(prev => ({ ...prev, [name]: value }));
     
+        if (name === 'discountPercentage' && product) {
+            const discountPercentage = parseFloat(value);
+            const original_price = parseFloat(product.original_price || product.price);
+            if (!isNaN(discountPercentage) && !isNaN(original_price) && discountPercentage > 0 && discountPercentage <= 100) {
+                const discountedPrice = original_price * (1 - (discountPercentage / 100));
+                setAfterPromotionPrice(discountedPrice.toFixed(2));
+            } else {
+                setAfterPromotionPrice(null);
+            }
+        }
+    };
+
     const handleSaveChanges = async () => {
         const productService = new ProductService();
         try {
-            const formData = new FormData();
-            formData.append('name', editProduct.name);
-            formData.append('description', editProduct.description);
-            formData.append('price', editProduct.price);
-            formData.append('stock', editProduct.stock);
-    
-            if (editProduct.images && editProduct.images.length > 0) {
-                editProduct.images.forEach((image, index) => {
-                    formData.append(`images[${index}]`, image);
-                });
-            }
-    
-            const res = await productService.editProduct(id, formData);
+            const updatedProduct = {
+                name: editProduct.name,
+                description: editProduct.description,
+                price: editProduct.price,
+                original_price: editProduct.price,
+                stock: editProduct.stock,
+            };
+            const formData = new FormData(); // Create a new FormData instance
+
+            // Append other product fields to formData
+            formData.append('name', updatedProduct.name);
+            formData.append('description', updatedProduct.description);
+            formData.append('price', updatedProduct.price);
+            formData.append('original_price', updatedProduct.original_price);
+            formData.append('stock', updatedProduct.stock);
+
+            // if (editProduct.images && editProduct.images.length > 0) {
+            //     editProduct.images.forEach((image, index) => {
+            //         console.log(image);
+            //         formData.append('images', image);
+            //     });
+            // }
+            const res = await productService.editProduct(id, updatedProduct);
+            console.log(res);
             if (res && res.status === 200) {
                 setProduct(res.data);
                 handleEditClose();
@@ -90,106 +140,254 @@ function SellerProductView() {
             console.error('Error updating product:', error);
         }
     };
-    
+
+    const handleApplyPromotion = async () => {
+        const productService = new ProductService();
+        const promotionService = new PromotionService();
+        try {
+            const updatedProduct = {
+                ...product,
+                original_price: product.original_price || product.price,
+                price: afterPromotionPrice,
+            };
+            console.log(product.id);
+            const addPromotion = {
+                product_id: product.id,
+                discountPercentage: parseFloat(promotion.discountPercentage),
+                startDate: promotion.startDate,
+                endDate: promotion.endDate
+            }
+            const resPromotion = await promotionService.createPromotion(addPromotion);
+            const res = await productService.editProduct(id, updatedProduct);
+            if (res && res.status === 200 && resPromotion.status === 200) {
+                setProduct(res.data);
+                handlePromotionClose();
+            }
+        } catch (error) {
+            console.error('Error applying promotion:', error);
+        }
+    };
+
+    const handleBack = () => {
+        navigate('/productlist'); // This will navigate to the previous page in the history
+    };
 
     if (!product) {
-        return <div>Loading...</div>;
+        return <Typography>Loading...</Typography>;
     }
 
     return (
-      <div style={{ 
-          padding: '30px',
-          backgroundColor: '#f3e5f5', // Set background color
-          minHeight: '100vh',
-          margin: 'auto', // Center the component horizontally
-      }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          {/* <Box sx={{flex: '1'}}><img src={image} alt="Product Photo" style={{ width: '450px', paddingLeft: '60px', paddingTop: '30px'}} /></Box> */}
-          <Box>
-                        <Typography variant="h6">Existing Images</Typography>
-                        {console.log(existingImages)}
-                        <Box display="flex" flexWrap="wrap" gap="10px">
-                            {existingImages.map((image, index) => (
+        <Box sx={{ backgroundColor: '#f5f5f5', minHeight: '100vh', py: 4 }}>
+            <Box sx={{ px: 4, mb: 2 }}>
+                <Button
+                    variant="outlined"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={handleBack}
+                >
+                    Back
+                </Button>
+            </Box>
+            <Grid container spacing={4} sx={{ px: 4 }}>
+                <Grid item xs={12} md={6}>
+                    <Paper elevation={3} sx={{ p: 2 }}>
+                    {existingImages.length > 0 ? (
+                            existingImages.map((image, index) => (
                                 <img
                                     key={index}
-                                    src={`http://localhost:8000${image.image_url}`}
-                                    alt={`Product Image ${index}`}
-                                    style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                                    src={BASE_URL + image.image_url}
+                                    alt={'Product'}
+                                    style={{ width: '100%', height: 'auto' }}
                                 />
+                            ))
+                        ) : (
+                            <Typography>No images available</Typography>
+                        )}
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Paper elevation={3} sx={{ p: 4 }}>
+                        <Typography variant="h4" gutterBottom>{product.name}</Typography>
+                        <Rating value={4} readOnly sx={{ mb: 2 }} />
+                        {product.price < product.original_price ? (
+                            <>
+                                <Typography variant="h6" color="textSecondary" style={{ textDecoration: 'line-through' }}>
+                                    Original Price: {product.currency} {product.original_price}
+                                </Typography>
+                                <Typography variant="h5" color="primary" gutterBottom>
+                                    Sale Price: {product.currency} {product.price}
+                                </Typography>
+                            </>
+                        ) : (
+                            <Typography variant="h5" color="primary" gutterBottom>
+                                Price: {product.currency} {product.price}
+                            </Typography>
+                        )}
+                        <Typography variant="body1" paragraph>{product.description}</Typography>
+                        <Divider sx={{ my: 2 }} />
+                        <Typography variant="subtitle1" gutterBottom>Category:</Typography>
+                        <Box sx={{ mb: 2 }}>
+                            {product.category.replace(/[\[\]']+/g, '').split(', ').map((cat, index) => (
+                                <Chip key={index} label={cat} sx={{ mr: 1, mb: 1 }} />
                             ))}
                         </Box>
-            </Box>
-            <br></br>
-          <Box sx={{flex: '1', paddingTop: '50px'}}>
-          <Typography variant="h4" style={{ marginBottom: '20px' }}>{product.name}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Description: ${product.description}`}</Typography>
-          {/* <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Category: ${product.category.replace(/[\[\]']+/g, '').split(', ').join(', ')}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Colors: ${product.colors.map(color => color.name.charAt(0).toUpperCase() + color.name.slice(1)).join(', ')}`}</Typography> */}
-          {/* <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Sizes: ${product.sizes.map(size => size.label).join(', ')}`}</Typography> */}
-          <Typography variant="body1" style={{ marginBottom: '10px' }}>{`Price: ${product.currency} ${product.price}`}</Typography>
-          <Typography variant="body1" style={{ marginBottom: '20px' }}>{`Stock: ${product.stock}`}</Typography>
-          <Button variant="contained" color="primary" onClick={handleEditOpen} style={{ marginRight: '10px' }}>
-              Edit
-          </Button>
+                        <Typography variant="subtitle1" gutterBottom>Colors:</Typography>
+                        <Box sx={{ mb: 2 }}>
+                            {product.colors.map((color, index) => (
+                                <Chip key={index} label={color.name} sx={{ mr: 1, mb: 1 }} />
+                            ))}
+                        </Box>
+                        <Typography variant="subtitle1" gutterBottom>Sizes:</Typography>
+                        <Box sx={{ mb: 2 }}>
+                            {product.sizes.map((size, index) => (
+                                <Chip key={index} label={size.label} sx={{ mr: 1, mb: 1 }} />
+                            ))}
+                        </Box>
+                        <Typography variant="subtitle1" gutterBottom>
+                            Stock: {product.stock}
+                        </Typography>
+                        <Box sx={{ mt: 3 }}>
+                            <Button 
+                                variant="contained" 
+                                startIcon={<EditIcon />}
+                                onClick={handleEditOpen} 
+                                sx={{ mr: 2 }}
+                            >
+                                Edit Product
+                            </Button>
+                            <Button 
+                                variant="outlined" 
+                                startIcon={<LocalOfferIcon />}
+                                onClick={handlePromotionOpen}
+                            >
+                                {product.original_price ? 'Add Promotion' : 'Apply Promotion'}
+                            </Button>
+                        </Box>
+                    </Paper>
+                </Grid>
+            </Grid>
+
             <Dialog open={editOpen} onClose={handleEditClose}>
                 <DialogTitle>Edit Product</DialogTitle>
                 <DialogContent>
                     <TextField
-                        margin="dense"
                         name="name"
                         label="Product Name"
-                        type="text"
-                        fullWidth
                         value={editProduct.name}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
                     />
                     <TextField
-                        margin="dense"
                         name="description"
-                        label="Description"
-                        type="text"
-                        fullWidth
+                        label="Product Description"
                         value={editProduct.description}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
                     />
                     <TextField
-                        margin="dense"
                         name="price"
-                        label="Price"
-                        type="number"
-                        fullWidth
+                        label="Product Price"
                         value={editProduct.price}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
                     />
                     <TextField
-                        margin="dense"
                         name="stock"
-                        label="Stock"
-                        type="number"
-                        fullWidth
+                        label="Product Stock"
                         value={editProduct.stock}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
                     />
+                    {/* <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                        Existing Images:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
+                        {existingImages.length > 0 ? (
+                            existingImages.map((images, index) => (
+                                <Box key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <img
+                                        src={BASE_URL + images.image_url}
+                                        alt={`Existing Image ${index + 1}`}
+                                        style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }}
+                                    />
+                                    <Button 
+                                        variant="text" to remove or handle image removal
+                                        color="error"
+                                        onClick={() => setExistingImages(existingImages.filter((_, i) => i !== index))}
+                                    >
+                                        Remove
+                                    </Button>
+                                </Box>
+                            ))
+                        ) : (
+                            <Typography variant="body2">No existing images available.</Typography>
+                        )}
+                    </Box>
                     <input
-                        id="images"
-                        name="images"
                         type="file"
+                        name="images"
+                        accept="image/*"
                         multiple
                         onChange={handleInputChange}
-                    />
+                        style={{ marginTop: '20px' }}
+                    /> */}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleEditClose} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSaveChanges} color="primary">
-                        Save
-                    </Button>
+                    <Button onClick={handleEditClose} color="primary">Cancel</Button>
+                    <Button onClick={handleSaveChanges} color="primary">Save</Button>
                 </DialogActions>
             </Dialog>
-            </Box>
+
+            <Dialog open={promotionOpen} onClose={handlePromotionClose}>
+                <DialogTitle>Apply Promotion</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        name="discountPercentage"
+                        label="Discount Percentage"
+                        value={promotion.discountPercentage}
+                        onChange={handlePromotionChange}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <TextField
+                        name="startDate"
+                        label="Start Date"
+                        type="date"
+                        value={promotion.startDate}
+                        onChange={handlePromotionChange}
+                        fullWidth
+                        margin="dense"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    <TextField
+                        name="endDate"
+                        label="End Date"
+                        type="date"
+                        value={promotion.endDate}
+                        onChange={handlePromotionChange}
+                        fullWidth
+                        margin="dense"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                    {afterPromotionPrice && (
+                        <Typography variant="body1" sx={{ mt: 2 }}>
+                            New Price After Promotion: {product.currency} {afterPromotionPrice}
+                        </Typography>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
+                    <Button onClick={handleApplyPromotion} color="primary">Apply</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
-      </div>
     );
 }
 

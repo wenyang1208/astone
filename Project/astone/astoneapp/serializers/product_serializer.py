@@ -13,7 +13,9 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        # fields = '__all__'
+        fields = ['id', 'name','description','category','colors','sizes','currency','price', 'rating', 'stock', 'original_price', 'promotion_price','seller','images']
+        extra_kwargs = {"seller": {"read_only": True}}
 
 class ProductCreateResponseSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)

@@ -19,14 +19,22 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 from astoneapp.views.product_view import * # Add necessary imports
+from astoneapp.views.seller_view import *
+from astoneapp.views.promotion_view import *
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 # Add urls as needed, usually one for each view function
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('products/', GetCreateUpdateProductView),
-    path('products/create/', CreateProductView),
-    path('products/', GetProductView),
+    # path('products/create/', ProductListCreate.as_view(), name="product_list"),
+    path('products/', ProductListCreate.as_view(), name='products'),
+    # path('products/images/', GetProductImagesView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
     path('products/<int:pk>/edit', UpdateProductView),
-    # path('products/list/',ProductView.as_view(),name="Product")
+    path('seller/register/', SellerRegisterView.as_view(), name='sign_up_seller'),
+    path('seller/token/', SellerTokenObtainPairView.as_view(), name='get_token'), # act as permissions/authentication everytime we access a website, make request
+    path('seller/token/refresh', TokenRefreshView.as_view(), name='refresh'),
+    path('seller/<int:pk>/', SellerGetView.as_view(), name='get_seller'),
+    path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
+    path('promotions/', PromotionListCreate.as_view(), name='promotions')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
