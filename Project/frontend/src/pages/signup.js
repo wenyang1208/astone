@@ -346,6 +346,9 @@ const Signup = () => {
                 p: 3,
               }}
             >
+              <Typography variant="h4" component="h1" color="text.primary" sx={{ mb: 3 }}>
+                Join Astoné
+              </Typography>
               {showErrorAlert && (
                 <Alert severity="error" sx={{ width: '100%', mb: 2, opacity: fade ? 1 : 0, transition: 'opacity 1s ease-in-out' }}>
                   Failed to create account.

@@ -110,7 +110,7 @@ const Login = () => {
                 }}
               >
                 <Typography component="h1" variant="h5" sx={{ color: 'text.primary' }}>
-                  Login
+                  Log In
                 </Typography>
                 <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
                   <TextField
