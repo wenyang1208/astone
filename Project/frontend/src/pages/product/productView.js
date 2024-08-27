@@ -122,7 +122,7 @@ function ProductView() {
           <Grid item xs={12} md={6}>
             <Paper>
               <img
-                src={product.images.length > 0 ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
+                src={product.images && product.images.length > 0 ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
                 alt={product?.name}
                 style={{ width: '100%', height: 'auto' }}
               />
