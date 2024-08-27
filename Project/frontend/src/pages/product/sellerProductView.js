@@ -102,6 +102,7 @@ function SellerProductView() {
                 name: editProduct.name,
                 description: editProduct.description,
                 price: editProduct.price,
+                original_price: editProduct.price,
                 stock: editProduct.stock,
             };
             const res = await productService.editProduct(id, updatedProduct);
