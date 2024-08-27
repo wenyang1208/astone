@@ -65,6 +65,7 @@ const Signup = () => {
         },
         body: JSON.stringify(formValues),
       });
+      console.log(response);
 
       if (response.ok) {
         // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)

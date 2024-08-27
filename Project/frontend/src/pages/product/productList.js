@@ -20,7 +20,6 @@ function ProductList() {
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
     const BASE_URL = 'http://localhost:8000';
-
     useEffect(() => {
         const fetchProducts = async () => {
             const productService = new ProductService();

@@ -1,0 +1,1 @@
+Project/astone/astoneapp/serializers/product_serializer.py

@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { ChromePicker } from 'react-color';
 import tinycolor from 'tinycolor2';
 import Select from 'react-select';
+import ntc from 'ntcjs';
 import image from './/image.png';
 import {
   Box,
@@ -14,8 +15,13 @@ import {
   InputAdornment, 
   IconButton,
   Popover,
-  Chip
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton as MuiIconButton,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
 import { ProductService } from '../../services/ProductService';
 
@@ -24,13 +30,14 @@ function CreateProduct() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popoverOpen, setPopoverOpen] = React.useState(false);
   const productService = new ProductService();
-
+  const [color, setColor] = React.useState('#fff');
+  const [colors, setColors] = React.useState([]);
   const formik = useFormik({
     initialValues: {
       name: '',
       description: '',
       categories: [],
-      color: [], 
+      colors: [],
       sizes: [],
       currency: 'MYR',
       price: 0.00,
@@ -108,6 +115,20 @@ function CreateProduct() {
     formik.setFieldValue('categories', selectedOptions.map(option => ({ code: option.value, name: option.label })));
   };
 
+  const handleAddColor = () => {
+    const colorName = ntc.name(color)[1];
+    const newColor = { name: colorName, hex: color };
+    const updatedColors = [...colors, newColor];
+    setColors(updatedColors);
+    formik.setFieldValue('colors', updatedColors);
+  };
+
+const handleRemoveColor = (index) => {
+  const updatedColors = colors.filter((_, i) => i !== index);
+  setColors(updatedColors);
+  formik.setFieldValue('colors', updatedColors); // Update the formik values when a color is removed
+};
+  
   const handleSizeChange = selectedOptions => {
     // Map selected options to format required by Formik
     const selected = selectedOptions.map(option => ({ value: option.value, label: option.label }));
@@ -219,44 +240,28 @@ function CreateProduct() {
               />
             </FormControl>
             <FormControl fullWidth margin="normal">
-              <TextField
-                id="brand"
-                name="brand"
-                label="Brand"
-                type="text"
-                onChange={formik.handleChange}
-                value={formik.values.brand}
-                style={{ backgroundColor: 'white' }}
-              />
-            </FormControl>
-            <FormControl fullWidth margin="normal">
-              <Typography>Colors</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
-              <ChromePicker
-                id="color"
-                name="color"
-                color={formik.values.color}
-                onChangeComplete={color => {
-                  if (color && color.hex !== '#000000') {
-                    const colorName = tinycolor(color.hex).toName() || color.hex;
-                    const newColor = { name: colorName, code: color.hex };
-                    console.log(newColor);
-                    formik.setFieldValue('color', [...formik.values.color, newColor]);
-                  }
-                }}
-              />
-                {formik.values.color.map((color, index) => (
-                  <Chip
-                    key={index}
-                    label={color.name}
-                    style={{ backgroundColor: color.code, color: '#fff', margin: '5px' }}
-                    onDelete={() => {
-                      const newColors = formik.values.color.filter((_, i) => i !== index);
-                      formik.setFieldValue('color', newColors);
-                    }}
-                  />
-                ))}
+              <Typography>Color</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ChromePicker
+                  color={color}
+                  onChange={(updatedColor) => setColor(updatedColor.hex)}
+                />
+                <Button onClick={handleAddColor} sx={{ marginLeft: 2, backgroundColor: '#b357ff', color: 'white' }}>
+                  Add Color
+                </Button>
               </Box>
+              <List>
+                {colors.map((color, index) => (
+                  <ListItem key={index}>
+                    <ListItemText primary={color.name} secondary={color.hex} />
+                    <ListItemSecondaryAction>
+                      <MuiIconButton edge="end" onClick={() => handleRemoveColor(index)}>
+                        <DeleteIcon />
+                      </MuiIconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
             </FormControl>
             <FormControl fullWidth margin="normal">
             <Typography sx={{ display: 'flex', alignItems: 'center' }}>Sizes
@@ -354,13 +359,15 @@ function CreateProduct() {
             </FormControl>
             <FormControl fullWidth margin="normal">
             <input
-                        id="images"
-                        name="images"
-                        type="file"
-                        multiple
-                        onChange={(event) => {
-                        formik.setFieldValue("images", Array.from(event.currentTarget.files));
-                        }}
+                id="images"
+                name="images"
+                type="file"
+                multiple
+                onChange={(event) => {
+                console.log(event)
+                console.log(Array.from(event.currentTarget.files))
+                formik.setFieldValue("images", Array.from(event.currentTarget.files));
+                }}
              />
             </FormControl>
             <Button
