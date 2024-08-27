@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Container, Box, TextField, Button, Typography, Grid, Alert } from '@mui/material';
 import { SellerService } from '../../services/SellerService';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from '../../constant';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const LoginSeller = () => {
   const [username, setUsername] = useState('');
@@ -29,10 +29,17 @@ const LoginSeller = () => {
       setPassword('');
       // Handle login failure (e.g., show error message)
     }
+    
+  };
+  const handleBack = () => {
+    navigate('/sell');
   };
 
   return (
       <Container maxWidth="lg">
+        <Button onClick={handleBack} sx={{ ml: 2, mt: 2 }}>
+            <ArrowBackIcon />
+          </Button>
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '80vh' }}>
           <Grid item xs={12} sm={8} md={5}>
             <Box
