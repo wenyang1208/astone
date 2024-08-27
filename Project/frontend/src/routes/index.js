@@ -16,6 +16,7 @@ const Unisex = React.lazy(() => import("../pages/unisex"));
 const Support = React.lazy(() => import("../pages/support"));
 const Login = React.lazy(() => import("../pages/login"));
 const SignUp = React.lazy(() => import("../pages/signup"));
+const Settings = React.lazy(() => import("../pages/settings"));
 const LoginSeller = React.lazy(() => import("../pages/seller/loginSeller"));
 const SignUpSeller = React.lazy(() => import("../pages/seller/signupSeller"));
 const CompareProducts = React.lazy(() => import("../pages/compareproducts"));
@@ -37,6 +38,7 @@ const routes = [
     { path: PathConstants.SELL, element: <Sell /> },
     { path: PathConstants.LOGIN, element: <Login /> },
     { path: PathConstants.SIGNUP, element: <SignUp /> },
+    { path: PathConstants.SETTINGS, element: <Settings /> },
     { path: PathConstants.LOGIN_SELLER, element: <LoginSeller /> },
     { path: PathConstants.SIGNUP_SELLER, element: <SignUpSeller /> },
     { path: PathConstants.COMPARE_PRODUCTS, element: <CompareProducts /> },

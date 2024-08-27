@@ -43,4 +43,14 @@ export class UserService {
             return null;
         }
     }
+
+    async updateUser(email, userDetails) {
+        try {
+            const res = await axios.put(`http://localhost:8000/userupdate/${email}/`, userDetails);
+            return res;
+        } catch (error) {
+            console.error(`Error updating user details for user ${email}:`, error.response?.data || error.message);
+            return null;
+        }
+    }
 }

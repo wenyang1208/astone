@@ -43,6 +43,7 @@ urlpatterns = [
     path('register/', register_user, name='register'),
     path('login/', login_user, name='login'),
     path('user/<str:email>/', get_user_details, name='get_user_details'),
+    path('userupdate/<str:email>/', update_user_details, name='update_user_details'),
     path('seller/register/', SellerRegisterView.as_view(), name='sign_up_seller'),
     path('seller/token/', SellerTokenObtainPairView.as_view(), name='get_token'), # act as permissions/authentication everytime we access a website, make request
     path('seller/token/refresh', TokenRefreshView.as_view(), name='refresh'),

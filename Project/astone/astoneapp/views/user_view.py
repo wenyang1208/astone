@@ -64,3 +64,16 @@ def get_user_details(request, email):
 
     serializer = UserSerializer(user)
     return Response(serializer.data)
+
+@api_view(['PUT'])
+def update_user_details(request, email):
+    try:
+        user = CustomUser.objects.get(email=email)
+    except CustomUser.DoesNotExist:
+        return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserSerializer(user, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
