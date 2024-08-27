@@ -141,7 +141,7 @@ function MyAppBar() {
               const sizes = item.size;
               const selectedColor = colors;
               const selectedSize = sizes;
-              const imageUrl = (item.product.default_image ? `${BASE_URL}${item.product.default_image}` : 'https://via.placeholder.com/140')
+              const imageUrl = (item?.product?.images && item?.product?.images.length > 0) ? `${BASE_URL}${item.product.images[0].image_url}` : 'https://via.placeholder.com/140';
 
               return (
                 <ListItem key={index}>

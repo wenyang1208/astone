@@ -45,6 +45,10 @@ function ProductView() {
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   useEffect(() => {
+    console.log(product);
+  },product)
+
+  useEffect(() => {
     const fetchProduct = async () => {
       const productService = new ProductService();
       try {
@@ -115,150 +119,150 @@ function ProductView() {
   };
 
   return (
-    <div>
-      <MyAppBar/>
-      <Container sx={{ marginTop: '20px' }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <Paper>
-              <img
-                src={product.images && product.images.length > 0 ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
-                alt={product?.name}
-                style={{ width: '100%', height: 'auto' }}
-              />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="h4" gutterBottom>
-              {product?.name}
-            </Typography>
-            <Typography variant="h5" color="textSecondary" gutterBottom>
-              {product?.currency} {product?.price}
-            </Typography>
-            <Typography gutterBottom>
-              {product?.description}
-            </Typography>
-            <Typography gutterBottom>
-              Brand: {product?.brand}
-            </Typography>
-            <Typography gutterBottom>
-              Date Added: {product?.dateAdded}
-            </Typography>
-            <Typography gutterBottom>
-              {product?.tags?.map((tag, index) => (
-                <Chip color='primary' key={index} label={tag} style={{ margin: '5px' }}/>
-              ))}
-            </Typography>
-            <div>
-              <Typography gutterBottom>
-                Size:
-              </Typography>
-              {product?.sizes?.map((sizeOption) => (
-                <Chip
-                  key={sizeOption.value}
-                  label={sizeOption.value}
-                  onClick={() => handleSizeChange(sizeOption.value)}
-                  color={size === sizeOption.value ? 'primary' : 'default'}
-                  style={{ margin: '5px' }}
+      <div>
+        <MyAppBar/>
+        <Container sx={{ marginTop: '20px' }}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Paper>
+                <img
+                  src={(product?.images && product.images.length > 0) ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
+                  alt={product?.name}
+                  style={{ width: '100%', height: 'auto' }}
                 />
-              ))}
-            </div>
-            <br />
-            <div>
-              <Typography gutterBottom>
-                Color:
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h4" gutterBottom>
+                {product?.name}
               </Typography>
-              {product?.colors?.map((colorOption, index) => (
-                <Chip
-                  key={index}
-                  label={
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <div
-                        style={{
-                          backgroundColor: colorOption.hex,
-                          width: '16px',
-                          height: '16px',
-                          borderRadius: '50%',
-                        }}
-                      />
-                    </div>
-                  }
-                  clickable
-                  style={{ margin: '5px' }}
-                  onClick={() => handleColorChange(colorOption.hex)}
-                  variant={color === colorOption.hex ? 'default' : 'outlined'}
-                />
-              ))}
-            </div>
-            <br />
-            <div>
-              <Typography gutterBottom>
-                Order Quantity:
+              <Typography variant="h5" color="textSecondary" gutterBottom>
+                {product?.currency} {product?.price}
               </Typography>
-              <Select value={quantity} onChange={handleQuantityChange}>
-                {[...Array(10).keys()].map((value) => (
-                  <MenuItem key={value} value={value + 1}>
-                    {value + 1}
-                  </MenuItem>
+              <Typography gutterBottom>
+                {product?.description}
+              </Typography>
+              <Typography gutterBottom>
+                Brand: {product?.brand}
+              </Typography>
+              <Typography gutterBottom>
+                Date Added: {product?.dateAdded}
+              </Typography>
+              <Typography gutterBottom>
+                {product?.tags?.map((tag, index) => (
+                  <Chip color='primary' key={index} label={tag} style={{ margin: '5px' }}/>
                 ))}
-              </Select>
-            </div>
-            <br />
-            <div>
-              <Button
-                startIcon={<ShoppingCartIcon />}
-                variant='contained'
-                onClick={handleAddToCart}
-                // disabled={!size || !color}
-              >
-                Add to Cart
-              </Button>
-            </div>
-            <br />
-            <div>
-              <Typography gutterBottom>
-                Rating:
               </Typography>
-              <Rating
-                name="product-rating"
-                value={rating}
-                onChange={handleRatingChange}
-              />
-            </div>
-            <br />
-            <div>
-              <Typography gutterBottom>
-                Review:
-              </Typography>
-              <TextField
-                label="Write your review"
-                multiline
-                rows={4}
-                value={review}
-                onChange={handleReviewChange}
-                variant="outlined"
-                fullWidth
-              />
-            </div>
-            <br />
-            <div>
-              <Button variant="contained" color="primary" onClick={handleSubmitReview}>
-                Submit Review
-              </Button>
-            </div>
+              <div>
+                <Typography gutterBottom>
+                  Size:
+                </Typography>
+                {product?.sizes?.map((sizeOption) => (
+                  <Chip
+                    key={sizeOption.value}
+                    label={sizeOption.value}
+                    onClick={() => handleSizeChange(sizeOption.value)}
+                    color={size === sizeOption.value ? 'primary' : 'default'}
+                    style={{ margin: '5px' }}
+                  />
+                ))}
+              </div>
+              <br />
+              <div>
+                <Typography gutterBottom>
+                  Color:
+                </Typography>
+                {product?.colors?.map((colorOption, index) => (
+                  <Chip
+                    key={index}
+                    label={
+                      <div style={{ display: 'flex', alignItems: 'center' }}>
+                        <div
+                          style={{
+                            backgroundColor: colorOption.hex,
+                            width: '16px',
+                            height: '16px',
+                            borderRadius: '50%',
+                          }}
+                        />
+                      </div>
+                    }
+                    clickable
+                    style={{ margin: '5px' }}
+                    onClick={() => handleColorChange(colorOption.hex)}
+                    variant={color === colorOption.hex ? 'default' : 'outlined'}
+                  />
+                ))}
+              </div>
+              <br />
+              <div>
+                <Typography gutterBottom>
+                  Order Quantity:
+                </Typography>
+                <Select value={quantity} onChange={handleQuantityChange}>
+                  {[...Array(10).keys()].map((value) => (
+                    <MenuItem key={value} value={value + 1}>
+                      {value + 1}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
+              <br />
+              <div>
+                <Button
+                  startIcon={<ShoppingCartIcon />}
+                  variant='contained'
+                  onClick={handleAddToCart}
+                  // disabled={!size || !color}
+                >
+                  Add to Cart
+                </Button>
+              </div>
+              <br />
+              <div>
+                <Typography gutterBottom>
+                  Rating:
+                </Typography>
+                <Rating
+                  name="product-rating"
+                  value={rating}
+                  onChange={handleRatingChange}
+                />
+              </div>
+              <br />
+              <div>
+                <Typography gutterBottom>
+                  Review:
+                </Typography>
+                <TextField
+                  label="Write your review"
+                  multiline
+                  rows={4}
+                  value={review}
+                  onChange={handleReviewChange}
+                  variant="outlined"
+                  fullWidth
+                />
+              </div>
+              <br />
+              <div>
+                <Button variant="contained" color="primary" onClick={handleSubmitReview}>
+                  Submit Review
+                </Button>
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
-    </div>
+        </Container>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+        >
+          <Alert onClose={handleCloseSnackbar} severity="warning" sx={{ width: '100%' }}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+      </div>
   );
 }
 

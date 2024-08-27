@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ProductService } from '../services/ProductService';
-import { Card, CardContent, CardMedia, Typography, Button, TextField, Checkbox, FormControlLabel, FormGroup, Slider, MenuItem, Select } from '@mui/material';
+import { Card, Paper, CardContent, CardMedia, Typography, Button, TextField, Checkbox, FormControlLabel, FormGroup, Slider, MenuItem, Select } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import MyAppBar from '../components/appBar';
@@ -132,11 +132,26 @@ const Men = () => {
 
   const ProductCard = ({ product }) => (
     <Card style={styles.card} onClick={() => handleCardClick(product.id)}>
-      <CardMedia
-        style={styles.media}
-        src={product.images && product.images.length > 0 ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
-        title={product.name}
-      />
+    <Card style={styles.card} onClick={() => handleCardClick(product.id)}>
+              <Paper>
+                <img
+                  src={(product?.images && product.images.length > 0) ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
+                  alt={product?.name}
+                  style={{ width: '100%', height: 'auto' }}
+                />
+              </Paper>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {product.name}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {product.description}
+        </Typography>
+        <Typography variant="body2" style={styles.price} component="p">
+          {product.currency} {product.price}
+        </Typography>
+      </CardContent>
+    </Card>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
           {product.name}

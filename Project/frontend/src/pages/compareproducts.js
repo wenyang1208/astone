@@ -88,7 +88,7 @@ const CompareProducts = () => {
               <Card>
                 <CardMedia
                   component="img"
-                  image={productDetails1.images.length > 0 ? `${BASE_URL}${productDetails1.images[0].image_url}` : 'https://via.placeholder.com/140'}
+                  image={productDetails1?.images.length > 0 ? `${BASE_URL}${productDetails1.images[0].image_url}` : 'https://via.placeholder.com/140'}
                   alt={productDetails1.name}
                   style={{ maxHeight: '300px', objectFit: 'contain' }}
                 />
@@ -112,7 +112,7 @@ const CompareProducts = () => {
               <Card>
                 <CardMedia
                   component="img"
-                  image={productDetails2.images.length > 0 ? `${BASE_URL}${productDetails2.images[0].image_url}` : 'https://via.placeholder.com/140'}
+                  image={productDetails2?.images.length > 0 ? `${BASE_URL}${productDetails2.images[0].image_url}` : 'https://via.placeholder.com/140'}
                   alt={productDetails2.name}
                   style={{ maxHeight: '300px', objectFit: 'contain' }}
                 />
