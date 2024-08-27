@@ -19,8 +19,7 @@ const CompareProducts = () => {
         // Ensure colors and sizes are parsed correctly
         console.log(res.data);
         const parsedProducts = res.data.map(product => ({
-          ...product,
-          sizes: JSON.parse(product.sizes),
+          ...product        
         }));
         console.log(parsedProducts);
         setProducts(parsedProducts);
