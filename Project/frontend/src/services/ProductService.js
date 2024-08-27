@@ -37,7 +37,7 @@ export class ProductService {
 
     async createProduct(data) {
         try {
-            const { name, description, categories, color, sizes, currency, price, stock, rating, images } = data;
+            const { name, description, categories, color, sizes, currency, price, stock, rating, brand, gender, images } = data;
     
             const categoryNames = categories.map(category => category.name);
     
@@ -52,6 +52,9 @@ export class ProductService {
             formData.append('price', price);
             formData.append('stock', stock);
             formData.append('rating', rating);
+            formData.append('brand', brand);
+            formData.append('gender', gender);
+
             
             console.log(images)
             // Append images to FormData

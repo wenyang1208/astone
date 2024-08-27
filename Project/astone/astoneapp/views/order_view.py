@@ -6,7 +6,7 @@ from astoneapp.models.order import Order, OrderItem
 from ..serializers.cart_serializer import OrderItemSerializer
 from astoneapp.models.cart import Cart, CartItem
 
-def get_cart(request):
+def get_cart():
     cart, created = Cart.objects.get_or_create(id=1)
     return cart
 
@@ -15,32 +15,42 @@ def save_cart(request, cart):
 
 @api_view(['POST'])
 def place_order(request):
-    cart = get_cart(request)
+    cart = get_cart()
     if not cart:
         return Response({'message': 'Cart is empty'}, status=400)
-    order = Order.objects.create(user=request.user, total_price=0)
+    print(request.data)
+    
+    address = request.data.get('address')    
+    print(address)
+
+    if not address:
+        return Response({'message': 'Address is required'}, status=400)
+    
+    order = Order.objects.create(total_price=0, address=address)
     total_price = 0
-    for item_key, item in cart.items():
-        product_id, size, color = item_key.split('_')
-        product = get_object_or_404(Product, id=product_id)
+    cart_items = CartItem.objects.filter(cart=cart)
+    
+    for item in cart_items:
+        product = item.product
         OrderItem.objects.create(
             order=order,
             product=product,
-            size=size,
-            color=color,
-            quantity=item['quantity'],
+            size=item.size,
+            color=item.color,
+            quantity=item.quantity,
             price=product.price
         )
-        total_price += product.price * item['quantity']
+        total_price += product.price * item.quantity
+        item.delete()  # Remove the item from the cart
+    
     order.total_price = total_price
     order.save()
-    request.session['cart'] = {}
     return Response({'message': 'Order placed', 'order_id': order.id})
-
 
 @api_view(['GET'])
 def order_detail(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     items = order.orderitem_set.all()
     serializer = OrderItemSerializer(items, many=True)
-    return Response({'order_items': serializer.data, 'total_price': order.total_price})
+    return Response({'order_items': serializer.data, 'total_price': order.total_price, 'address': order.address})
+

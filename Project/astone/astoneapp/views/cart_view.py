@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from astoneapp.models.product import Product
 from astoneapp.models.cart import Cart, CartItem
+from astoneapp.serializers.product_serializer import ProductSerializer
 
 def get_single_cart():
     cart, created = Cart.objects.get_or_create(id=1)
@@ -29,14 +30,41 @@ def add_to_cart(request, product_id):
 
     return Response({'message': 'Item added to cart'})
 
+@api_view(['POST'])
+def update_cart_item(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    cart = get_single_cart()
+    size = request.data.get('size')
+    color = request.data.get('color')
+    quantity = request.data.get('quantity')
+
+    try:
+        quantity = int(quantity)  # Convert quantity to integer
+        cart_item = CartItem.objects.get(cart=cart, product=product, size=size, color=color)
+        if quantity > 0:
+            cart_item.quantity = quantity
+            cart_item.save()
+            message = 'Item quantity updated'
+        else:
+            cart_item.delete()
+            message = 'Item removed from cart'
+    except CartItem.DoesNotExist:
+        return Response({'message': 'Item not found in cart'}, status=404)
+    except ValueError:
+        return Response({'message': 'Invalid quantity value'}, status=400)
+
+    return Response({'message': message})
+
 @api_view(['GET'])
 def cart_detail(request):
     cart = get_single_cart()
     cart_items = CartItem.objects.filter(cart=cart)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
+    
     cart_items_data = [
         {
-            'product': item.product.name,
+            'product_id': item.product.id,
+            'product': ProductSerializer(item.product).data,
             'size': item.size,
             'color': item.color,
             'quantity': item.quantity,
@@ -45,4 +73,5 @@ def cart_detail(request):
         }
         for item in cart_items
     ]
+    
     return Response({'cart_items': cart_items_data, 'total_price': total_price})

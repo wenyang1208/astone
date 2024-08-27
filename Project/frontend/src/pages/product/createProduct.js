@@ -36,6 +36,8 @@ function CreateProduct() {
       price: 0.00,
       stock: 0,
       rating: 0,
+      gender: '',
+      brand: '',
       images: []
     },
     onSubmit: async (values, actions) => {
@@ -110,6 +112,10 @@ function CreateProduct() {
     // Map selected options to format required by Formik
     const selected = selectedOptions.map(option => ({ value: option.value, label: option.label }));
     formik.setFieldValue('sizes', selected);
+  };
+
+  const handleGenderChange = selectedOption => {
+    formik.setFieldValue('gender', selectedOption.value);
   };
 
   const handlePopoverOpen = (event) => {
@@ -213,6 +219,17 @@ function CreateProduct() {
               />
             </FormControl>
             <FormControl fullWidth margin="normal">
+              <TextField
+                id="brand"
+                name="brand"
+                label="Brand"
+                type="text"
+                onChange={formik.handleChange}
+                value={formik.values.brand}
+                style={{ backgroundColor: 'white' }}
+              />
+            </FormControl>
+            <FormControl fullWidth margin="normal">
               <Typography>Colors</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
               <ChromePicker
@@ -282,7 +299,18 @@ function CreateProduct() {
               styles={customSelectStyles}
             />
           </FormControl>
-            
+          <FormControl fullWidth margin="normal">
+              <Typography>Gender</Typography>
+              <Select
+                name="gender"
+                options={genderOptions}
+                className="basic-single-select"
+                classNamePrefix="select"
+                onChange={handleGenderChange}
+                value={genderOptions.find(option => option.value === formik.values.gender)}
+                styles={customSelectStyles}
+              />
+          </FormControl>
             <FormControl fullWidth margin="normal">
               <TextField
                 id="price"

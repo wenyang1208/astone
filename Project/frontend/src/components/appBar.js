@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Badge, Drawer, List, ListItem, ListItemText, Button, Container } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, IconButton, Badge, Drawer, List, ListItem, ListItemText, Button, Container, Box } from '@mui/material';
+import { Link, useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { styled } from '@mui/material/styles';
-import backgroundImage from '../assets/mask-group.png'
+import backgroundImage from '../assets/mask-group.png';
 import { OrderService } from '../services/OrderService';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundImage: `url(${backgroundImage})`,
@@ -21,11 +23,16 @@ const sections = [
   { title: 'Support', url: '/support' },
 ];
 
+const placeholderImage = 'path/to/placeholder/image.png'; // Path to your placeholder image
+
 function MyAppBar() {
   const [cartItemCount, setCartItemCount] = useState(0);
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const BASE_URL = 'http://localhost:8000';
 
   const fetchCartItems = async () => {
     const orderService = new OrderService();
@@ -53,6 +60,33 @@ function MyAppBar() {
 
   const handleDrawerClose = () => {
     setDrawerOpen(false);
+  };
+
+  const handleIncrement = async (item) => {
+    const orderService = new OrderService();
+    console.log(item);
+    try {
+        await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity + 1);
+        fetchCartItems();
+    } catch (error) {
+        console.error('Error updating cart item:', error);
+    }
+  };
+
+  const handleDecrement = async (item) => {
+      const orderService = new OrderService();
+      console.log(item);
+
+      try {
+          await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity - 1);
+          fetchCartItems();
+      } catch (error) {
+          console.error('Error updating cart item:', error);
+      }
+  };
+
+  const handleCheckout = () => {
+    navigate('/checkout');
   };
 
   return (
@@ -84,24 +118,55 @@ function MyAppBar() {
         </Toolbar>
       </StyledAppBar>
       <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
-        <Container sx={{ width: 300, padding: 2 }}>
+        <Container sx={{ width: 500, padding: 2 }}>
           <Typography variant="h6" gutterBottom>
             Your Cart
           </Typography>
           <List>
-            {cartItems.map((item, index) => (
-              <ListItem key={index}>
-                <ListItemText
-                  primary={`${item.product} - ${item.quantity} x ${item.price}`}
-                  secondary={`Total: ${item.total_price}`}
-                />
-              </ListItem>
-            ))}
+            {cartItems.map((item, index) => {
+              const colors = JSON.parse(item.product.colors);
+              const sizes = JSON.parse(item.product.sizes);
+              const selectedColor = colors.find(color => color.code === item.color);
+              const selectedSize = sizes.find(size => size.value === item.size);
+              const imageUrl = (item.product.default_image ? `${BASE_URL}${item.product.default_image}` : 'https://via.placeholder.com/140')
+
+              return (
+                <ListItem key={index}>
+                  <img src={imageUrl} alt={item.product.name} style={{ width: 50, height: 50, marginRight: 10 }} />
+                  <ListItemText
+                    primary={`${item.product.name} - ${item.quantity} x MYR ${item.price}`}
+                    secondary={`Total: MYR ${item.total_price}`}
+                  />
+                  {selectedColor && (
+                    <Box style={{ backgroundColor: selectedColor.code, width: '20px', height: '20px', marginRight: '5px' }} />
+                  )}
+                  {selectedSize && (
+                    <Typography variant="body2" sx={{ marginRight: '5px' }}>
+                      {selectedSize.value}
+                    </Typography>
+                  )}
+                  <Box>
+                    <IconButton onClick={() => handleIncrement(item)}>
+                      <AddIcon />
+                    </IconButton>
+                    <IconButton onClick={() => handleDecrement(item)}>
+                      <RemoveIcon />
+                    </IconButton>
+                  </Box>
+                </ListItem>
+              );
+            })}
           </List>
           <Typography variant="h6" gutterBottom>
-            Total Price: {totalPrice}
+            Total Price: {"MYR " + totalPrice}
           </Typography>
-          <Button variant="contained" color="primary" fullWidth>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleCheckout}
+            disabled={cartItemCount === 0}
+          >
             Checkout
           </Button>
         </Container>

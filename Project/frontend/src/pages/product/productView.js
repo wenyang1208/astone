@@ -152,10 +152,10 @@ function ProductView() {
               </Typography>
               {product?.sizes?.map((sizeOption) => (
                 <Chip
-                  key={sizeOption.code}
-                  label={sizeOption.code}
-                  onClick={() => handleSizeChange(sizeOption.code)}
-                  color={size === sizeOption.code ? 'primary' : 'default'}
+                  key={sizeOption.value}
+                  label={sizeOption.value}
+                  onClick={() => handleSizeChange(sizeOption.value)}
+                  color={size === sizeOption.value ? 'primary' : 'default'}
                   style={{ margin: '5px' }}
                 />
               ))}
@@ -172,7 +172,7 @@ function ProductView() {
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div
                         style={{
-                          backgroundColor: colorOption.hex,
+                          backgroundColor: colorOption.code,
                           width: '16px',
                           height: '16px',
                           borderRadius: '50%',
@@ -182,8 +182,8 @@ function ProductView() {
                   }
                   clickable
                   style={{ margin: '5px' }}
-                  onClick={() => handleColorChange(colorOption.hex)}
-                  variant={color === colorOption.hex ? 'default' : 'outlined'}
+                  onClick={() => handleColorChange(colorOption.code)}
+                  variant={color === colorOption.code ? 'default' : 'outlined'}
                 />
               ))}
             </div>

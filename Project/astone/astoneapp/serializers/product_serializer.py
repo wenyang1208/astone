@@ -6,14 +6,20 @@ from astoneapp.models.image import Image
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = ['id', 'image_url']
+        fields = ['image_url']
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
+    default_image = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
         fields = '__all__'
+
+    def get_default_image(self, obj):
+        if obj.images.exists():
+            return obj.images.first().image_url.url
+        return 'path/to/placeholder/image.png'
 
 class ProductCreateResponseSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)

@@ -112,6 +112,9 @@ def CreateProductView(request):
             price = request.data.get('price')
             stock = request.data.get('stock')
             rating = request.data.get('rating')
+            brand = request.data.get('brand')
+            gender = request.data.get('gender')
+
             images = request.FILES.getlist('images')
 
             # Validate request
@@ -127,9 +130,10 @@ def CreateProductView(request):
                 currency=currency,
                 price=price,
                 stock=stock,
-                rating=rating
+                rating=rating,
+                brand=brand,
+                gender=gender
             )
-            print(images)
 
             # Create product images
             for image in images:

@@ -16,6 +16,8 @@ const Support = React.lazy(() => import("../pages/support"));
 const Login = React.lazy(() => import("../pages/login"));
 const SignUp = React.lazy(() => import("../pages/signup"));
 const CompareProducts = React.lazy(() => import("../pages/compareproducts"));
+const Checkout = React.lazy(() => import("../pages/checkout"));
+const OrderConfirmation = React.lazy(() => import("../pages/orderConfirmation"));
 
 
 const routes = [
@@ -32,7 +34,10 @@ const routes = [
     { path: PathConstants.SELL, element: <Sell /> },
     { path: PathConstants.LOGIN, element: <Login /> },
     { path: PathConstants.SIGNUP, element: <SignUp /> },
-    { path: PathConstants.COMPARE_PRODUCTS, element: <CompareProducts /> }
+    { path: PathConstants.COMPARE_PRODUCTS, element: <CompareProducts /> },
+    { path: PathConstants.CHECKOUT, element: <Checkout /> },
+    { path: PathConstants.ORDER_CONFIRMARION, element: <OrderConfirmation /> },
+
 
 ]
 

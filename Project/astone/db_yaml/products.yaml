@@ -4,7 +4,7 @@
     name: "Men's long sleeve over shirt"
     description: "Lightweight over shirt for the summer"
     category: "Men's"
-    colors: '[{"name": "Red", "hex": "#FF0000"}, {"name": "Blue", "hex": "#0000FF"}]'
+    colors: '[{"name": "Red", "code": "#FF0000"}, {"name": "Blue", "code": "#0000FF"}]'
     sizes: '[{"name": "Small", "code": "S"}, {"name": "Medium", "code": "M"}, {"name": "Large", "code": "L"}]'
     currency: "MYR"
     price: "29.99"
@@ -16,7 +16,7 @@
     name: "Men's crew neck shirt"
     description: "Basic but versatile crew neck"
     category: "Men's"
-    colors: '[{"name": "Green", "hex": "#00FF00"}, {"name": "Yellow", "hex": "#FFFF00"}]'
+    colors: '[{"name": "Green", "code": "#00FF00"}, {"name": "Yellow", "code": "#FFFF00"}]'
     sizes: '[{"name": "Medium", "code": "M"}, {"name": "Large", "code": "L"}]'
     currency: "MYR"
     price: "19.99"
