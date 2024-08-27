@@ -42,14 +42,24 @@ function SellerProductView() {
         try {
             const res = await productService.getProductById(id);
             if (res && res.data) {
-                setProduct(res.data);
+                setProduct({
+                    name: res.data.name,
+                    description: res.data.description,
+                    price: res.data.price,
+                    stock: res.data.stock,
+                    images: BASE_URL + res.data.images[0].image_url,
+                    sizes: JSON.parse(res.data.sizes),
+                    colors: res.data.colors
+                });
                 console.log(res.data);
                 setEditProduct({
                     name: res.data.name,
                     description: res.data.description,
                     price: res.data.price,
                     stock: res.data.stock,
-                    images: BASE_URL + res.data.images[0].image_url
+                    images: BASE_URL + res.data.images[0].image_url,
+                    sizes: JSON.parse(res.data.sizes),
+                    colors: res.data.colors
                 });
                 setExistingImages(res.data.images);
                 // Initialize promotion if it exists
@@ -66,6 +76,10 @@ function SellerProductView() {
             console.error('Error fetching product:', error);
         }
     };
+
+    useEffect(() => {
+        console.log(product);
+    }, [product] )
 
     const handleEditOpen = () => setEditOpen(true);
     const handleEditClose = () => setEditOpen(false);
@@ -168,6 +182,10 @@ function SellerProductView() {
         }
     };
 
+    useEffect(() => {
+        console.log(product)
+    }, [product]);
+
     const handleBack = () => {
         navigate('/productlist'); // This will navigate to the previous page in the history
     };
@@ -226,7 +244,7 @@ function SellerProductView() {
                         <Divider sx={{ my: 2 }} />
                         <Typography variant="subtitle1" gutterBottom>Category:</Typography>
                         <Box sx={{ mb: 2 }}>
-                            {product.category.replace(/[\[\]']+/g, '').split(', ').map((cat, index) => (
+                            {product.category && product.category.replace(/[\[\]']+/g, '').split(', ').map((cat, index) => (
                                 <Chip key={index} label={cat} sx={{ mr: 1, mb: 1 }} />
                             ))}
                         </Box>
@@ -237,11 +255,13 @@ function SellerProductView() {
                             ))}
                         </Box>
                         <Typography variant="subtitle1" gutterBottom>Sizes:</Typography>
-                        <Box sx={{ mb: 2 }}>
-                            {product.sizes.map((size, index) => (
+                        {Array.isArray(product.sizes) ? (
+                            product.sizes.map((size, index) => (
                                 <Chip key={index} label={size.label} sx={{ mr: 1, mb: 1 }} />
-                            ))}
-                        </Box>
+                            ))
+                        ) : (
+                            <Typography>No sizes available</Typography>
+                        )}
                         <Typography variant="subtitle1" gutterBottom>
                             Stock: {product.stock}
                         </Typography>

@@ -346,6 +346,17 @@ const handleRemoveColor = (index) => {
             </FormControl>
             <FormControl fullWidth margin="normal">
               <TextField
+                  id="brand"
+                  name="brand"
+                  label="Brand"
+                  type="text"
+                  onChange={formik.handleChange}
+                  value={formik.values.brand}
+                  style={{ backgroundColor: 'white' }}
+                />
+              </FormControl>
+            <FormControl fullWidth margin="normal">
+              <TextField
                 id="stock"
                 name="stock"
                 label="Stock"

@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import MyAppBar from '../components/appBar';
 
-const Women = () => {
+const Men = () => {
   const BASE_URL = 'http://localhost:8000';
 
   const [products, setProducts] = useState([]);
@@ -134,7 +134,7 @@ const Women = () => {
     <Card style={styles.card} onClick={() => handleCardClick(product.id)}>
       <CardMedia
         style={styles.media}
-        image={product.images.length > 0 ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/140'}
+        image={product.images.length > 0 ? `${BASE_URL}${product.default_image}` : 'https://via.placeholder.com/140'}
         title={product.name}
       />
       <CardContent>
@@ -298,4 +298,4 @@ const Women = () => {
     }
   };
 
-export default Women;
+export default Men;

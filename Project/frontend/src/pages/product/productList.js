@@ -24,7 +24,7 @@ function ProductList() {
         const fetchProducts = async () => {
             const productService = new ProductService();
             try {
-                const res = await productService.getProducts();
+                const res = await productService.getAuthProducts();
                 if (res && res.data) {
                     setProducts(res.data);
                 }

@@ -22,7 +22,7 @@ function CheckoutPage() {
       const res = await orderService.getCart();
       if (res && res.data) {
         setCartItems(res.data.cart_items);
-        setTotalPrice(res.data.total_price);
+        setTotalPrice(res.data.total_price.toFixed(2));
       }
     } catch (error) {
       console.error('Error fetching cart items:', error);
@@ -105,7 +105,7 @@ function CheckoutPage() {
         <Box>
           <List>
             {cartItems.map((item, index) => {
-              const colors = JSON.parse(item.product.colors);
+              const colors = item.product.colors;
               const sizes = JSON.parse(item.product.sizes);
               const selectedColor = colors.find(color => color.code === item.color);
               const selectedSize = sizes.find(size => size.value === item.size);
@@ -116,7 +116,7 @@ function CheckoutPage() {
                   <img src={imageUrl} alt={item.product.name} style={{ width: 50, height: 50, marginRight: 10 }} />
                   <ListItemText
                     primary={`${item.product.name} - ${item.quantity} x MYR ${item.price}`}
-                    secondary={`Total: MYR ${item.total_price}`}
+                    secondary={`Total: MYR ${item.total_price.toFixed(2)}`}
                   />
                   {selectedColor && (
                     <Box style={{ backgroundColor: selectedColor.code, width: '20px', height: '20px', marginRight: '5px' }} />

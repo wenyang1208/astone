@@ -17,9 +17,9 @@ const CompareProducts = () => {
     productService.getProducts()
       .then(res => {
         // Ensure colors and sizes are parsed correctly
+        console.log(res.data);
         const parsedProducts = res.data.map(product => ({
           ...product,
-          colors: JSON.parse(product.colors),
           sizes: JSON.parse(product.sizes),
         }));
         console.log(parsedProducts);
@@ -98,11 +98,11 @@ const CompareProducts = () => {
                   <Typography variant="body2" color="textSecondary">Price: {productDetails1.currency} {productDetails1.price}</Typography>
                   <Typography variant="body2" color="textSecondary">Stock: {productDetails1.stock}</Typography>
                   <Typography variant="body2" color="textSecondary">Rating: {productDetails1.rating}</Typography>
-                  <Typography variant="body2" color="textSecondary">Sizes: {productDetails1.sizes.map(size => size.label).join(', ')}</Typography>
+                  <Typography variant="body2" color="textSecondary">Sizes: {productDetails1.sizes.map(size => size.value).join(', ')}</Typography>
                   <Typography variant="body2" color="textSecondary">Colors:</Typography>
                   <Box display="flex" flexDirection="row">
                     {productDetails1.colors.map(color => (
-                      <Box key={color.name} style={{ backgroundColor: color.code, width: '20px', height: '20px', marginRight: '5px' }} />
+                      <Box key={color.name} style={{ backgroundColor: color.hex, width: '20px', height: '20px', marginRight: '5px' }} />
                     ))}
                   </Box>
                 </CardContent>
@@ -122,11 +122,11 @@ const CompareProducts = () => {
                   <Typography variant="body2" color="textSecondary">Price: {productDetails2.currency} {productDetails2.price}</Typography>
                   <Typography variant="body2" color="textSecondary">Stock: {productDetails2.stock}</Typography>
                   <Typography variant="body2" color="textSecondary">Rating: {productDetails2.rating}</Typography>
-                  <Typography variant="body2" color="textSecondary">Sizes: {productDetails2.sizes.map(size => size.label).join(', ')}</Typography>
+                  <Typography variant="body2" color="textSecondary">Sizes: {productDetails2.sizes.map(size => size.value).join(', ')}</Typography>
                   <Typography variant="body2" color="textSecondary">Colors:</Typography>
                   <Box display="flex" flexDirection="row">
                     {productDetails2.colors.map(color => (
-                      <Box key={color.name} style={{ backgroundColor: color.code, width: '20px', height: '20px', marginRight: '5px' }} />
+                      <Box key={color.name} style={{ backgroundColor: color.hex, width: '20px', height: '20px', marginRight: '5px' }} />
                     ))}
                   </Box>
                 </CardContent>

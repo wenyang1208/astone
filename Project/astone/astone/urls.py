@@ -30,7 +30,8 @@ from astoneapp.views.user_view import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('products/create/', ProductListCreate.as_view(), name="product_list"),
-    path('products/', ProductListCreate.as_view(), name='products'),
+    path('auth_products/', ProductListCreate.as_view(), name='products'),
+    path('products/', GetProductView, name='products'),
     # path('products/images/', GetProductImagesView),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='get_product_detail'),
     path('products/<int:pk>/edit', UpdateProductView),

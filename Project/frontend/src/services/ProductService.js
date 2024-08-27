@@ -4,9 +4,19 @@ import { getInitColorSchemeScript } from '@mui/material';
 
 export class ProductService {
 
+    async getAuthProducts() {
+        try {
+            const res = await api.get('http://localhost:8000/auth_products/')
+            return res;
+        } catch (error) {
+            console.error('Error getting products:', error);
+            return null;
+        }
+    } 
+
     async getProducts() {
         try {
-            const res = await api.get('http://localhost:8000/products/')
+            const res = await axios.get('http://localhost:8000/products/')
             return res;
         } catch (error) {
             console.error('Error getting products:', error);
@@ -58,7 +68,7 @@ export class ProductService {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
 
-            const res = await api.post('http://localhost:8000/products/', formData, {
+            const res = await api.post('http://localhost:8000/auth_products/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

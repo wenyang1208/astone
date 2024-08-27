@@ -39,7 +39,7 @@ const ProductList = () => {
         const sellerData = await sellerService.getSellerById(sellerId);
         setSeller(sellerData.data);
         
-        const productData = await productService.getProducts();
+        const productData = await productService.getAuthProducts();
         setProducts(productData.data);
         
         setLoading(false);

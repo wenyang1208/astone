@@ -47,9 +47,9 @@ function ProductView() {
       try {
         const res = await productService.getProductById(id);
         if (res && res.data) {
+          console.log(res.data);
           const productData = res.data;
           // Parse colors and sizes fields
-          productData.colors = JSON.parse(productData.colors);
           productData.sizes = JSON.parse(productData.sizes);
           console.log(productData);
 
@@ -119,7 +119,7 @@ function ProductView() {
           <Grid item xs={12} md={6}>
             <Paper>
               <img
-                src={product?.images[0]?.image_url ? `http://localhost:8000${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
+                src={product?.default_image ? `http://localhost:8000${product.default_image}` : 'https://via.placeholder.com/750'}
                 alt={product?.name}
                 style={{ width: '100%', height: 'auto' }}
               />
@@ -172,7 +172,7 @@ function ProductView() {
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div
                         style={{
-                          backgroundColor: colorOption.code,
+                          backgroundColor: colorOption.hex,
                           width: '16px',
                           height: '16px',
                           borderRadius: '50%',
@@ -182,8 +182,8 @@ function ProductView() {
                   }
                   clickable
                   style={{ margin: '5px' }}
-                  onClick={() => handleColorChange(colorOption.code)}
-                  variant={color === colorOption.code ? 'default' : 'outlined'}
+                  onClick={() => handleColorChange(colorOption.hex)}
+                  variant={color === colorOption.hex ? 'default' : 'outlined'}
                 />
               ))}
             </div>
