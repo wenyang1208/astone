@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Badge, Drawer, List, ListItem, ListItemText, Button, Container, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Badge, Drawer, List, ListItem, ListItemText, Button, Container, Box, Box } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { styled } from '@mui/material/styles';
 import backgroundImage from '../assets/mask-group.png';
 import { OrderService } from '../services/OrderService';
+import LoginButton from './loginButton';  // Import the LoginButton component
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
@@ -92,29 +93,40 @@ function MyAppBar() {
   return (
     <>
       <StyledAppBar position="static">
-        <Toolbar>
-          <Typography sx={{ flexGrow: 1 }} variant="h6">
+        <Toolbar sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography 
+            component={Link} 
+            to="/" 
+            variant="h6" 
+            color="inherit" 
+            sx={{ textDecoration: 'none' }}
+          >
             Astoné
           </Typography>
-          {sections.map((section, index) => (
-            <Link
-              key={index}
-              to={section.url}
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <Typography
-                variant="body2"
-                sx={{ p: 1, flexShrink: 0 }}
+          <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
+            {sections.map((section, index) => (
+              <Link
+                key={index}
+                to={section.url}
+                style={{ textDecoration: 'none', color: 'inherit', margin: '0 15px' }}
               >
-                {section.title}
-              </Typography>
-            </Link>
-          ))}
-          <IconButton color="inherit" onClick={handleCartClick}>
-            <Badge badgeContent={cartItemCount} color="secondary">
-              <ShoppingCartIcon />
-            </Badge>
-          </IconButton>
+                <Typography
+                  variant="body2"
+                  sx={{ p: 1, flexShrink: 0 }}
+                >
+                  {section.title}
+                </Typography>
+              </Link>
+            ))}
+          </Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton color="inherit" onClick={handleCartClick}>
+              <Badge badgeContent={cartItemCount} color="secondary">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+            <LoginButton />  {/* Use the LoginButton component here */}
+          </Box>
         </Toolbar>
       </StyledAppBar>
       <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
