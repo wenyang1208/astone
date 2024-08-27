@@ -34,12 +34,12 @@ export class UserService {
         }
     }
 
-    async getUserDetails(userId) {
+    async get_user_details(email) {
         try {
-            const res = await axios.get(`http://localhost:8000/user/${userId}/`);
+            const res = await axios.get(`http://localhost:8000/user/${email}/`);
             return res;
         } catch (error) {
-            console.error(`Error getting user details for user ${userId}:`, error);
+            console.error(`Error getting user details for user ${email}:`, error);
             return null;
         }
     }

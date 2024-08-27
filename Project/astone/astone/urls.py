@@ -37,6 +37,6 @@ urlpatterns = [
     path('order/<int:order_id>/', order_detail, name='order_detail'),
     path('register/', register_user, name='register'),
     path('login/', login_user, name='login'),
-    path('user/<int:user_id>/', get_user_details, name='get_user_details'),
+    path('user/<str:email>/', get_user_details, name='get_user_details'),
     # path('products/list/',ProductView.as_view(),name="Product")
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

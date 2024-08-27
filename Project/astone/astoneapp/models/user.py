@@ -11,7 +11,10 @@ class CustomUser(models.Model):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.CharField(max_length=255, blank=True, null=True)
 
-    password = models.CharField(max_length=50)
+    password = models.CharField(max_length=512)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
     def __str__(self):
         return self.email
