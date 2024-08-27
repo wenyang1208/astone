@@ -438,7 +438,7 @@ const Home = () => {
           <div style={{ height: '6rem' }} /> {/* Adjust the height as needed */}
         </main>
       </Container>
-      <Footer
+      <Footer2
         title="Footer"
         description="Something here to give the footer a purpose!"
       />
