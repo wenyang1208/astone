@@ -48,7 +48,7 @@ function SellerProductView() {
                     price: res.data.price,
                     stock: res.data.stock,
                     images: BASE_URL + res.data.images[0].image_url,
-                    sizes: JSON.parse(res.data.sizes),
+                    sizes: res.data.sizes,
                     colors: res.data.colors
                 });
                 console.log(res.data);
@@ -58,7 +58,7 @@ function SellerProductView() {
                     price: res.data.price,
                     stock: res.data.stock,
                     images: BASE_URL + res.data.images[0].image_url,
-                    sizes: JSON.parse(res.data.sizes),
+                    sizes: res.data.sizes,
                     colors: res.data.colors
                 });
                 setExistingImages(res.data.images);

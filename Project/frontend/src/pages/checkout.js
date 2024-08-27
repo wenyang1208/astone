@@ -106,7 +106,7 @@ function CheckoutPage() {
           <List>
             {cartItems.map((item, index) => {
               const colors = item.product.colors;
-              const sizes = JSON.parse(item.product.sizes);
+              const sizes = item.product.sizes;
               const selectedColor = colors.find(color => color.code === item.color);
               const selectedSize = sizes.find(size => size.value === item.size);
               const imageUrl = item.product.default_image ? `${BASE_URL}${item.product.default_image}` : 'https://via.placeholder.com/140';

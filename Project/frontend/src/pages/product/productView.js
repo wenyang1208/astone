@@ -57,7 +57,7 @@ function ProductView() {
           console.log(res.data);
           const productData = res.data;
           // Parse colors and sizes fields
-          productData.sizes = JSON.parse(productData.sizes);
+          productData.sizes = productData.sizes;
           console.log(productData);
 
           setProduct(productData);
