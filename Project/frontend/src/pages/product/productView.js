@@ -30,6 +30,9 @@ const Aston = ({ className, divClassName }) => {
   );
 };
 
+const BASE_URL = 'http://localhost:8000';
+
+
 function ProductView() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -119,7 +122,7 @@ function ProductView() {
           <Grid item xs={12} md={6}>
             <Paper>
               <img
-                src={product?.default_image ? `http://localhost:8000${product.default_image}` : 'https://via.placeholder.com/750'}
+                src={product.images.length > 0 ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
                 alt={product?.name}
                 style={{ width: '100%', height: 'auto' }}
               />

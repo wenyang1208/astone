@@ -134,7 +134,7 @@ const Men = () => {
     <Card style={styles.card} onClick={() => handleCardClick(product.id)}>
       <CardMedia
         style={styles.media}
-        image={product.images.length > 0 ? `${BASE_URL}${product.default_image}` : 'https://via.placeholder.com/140'}
+        image={product.images.length > 0 ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/140'}
         title={product.name}
       />
       <CardContent>
