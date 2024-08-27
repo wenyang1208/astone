@@ -21,6 +21,8 @@ function SellerProductView() {
         name: '',
         description: '',
         price: '',
+        stock: '',
+        images: [],
         stock: ''
     });
     const [promotion, setPromotion] = useState({
@@ -29,6 +31,7 @@ function SellerProductView() {
         endDate: ''
     });
     const [afterPromotionPrice, setAfterPromotionPrice] = useState(null);
+    const [existingImages, setExistingImages] = useState(editProduct.images || []);
 
     useEffect(() => {
         fetchProduct();
@@ -44,8 +47,10 @@ function SellerProductView() {
                     name: res.data.name,
                     description: res.data.description,
                     price: res.data.price,
-                    stock: res.data.stock
+                    stock: res.data.stock,
+                        images: res.data.images
                 });
+                    setExistingImages(res.data.images);
                 // Initialize promotion if it exists
                 if (res.data.promotion) {
                     setPromotion({
@@ -75,8 +80,12 @@ function SellerProductView() {
     };
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setEditProduct({ ...editProduct, [name]: value });
+        const { name, value, files } = e.target;
+        if (name === 'images') {
+            setEditProduct({ ...editProduct, images: Array.from(files) });
+        } else {
+            setEditProduct({ ...editProduct, [name]: value });
+        }
     };
 
     const handlePromotionChange = (e) => {
@@ -105,6 +114,11 @@ function SellerProductView() {
                 original_price: editProduct.price,
                 stock: editProduct.stock,
             };
+            if (editProduct.images && editProduct.images.length > 0) {
+                editProduct.images.forEach((image, index) => {
+                    formData.append(`images[${index}]`, image);
+                });
+            }
             const res = await productService.editProduct(id, updatedProduct);
             if (res && res.status === 200) {
                 setProduct(res.data);
@@ -233,99 +247,121 @@ function SellerProductView() {
                 <DialogTitle>Edit Product</DialogTitle>
                 <DialogContent>
                     <TextField
-                        margin="dense"
                         name="name"
                         label="Product Name"
-                        type="text"
-                        fullWidth
                         value={editProduct.name}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
                     />
                     <TextField
-                        margin="dense"
                         name="description"
-                        label="Description"
-                        type="text"
-                        fullWidth
-                        multiline
-                        rows={4}
+                        label="Product Description"
                         value={editProduct.description}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
                     />
                     <TextField
-                        margin="dense"
                         name="price"
-                        label="Price"
-                        type="number"
-                        fullWidth
+                        label="Product Price"
                         value={editProduct.price}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
                     />
                     <TextField
-                        margin="dense"
                         name="stock"
-                        label="Stock"
-                        type="number"
-                        fullWidth
+                        label="Product Stock"
                         value={editProduct.stock}
                         onChange={handleInputChange}
+                        fullWidth
+                        margin="dense"
+                    />
+                    <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                        Existing Images:
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
+                        {existingImages.length > 0 ? (
+                            existingImages.map((imageUrl, index) => (
+                                <Box key={index} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <img
+                                        src={imageUrl}
+                                        alt={`Existing Image ${index + 1}`}
+                                        style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }}
+                                    />
+                                    <Button 
+                                        variant="text" to remove or handle image removal
+                                        color="error"
+                                        onClick={() => setExistingImages(existingImages.filter((_, i) => i !== index))}
+                                    >
+                                        Remove
+                                    </Button>
+                                </Box>
+                            ))
+                        ) : (
+                            <Typography variant="body2">No existing images available.</Typography>
+                        )}
+                    </Box>
+                    <input
+                        type="file"
+                        name="images"
+                        accept="image/*"
+                        multiple
+                        onChange={handleInputChange}
+                        style={{ marginTop: '20px' }}
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleEditClose} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSaveChanges} color="primary">
-                        Save
-                    </Button>
+                    <Button onClick={handleEditClose} color="primary">Cancel</Button>
+                    <Button onClick={handleSaveChanges} color="primary">Save</Button>
                 </DialogActions>
             </Dialog>
 
             <Dialog open={promotionOpen} onClose={handlePromotionClose}>
-                <DialogTitle>{product.original_price ? 'Update Promotion' : 'Apply Promotion'}</DialogTitle>
+                <DialogTitle>Apply Promotion</DialogTitle>
                 <DialogContent>
                     <TextField
-                        margin="dense"
                         name="discountPercentage"
                         label="Discount Percentage"
-                        type="number"
-                        fullWidth
                         value={promotion.discountPercentage}
                         onChange={handlePromotionChange}
+                        fullWidth
+                        margin="dense"
                     />
                     <TextField
-                        margin="dense"
                         name="startDate"
                         label="Start Date"
                         type="date"
-                        fullWidth
-                        InputLabelProps={{ shrink: true }}
                         value={promotion.startDate}
                         onChange={handlePromotionChange}
+                        fullWidth
+                        margin="dense"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                     <TextField
-                        margin="dense"
                         name="endDate"
                         label="End Date"
                         type="date"
-                        fullWidth
-                        InputLabelProps={{ shrink: true }}
                         value={promotion.endDate}
                         onChange={handlePromotionChange}
+                        fullWidth
+                        margin="dense"
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
-                    {afterPromotionPrice !== null && (
+                    {afterPromotionPrice && (
                         <Typography variant="body1" sx={{ mt: 2 }}>
-                            After Promotion Price: {product.currency} {afterPromotionPrice}
+                            New Price After Promotion: {product.currency} {afterPromotionPrice}
                         </Typography>
                     )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handlePromotionClose} color="secondary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleApplyPromotion} color="primary">
-                        {product.original_price ? 'Update' : 'Apply'}
-                    </Button>
+                    <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
+                    <Button onClick={handleApplyPromotion} color="primary">Apply</Button>
                 </DialogActions>
             </Dialog>
         </Box>

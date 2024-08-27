@@ -1,6 +1,6 @@
 from django.db import models, transaction
-from astoneapp.models.images import ProductImage
 from astoneapp.models.seller import Seller;
+
 class Product(models.Model):
     name = models.CharField(max_length = 30, null=False, default='', help_text="name of the product")    
     description = models.CharField(max_length = 100, null=False, default='', help_text="description of the product")    
@@ -56,6 +56,3 @@ class Product(models.Model):
     #     )
 
     #     return product
-
-    def add_image(self, key, url, name, width, height, format):
-        return ProductImage.objects.create(product=self, key=key, url=url, name=name, width=width, height=height, format=format)

@@ -43,6 +43,7 @@ function CreateProduct() {
       price: 0.00,
       stock: 0,
       rating: 0,
+      images: []
     },
     onSubmit: async (values, actions) => {
       try {
@@ -165,7 +166,7 @@ const handleRemoveColor = (index) => {
         <Typography variant="h4" sx={{paddingBottom: '3px'}}>Create Your Product</Typography>
         <Typography sx={{fontSize: '15px'}} >Start your fashion journey with Astone and unlock endless possibilities for creating captivating, trend-setting products.</Typography>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <Box
+          {/* <Box
             sx={{
               flex: 1,
               border: '2px solid #b7b7b7',
@@ -178,7 +179,7 @@ const handleRemoveColor = (index) => {
           >
             <Typography variant="h6">Add Image</Typography>
           
-          </Box>
+          </Box> */}
           <Box component="form" onSubmit={formik.handleSubmit} sx={{ flex: 1 }}>
           <FormControl fullWidth margin="normal">
               <TextField
@@ -325,6 +326,17 @@ const handleRemoveColor = (index) => {
                 helperText={formik.touched.stock && formik.errors.stock}
                 style={{ backgroundColor: 'white' }}
               />
+            </FormControl>
+            <FormControl fullWidth margin="normal">
+            <input
+                        id="images"
+                        name="images"
+                        type="file"
+                        multiple
+                        onChange={(event) => {
+                        formik.setFieldValue("images", Array.from(event.currentTarget.files));
+                        }}
+             />
             </FormControl>
             <Button
               type="submit"
