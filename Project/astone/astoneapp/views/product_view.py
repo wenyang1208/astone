@@ -139,16 +139,6 @@ def UpdateProductView(request, pk):
             if serializer.is_valid():
                 serializer.save()
                 
-                # Handle images
-                images = request.FILES.getlist('images')
-                if images:
-                    # Clear existing images if needed
-                    product.images.all().delete()
-                    
-                    # Add new images
-                    for image in images:
-                        Image.objects.create(product=product, image_url=image)
-                
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         

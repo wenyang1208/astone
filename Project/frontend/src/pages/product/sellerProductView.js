@@ -124,12 +124,12 @@ function SellerProductView() {
             formData.append('original_price', updatedProduct.original_price);
             formData.append('stock', updatedProduct.stock);
 
-            if (editProduct.images && editProduct.images.length > 0) {
-                editProduct.images.forEach((image, index) => {
-                    console.log(image);
-                    formData.append('images', image);
-                });
-            }
+            // if (editProduct.images && editProduct.images.length > 0) {
+            //     editProduct.images.forEach((image, index) => {
+            //         console.log(image);
+            //         formData.append('images', image);
+            //     });
+            // }
             const res = await productService.editProduct(id, updatedProduct);
             console.log(res);
             if (res && res.status === 200) {
@@ -301,7 +301,7 @@ function SellerProductView() {
                         fullWidth
                         margin="dense"
                     />
-                    <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+                    {/* <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
                         Existing Images:
                     </Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, flexWrap: 'wrap' }}>
@@ -333,7 +333,7 @@ function SellerProductView() {
                         multiple
                         onChange={handleInputChange}
                         style={{ marginTop: '20px' }}
-                    />
+                    /> */}
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleEditClose} color="primary">Cancel</Button>
