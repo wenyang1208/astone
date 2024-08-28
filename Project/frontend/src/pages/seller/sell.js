@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link , useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Box, Button, Typography, Container, Paper } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import MyAppBar2 from '../../components/appBar2'; // Import MyAppBar component
 
 const theme = createTheme({
   palette: {
@@ -33,28 +33,20 @@ const theme = createTheme({
 });
 
 function Sell() {
-
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate('/');
-  };
-
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{backgroundColor: 'background.default'}}>
-        <Button onClick={handleBack} sx={{ ml: 2, mt: 2 }}>
-            <ArrowBackIcon />
-          </Button>
-        
+      <Box sx={{ backgroundColor: 'background.default' }}>
+        {/* Use MyAppBar at the top */}
+        <MyAppBar2 />
+
         <Box
           sx={{
             minHeight: '100vh',
-            
             backgroundColor: 'background.default',
-          }}>
-          
-          <Container component="main" maxWidth="sm" >
+            pt: 10, // Add padding to create space between AppBar and content
+          }}
+        >
+          <Container component="main" maxWidth="sm">
             <Paper elevation={3} sx={{ mt: 8, p: 4, borderRadius: '15px' }}>
               <Box
                 sx={{
