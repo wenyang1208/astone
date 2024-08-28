@@ -17,9 +17,9 @@ Astone is licensed under the [GNU General Public License v3.0](./LICENSE).
 
 1. **Clone Repository**: Clone the repository to your local machine using the following command via any method of your choice.
 
-2. **Setup Frontend**: Navigate to the `Project/frontend` directory and follow the instructions in the [README.md](./Project/frontend/README.md#setup) file to set up the frontend.
+2. **Setup Frontend**: Navigate to the `Project/frontend` directory and follow the setup instructions in the [README.md](./Project/frontend) file to set up the frontend.
 
-3. **Setup Backend**: Navigate to the `Project/astone` directory and follow the instructions in the [README.md](./Project/astone/README.md#setup) file to set up the backend.
+3. **Setup Backend**: Navigate to the `Project/astone` directory and follow the setup instructions in the [README.md](./Project/astone) file to set up the backend.
 
 4. **Use Application**: Once frontend and backend are set up, they will be running on http://localhost:3000/ and http://localhost:8000/admin respectively and are ready for use. (Typical use only requires frontend access)
 

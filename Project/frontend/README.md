@@ -89,7 +89,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ## Setup
 1. **Prerequisites**: Ensure you have Node.js installed on your machine. If not, download and install [Node.js](https://nodejs.org/en/download/).
 
-2. **Install and Run**: Clone the repository to your local machine and navigate to the `Project/frontend` directory. Run the following commands to install dependencies and start the React app:
+2. **Install and Run**: Clone the repository to your local machine and navigate to the project directory. Run the following commands to install dependencies and start the React app:
 ```bash
 cd Project/frontend
 npm install [--force]
