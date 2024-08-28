@@ -4,42 +4,6 @@
 
 The Astone back-end provides RESTful API endpoints for interacting with the backend system, including CRUD operations for managing resources such as users, products, and orders. It utilizes a PostgreSQL database to persist data and implements business logic to process requests and generate responses.
 
-## Docker Setup
-
-To ease setup and deployment, Docker is used to containerize dependencies and provide a consistent environment.
-
-1. **Prerequisites**: Ensure Docker Desktop is installed and running with administrator permissions. [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
-
-2. **Building and Running**: Navigate to the project directory and run the following commands:  
-
-cd Project/astone  
-
-docker-compose build 
-
-docker-compose up
-
-If getting the follwing error after running 'docker-compose up': "not found    | ./start.sh: 2:", it is caused by a file formatiing error.
-Refer to the screenshot below on how to resolve this:
-
-![Alt text](<Screenshot 2024-05-19 005259.jpg>)
-
-Another way of resolving this issue would be by running the following commands in your terminal:
-
-cd Project/astone  
-
-dos2unix ./start.sh  
-
-
-
-3. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.
-
-Note that simply navigating to http://localhost:8000/ in your web browser will lead to a 404 page
-
-
-4. **Admin Interface**: Access the Django admin page at `http://localhost:8000/admin/` to manage entities. Use the following credentials:
-- Username: admin
-- Password: 1234
-
 ## Creating Entities (Models)
 
 1. **Define Models**: Create a new file in `astoneapp.models` for each new model. Define model classes based on your requirements, ensuring to include necessary functions. [Django Models Documentation](https://docs.djangoproject.com/en/5.0/topics/db/models/)
@@ -72,11 +36,47 @@ docker-compose up
 
 4. **Testing**: Test endpoints using tools like [Postman desktop app](https://www.postman.com/downloads/).
 
-## License
+## Setup
 
-Astone is licensed under the [GNU General Public License v3.0](./LICENSE).
+To ease setup and deployment, Docker is used to containerize dependencies and provide a consistent environment.
+
+1. **Prerequisites**: Ensure Docker Desktop is installed and running with administrator permissions. [Download Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+2. **Building and Running**: Navigate to the project directory and run the following commands one by one:  
+
+```bash
+cd Project/astone
+docker-compose build
+docker-compose up
+```
+
+3. **Error Resolution:** If getting an error regarding `./start.sh`, it is caused by a file formatiing error.
+There are two ways to resolve this:
+
+- Use [Notepad++](https://notepad-plus-plus.org/downloads/) to convert the file format to Unix format. To do this, open the file in NotePad++, click on Edit -> EOL Conversion -> Unix/OSX format, then save the file.
+
+- Alternatively, run the following commands in a bash terminal:
+```bash
+cd Project/astone; dos2unix ./start.sh
+```
+
+4. **Accessing API Endpoints**: API endpoints can be accessed at `http://localhost:8000/`. Combine this base URL with the appropriate suffix based on the URLs defined in `urls.py` to access specific endpoints.
+
+- Note: that simply navigating to `http://localhost:8000/` in your web browser will lead to a 404 page.
 
 
+5. **Admin Interface**: Access the Django admin page at http://localhost:8000/admin/ to manage entities. Use the following credentials:
+```bash
+Username: admin
+Password: 1234
+```
 
+## Completely Resetting the Backend
 
+If you need to completely reset the backend, including the database and all data, follow these steps:
 
+1. **Stop Docker Containers**: Stop the running Docker containers via the Docker app.
+
+2. **Remove Related Docker Resources**: Remove all related Docker resources, including containers, images, and volumes, using the following commands. 
+
+3. **Rebuild Docker Image**: Rebuild the Docker image to apply changes. Refer to the [Setup](#setup) section for detailed instructions.

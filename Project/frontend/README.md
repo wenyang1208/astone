@@ -85,3 +85,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Setup
+1. **Prerequisites**: Ensure you have Node.js installed on your machine. If not, download and install [Node.js](https://nodejs.org/en/download/).
+
+2. **Install and Run**: Clone the repository to your local machine and navigate to the `Project/frontend` directory. Run the following commands to install dependencies and start the React app:
+```bash
+cd Project/frontend
+npm install [--force]
+npm start
+```
+- Add `--force` flag if you encounter any dependency issues.
+
+3. **Accessing Application**: The React app will be running on http://localhost:3000/ and can be accessed via your web browser.
