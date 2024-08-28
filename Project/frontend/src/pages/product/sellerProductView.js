@@ -49,7 +49,8 @@ function SellerProductView() {
                     stock: res.data.stock,
                     images: BASE_URL + res.data.images[0].image_url,
                     sizes: res.data.sizes,
-                    colors: res.data.colors
+                    colors: res.data.colors,
+                    category: res.data.category
                 });
                 console.log(res.data);
                 setEditProduct({
@@ -244,6 +245,7 @@ function SellerProductView() {
                         <Divider sx={{ my: 2 }} />
                         <Typography variant="subtitle1" gutterBottom>Category:</Typography>
                         <Box sx={{ mb: 2 }}>
+                            {console.log(product.category)}
                             {product.category && product.category.replace(/[\[\]']+/g, '').split(', ').map((cat, index) => (
                                 <Chip key={index} label={cat} sx={{ mr: 1, mb: 1 }} />
                             ))}
