@@ -349,11 +349,6 @@ const Signup = () => {
               <Typography variant="h4" component="h1" color="text.primary" sx={{ mb: 3 }}>
                 Join Astoné
               </Typography>
-              {showErrorAlert && (
-                <Alert severity="error" sx={{ width: '100%', mb: 2, opacity: fade ? 1 : 0, transition: 'opacity 1s ease-in-out' }}>
-                  Failed to create account.
-                </Alert>
-              )}
               <Stepper activeStep={activeStep} sx={{ width: '100%', mb: 2 }}>
                 {steps.map((label, index) => (
                   <Step key={index}>
@@ -366,6 +361,19 @@ const Signup = () => {
           </Grid>
         </Grid>
       </Container>
+      {showErrorAlert && (
+        <Alert severity="error" sx={{
+          position: 'fixed',
+          bottom: 20,
+          right: 20,
+          width: 'auto',
+          opacity: fade ? 1 : 0,
+          transition: 'opacity 1s ease-in-out',
+          zIndex: 1300, // Ensure the alert is above other content
+        }}>
+          Failed to create account.
+        </Alert>
+      )}
     </ThemeProvider>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Container, Box, TextField, Button, Typography, CssBaseline, Divider,
-  List, ListItem, ListItemText, Switch, FormControlLabel, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
+  Tabs, Tab, FormControlLabel, Switch, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle
 } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MyAppBar from '../components/appBar';
@@ -94,58 +94,37 @@ const Settings = () => {
     setOpen(false);
   };
 
+  const handleTabChange = (event, newValue) => {
+    setTab(newValue);
+  };
+
   return (
     <ThemeProvider theme={purpleTheme}>
       <CssBaseline />
       <MyAppBar />
-      <Box sx={{ display: 'flex' }}>
-        {/* Sidebar */}
-        <Box 
-          sx={{ 
-            width: '250px', 
-            bgcolor: '#f4f4f4', 
-            height: 'calc(100vh - 80px)', 
-            position: 'fixed', 
-            left: '40px', // Increased space from the left edge
-            top: '80px', 
-            borderRight: '1px solid #ddd', 
-            borderRadius: '8px', // Rounded all corners
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 40px)', paddingTop: '40px' }}>
+        {/* Main content container with spacing */}
+        <Box
+          sx={{
+            flex: 1,
+            width: '100%',
+            maxWidth: '1200px',
+            margin: '0 auto',
             padding: '16px',
             boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            zIndex: 1,
-            overflowY: 'auto' // Make sure it scrolls if content is too long
+            borderRadius: '8px',
+            backgroundColor: '#f4f4f4',
+            mb: '40px' // Add bottom margin for space before end of page
           }}
         >
-          <List>
-            <ListItem button onClick={() => setTab('account')}>
-              <ListItemText primary="Account" />
-            </ListItem>
-            <ListItem button onClick={() => setTab('preferences')}>
-              <ListItemText primary="Preferences" />
-            </ListItem>
-            <ListItem button onClick={() => setTab('privacy')}>
-              <ListItemText primary="Privacy" />
-            </ListItem>
-          </List>
-        </Box>
-        
-        {/* Main content */}
-        <Box 
-          sx={{ 
-            flexGrow: 1, 
-            marginLeft: '300px', // Adjusted to leave space for the sidebar and extra padding
-            padding: '40px 20px 20px', // Add space above and below the content
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            minHeight: 'calc(100vh - 80px)'
-          }}
-        >
-          <Box sx={{ width: '80%', maxWidth: '800px' }}>
-            <Typography variant="h4" sx={{ mb: 2 }}>
-              {tab === 'account' ? 'Account Settings' : tab === 'preferences' ? 'Preferences' : 'Privacy'}
-            </Typography>
-            <Divider sx={{ mb: 2 }} />
+          {/* Tabs for navigation */}
+          <Tabs value={tab} onChange={handleTabChange} aria-label="settings tabs" sx={{ mb: 2 }}>
+            <Tab value="account" label="Account" />
+            <Tab value="preferences" label="Preferences" />
+            <Tab value="privacy" label="Privacy" />
+          </Tabs>
+          <Divider sx={{ mb: 2 }} />
+          <Box sx={{ padding: '16px' }}>
             {tab === 'account' && (
               <Box sx={{ width: '100%' }}>
                 <TextField

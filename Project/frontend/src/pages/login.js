@@ -175,8 +175,8 @@ const Login = () => {
             severity="success"
             sx={{
               position: 'fixed',
-              top: 20,
-              right: 20,
+              bottom: 20, // Adjust this value if needed
+              right: 20, // Adjust this value if needed
               width: 'fit-content',
               padding: '8px 24px',
               textAlign: 'center',
