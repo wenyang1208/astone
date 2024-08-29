@@ -37,9 +37,14 @@ const LoginSeller = () => {
 
   return (
       <Container maxWidth="lg">
-        <Button onClick={handleBack} sx={{ ml: 2, mt: 2 }}>
+
+        {/* This button was creating an infinite loop, temporary solution */}
+        <Link to="/">
+          <Button onClick={handleBack} sx={{ ml: 2, mt: 2 }}>
             <ArrowBackIcon />
           </Button>
+        </Link>
+        
         <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '80vh' }}>
           <Grid item xs={12} sm={8} md={5}>
             <Box
