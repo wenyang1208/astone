@@ -12,7 +12,9 @@ Refer to [backend](./Project/astone) for more information.
 
 ## Testing
 Run frontend and backend tests automatically with Gitlab CI on code pushes.
+
 Refer to [frontend](./Project/frontend) for more information.
+
 Refer to [backend](./Project/astone) for more information.
 
 ## Open License 
