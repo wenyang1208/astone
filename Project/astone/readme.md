@@ -80,3 +80,30 @@ If you need to completely reset the backend, including the database and all data
 2. **Remove Related Docker Resources**: Remove all related Docker resources, including containers, images, and volumes, using the following commands. 
 
 3. **Rebuild Docker Image**: Rebuild the Docker image to apply changes. Refer to the [Setup](#setup) section for detailed instructions.
+
+## Testing
+
+We will focus on Django Backend Testing and API testing for backend:
+
+1. **Django Backend Testing**
+
+- Run the following command to execute all tests in the project:
+```bash
+python manage.py test
+```
+
+- Unit Tests: Test models, views, and serializers using TestCase.
+
+- Integration Tests: Use APITestCase to test end-to-end scenarios.
+
+For more details, refer to the Django Documentation and Django REST Framework Testing Documentation:
+
+- [Django Documentation](https://docs.djangoproject.com/en/5.1/topics/testing/overview/)
+
+- [Django REST Framework Testing Documentation](https://www.django-rest-framework.org/api-guide/testing/)
+
+2. **API Testing**
+
+- Use Postman to automate and validate API endpoint responses, 
+
+- For more details on implementing API endpoints, refer to the "Testing" section in[Implementing API Endpoints](#implementing-api-endpoints).

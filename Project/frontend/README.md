@@ -98,3 +98,17 @@ npm start
 - Add `--force` flag if you encounter any dependency issues.
 
 3. **Accessing Application**: The React app will be running on http://localhost:3000/ and can be accessed via your web browser.
+
+## Testing
+
+We use React Testing Library and Jest for testing components and features. To run tests, use:
+
+`npm test`
+
+This launches the test runner in interactive watch mode, allowing you to run, re-run, and view test results. Write meaningful tests for components to verify functionality and user interactions.
+
+For more details, refer to the React Testing Library Documentation and unit testing tutorial:
+
+- [React Testing Library Documentation](https://testing-library.com/docs/react-testing-library/intro)
+
+- [Unit Testing Tutorial](https://www.youtube.com/watch?v=OVNjsIto9xM)
