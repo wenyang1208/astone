@@ -36,7 +36,7 @@ If they do not have account, they must sign up first.
 
 - The customer can click on categories "Women"/"Man"/"Unisex" to view the relevant product, and "Compare" to compare two products.
 
-![Screenshot](frontend/src/image/header.png)
+![Screenshot](frontend/src/images/header.png)
 
 ## Filter & Sort
 
