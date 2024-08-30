@@ -30,6 +30,10 @@ Astone is licensed under the [GNU General Public License v3.0](./LICENSE).
 
 4. **Use Application**: Once frontend and backend are set up, they will be running on http://localhost:3000/ and http://localhost:8000/admin respectively and are ready for use. (Typical use only requires frontend access)
 
+## Tutorial of using Astone
+
+Refer [tutorial](./Project/) for more information.
+
 ## Members
 | Name | Role | Email |
 | --- | --- | --- |

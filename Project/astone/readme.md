@@ -98,7 +98,7 @@ python manage.py test
 
 For more details, refer to the Django Documentation and Django REST Framework Testing Documentation:
 
-- [Django Documentation](https://docs.djangoproject.com/en/5.1/topics/testing/overview/)
+- [Django Testing Documentation](https://docs.djangoproject.com/en/5.1/topics/testing/overview/)
 
 - [Django REST Framework Testing Documentation](https://www.django-rest-framework.org/api-guide/testing/)
 
@@ -106,4 +106,4 @@ For more details, refer to the Django Documentation and Django REST Framework Te
 
 - Use Postman to automate and validate API endpoint responses, 
 
-- For more details on implementing API endpoints, refer to the "Testing" section in[Implementing API Endpoints](#implementing-api-endpoints).
+- For more details on implementing API endpoints, refer to the "Testing" section in [Implementing API Endpoints](#implementing-api-endpoints).
