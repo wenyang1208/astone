@@ -8,7 +8,12 @@ Refer to [frontend](./Project/frontend) for more information.
 
 ## Backend
 Backend uses Django connected to a PostgreSQL database.  
-Refer to [backend](./Project/astone) for more information.  
+Refer to [backend](./Project/astone) for more information.
+
+## Testing
+Run frontend and backend tests automatically with Gitlab CI on code pushes.
+Refer to [frontend](./Project/frontend) for more information.
+Refer to [backend](./Project/astone) for more information.
 
 ## Open License 
 Astone is licensed under the [GNU General Public License v3.0](./LICENSE).  
