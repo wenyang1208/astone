@@ -54,38 +54,38 @@ If they do not have account, they must sign up first.
 
 - The customer can add the product to cart by clicking on "ADD TO CART", the product info will be shown and the customer can choose to add the product to cart.
 
-![Screenshot](frontend\src\images\product_customer_view.png)
+![Screenshot](\frontend\src\images\product_customer_view.png)
 
 - After adding the product to cart, the cart icon on the header will update the number of products in user's cart.
 
-![Screenshot](frontend\src\images\cart_icon.png)
+![Screenshot](\frontend\src\images\cart_icon.png)
 
 - By clicking on the cart icon, the customer can choose product's quantity and proceed to checkout.
 
-![Screenshot](frontend\src\images\chk_out.png)
+![Screenshot](\frontend\src\images\chk_out.png)
 
 - During checkout process, the customer must enter their information to proceed checkout.
 
-![Screenshot](frontend\src\images\product_chk_out.png)
+![Screenshot](\frontend\src\images\product_chk_out.png)
 
 - After checkout, the customer can view their order's details.
 
-![Screenshot](frontend\src\images\order_details.png)
+![Screenshot](\frontend\src\images\order_details.png)
 
 ## Setting
 
 - User can edit the setting by clicking and navigating on the login account button
 
-![Screenshot](frontend\src\images\settings.png)
+![Screenshot](\frontend\src\images\settings.png)
 
 - In the "ACCOUNT" section, user can edit their personal information except email.
 
-![Screenshot](frontend\src\images\setting_account.png)
+![Screenshot](\frontend\src\images\setting_account.png)
 
 - In the "PREFERENCE" section, user can choose to enable notifications.
 
-![Screenshot](frontend\src\images\setting_preferences.png)
+![Screenshot](\frontend\src\images\setting_preferences.png)
 
 - In the "PRIVACY" section, user can request to delete their accounts.
 
-![Screenshot](frontend\src\images\setting_privacy.png)
+![Screenshot](\frontend\src\images\setting_privacy.png)
