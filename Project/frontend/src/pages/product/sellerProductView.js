@@ -86,6 +86,7 @@ function SellerProductView() {
     const handleEditClose = () => setEditOpen(false);
     const handlePromotionOpen = () => setPromotionOpen(true);
     const handlePromotionClose = () => {
+        console.log('hi');
         setPromotionOpen(false);
         setAfterPromotionPrice(null);
         setPromotion({
@@ -165,16 +166,15 @@ function SellerProductView() {
                 original_price: product.original_price || product.price,
                 price: afterPromotionPrice,
             };
-            console.log(product.id);
             const addPromotion = {
-                product_id: product.id,
+                product_id: id,
                 discountPercentage: parseFloat(promotion.discountPercentage),
                 startDate: promotion.startDate,
                 endDate: promotion.endDate
             }
             const resPromotion = await promotionService.createPromotion(addPromotion);
             const res = await productService.editProduct(id, updatedProduct);
-            if (res && res.status === 200 && resPromotion.status === 200) {
+            if (res && res.status === 200 && resPromotion.status === 201) {
                 setProduct(res.data);
                 handlePromotionClose();
             }

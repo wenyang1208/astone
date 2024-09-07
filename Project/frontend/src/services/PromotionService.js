@@ -25,9 +25,8 @@ export class PromotionService {
             is_active: true
         
         };
-
         console.log('Final data being sent:', promotionData);
-        const res = await api.post('http://localhost:8000/promotions/', promotionData);
+        const res = await axios.post('http://localhost:8000/promotions/', promotionData);
         return res;
         } catch (error) {
             console.error('Error creating product:', error);
