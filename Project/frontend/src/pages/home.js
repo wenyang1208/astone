@@ -1,42 +1,24 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useEffect } from "react";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import XIcon from "@mui/icons-material/X";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Header from "../components/header";
-import MainBanner from "../components/mainBanner";
-import FeaturedProduct from "../components/featuredProduct";
-import Sidebar from "../components/sidebar";
-import Footer from "../components/footer2";
 import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
-import PathConstants from "../routes/pathConstants";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
 import { ProductService } from "../services/ProductService";
+import MyAppBar from "../components/appBar";
+import MainBanner from "../components/mainBanner";
+import FeaturedProduct from "../components/featuredProduct";
+import Footer from "../components/footer2";
+import HelpDial from "../components/helpDial"; // Import HelpDial
 import {
   Card,
   CardContent,
   CardMedia,
   Typography,
-  TextField,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import MyAppBar from "../components/appBar";
-
-// const sections = [
-//   { title: 'Men', url: '#' },
-//   { title: 'Women', url: '#' },
-//   { title: 'Unisex', url: '#' },
-//   { title: 'Support', url: '#' },
-//   { title: 'Sell', url: '#' },
-//   { title: 'About', url: '#' },
-//   { title: 'Compare Products', url: '#' },
-
-// ];
 
 const mainBanner = {
   title: "SALE!",
@@ -57,12 +39,9 @@ const Home = () => {
   useEffect(() => {
     const productService = new ProductService();
 
-    // Call the getProducts method from ProductService
     productService
       .getProducts()
       .then((res) => {
-        // Filter products for men
-        // const menProducts = res.data.filter(product => product.category.toLowerCase() === "men" || product.category.toLowerCase() === "men's");
         setProducts(res.data);
       })
       .catch((err) => {
@@ -108,7 +87,8 @@ const Home = () => {
 
   return (
     <div>
-      <MyAppBar></MyAppBar>
+      <CssBaseline />
+      <MyAppBar />
       <div style={styles.container}>
         <main style={styles.content}>
           <MainBanner post={mainBanner} />
@@ -151,6 +131,10 @@ const Home = () => {
             </div>
           )}
         </main>
+        {/* Position HelpDial at the bottom right */}
+        <div style={styles.helpDial}>
+          <HelpDial />
+        </div>
       </div>
       <Footer />
     </div>
@@ -162,38 +146,7 @@ const styles = {
     display: "flex",
     backgroundColor: "#f0f0f0",
     minHeight: "100vh",
-  },
-  sidebar: {
-    width: "250px", // Fixed width for the sidebar
-    flexShrink: 0,
-    padding: "20px",
-    backgroundColor: "#ffffff",
-  },
-  filter: {
-    marginTop: "0",
-  },
-  heading: {
-    fontSize: "20px",
-    fontWeight: "bold",
-    marginBottom: "20px",
-  },
-  subHeading: {
-    fontSize: "16px",
-    fontWeight: "bold",
-    marginBottom: "10px",
-  },
-  list: {
-    listStyle: "none",
-    padding: "0",
-  },
-  listItem: {
-    marginBottom: "10px",
-  },
-  checkbox: {
-    marginRight: "10px",
-  },
-  section: {
-    marginBottom: "20px",
+    position: "relative", // Make sure container is positioned relative
   },
   content: {
     flexGrow: "1",
@@ -209,6 +162,12 @@ const styles = {
   },
   price: {
     color: "#ff0000", // Changed color to red
+  },
+  helpDial: {
+    position: "absolute",
+    bottom: 16,
+    right: 16,
+    zIndex: 1000, // Ensure it is above other elements
   },
 };
 
