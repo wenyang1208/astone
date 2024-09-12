@@ -3,7 +3,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 
@@ -83,17 +82,17 @@ export default function Footer() {
             >
               Help
             </Typography>
-            <Link href="#" color="inherit" display="block">
+            <Link href="/faq" color="inherit" display="block">
               FAQ
+            </Link>
+            <Link href="/support" color="inherit" display="block">
+              Support
             </Link>
             <Link href="#" color="inherit" display="block">
               Return Policy
             </Link>
             <Link href="#" color="inherit" display="block">
               Privacy Policy
-            </Link>
-            <Link href="#" color="inherit" display="block">
-              Accessibility
             </Link>
           </Grid>
 
@@ -158,11 +157,4 @@ export default function Footer() {
       </Box>
     </ThemeProvider>
   );
-}
-
-{
-  /* <Container maxWidth="sm"> */
-}
-{
-  /* </Container> */
 }

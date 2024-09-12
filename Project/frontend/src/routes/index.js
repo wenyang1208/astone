@@ -14,6 +14,7 @@ const Men = React.lazy(() => import("../pages/men"));
 const Sell = React.lazy(() => import("../pages/seller/sell"));
 const Unisex = React.lazy(() => import("../pages/unisex"));
 const Support = React.lazy(() => import("../pages/support"));
+const FAQ = React.lazy(() => import("../pages/faq"));
 const Login = React.lazy(() => import("../pages/login"));
 const SignUp = React.lazy(() => import("../pages/signup"));
 const Settings = React.lazy(() => import("../pages/settings"));
@@ -35,6 +36,7 @@ const routes = [
     { path: PathConstants.MEN, element: <Men /> },
     { path: PathConstants.UNISEX, element: <Unisex /> },
     { path: PathConstants.SUPPORT, element: <Support /> },
+    { path: PathConstants.FAQ, element: <FAQ /> },
     { path: PathConstants.SELL, element: <Sell /> },
     { path: PathConstants.LOGIN, element: <Login /> },
     { path: PathConstants.SIGNUP, element: <SignUp /> },
