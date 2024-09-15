@@ -171,3 +171,6 @@ EMAIL_HOST_USER = 'astoneecommerce3170@gmail.com'
 EMAIL_HOST_PASSWORD = 'wxph wtpl qzvz vbmv'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+# email address: astoneecommerce3170@gmail.com
+# email password: astone1234

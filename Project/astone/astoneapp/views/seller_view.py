@@ -66,7 +66,7 @@ class SellerForgotPassword(generics.CreateAPIView):
                  send_mail(
                     subject='Verify Account',
                     message='Please verify your account',
-                    from_email='wenyangchua@gmail.com',
+                    from_email='astoneecommerce3170@gmail.com',
                     recipient_list=[email],
                     fail_silently=False,
                     html_message=f"<p>To change your password, click on this link: </p><p>{link}</p>"
