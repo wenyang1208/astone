@@ -49,5 +49,7 @@ urlpatterns = [
     path('seller/token/refresh', TokenRefreshView.as_view(), name='refresh'),
     path('seller/<int:pk>/', SellerGetView.as_view(), name='get_seller'),
     path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
-    path('promotions/', PromotionListCreate.as_view(), name='promotions')
+    path('promotions/', PromotionListCreate.as_view(), name='promotions'),
+    path('seller/seller-forgot-password/', SellerForgotPassword.as_view(), name='seller_forgot_password'),
+    path('seller/seller-change-password/<int:user_id>/', SellerChangePassword.as_view(), name='change-seller-password')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

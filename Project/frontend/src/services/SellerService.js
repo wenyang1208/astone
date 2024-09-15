@@ -47,4 +47,29 @@ export class SellerService {
             throw error;
         }
     }
+
+    async requestPasswordReset(data)
+    {
+        try {
+            const res = await axios.post('http://localhost:8000/seller/seller-forgot-password/', data);
+            return res;
+        } catch (error) {
+            console.log(data);
+            console.error('Error in requesting seller link:', error.response?.data || error.message);
+            return null;
+        }
+    }
+
+    async changePassword(seller_id, data)
+    {
+        try {
+            console.log(data);
+            const res = await axios.put(`http://localhost:8000/seller/seller-change-password/${seller_id}/`, data);
+            return res;
+        } catch (error) {
+            console.log(data);
+            console.error('Error in requesting seller link:', error.response?.data || error.message);
+            return null;
+        }
+    }
 }

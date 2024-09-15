@@ -103,7 +103,7 @@ const LoginSeller = () => {
                   Don't have an account? <Link to="/signupSeller" style={{ textDecoration: 'none', color: 'blue' }}>Sign Up</Link>
                 </Typography>
                 <Typography variant="body2" color="textSecondary" align="center">
-                  <Link to="/forgotpassword" style={{ textDecoration: 'none', color: 'gray' }}>Forgot Password?</Link>
+                  <Link to="/SellerForgotPassword" style={{ textDecoration: 'none', color: 'gray' }}>Forgot Password?</Link>
                 </Typography>
               </Box>
             </Box>

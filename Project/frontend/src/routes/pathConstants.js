@@ -19,7 +19,9 @@ const PathConstants = {
     SIGNUP_SELLER: "signupSeller",
     COMPARE_PRODUCTS: "compare",
     ORDER_CONFIRMARION: "order-confirmation", 
-    CHECKOUT: "checkout"
+    CHECKOUT: "checkout",
+    SELLER_FORGOT_PASSWORD: "SellerForgotPassword",
+    SELLER_CHANGE_PASSWORD: "SellerChangePassword"
 }
 
 export default PathConstants

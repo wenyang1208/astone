@@ -48,6 +48,18 @@ class SellerSerializer(serializers.ModelSerializer):
             shop_name=validated_data['shop_name'],
         )
         return seller
+    
+class SellerForgotPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+    def validate_email(self, value):
+        # Ensure that the email exists in the Seller model
+        if not User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Invalid email address")
+        return value
+    
+class SellerChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True)
 
 class SellerResponseSerializer(serializers.Serializer):
     message = serializers.CharField(max_length=200)
