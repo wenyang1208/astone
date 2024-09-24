@@ -21,7 +21,9 @@ const PathConstants = {
     ORDER_CONFIRMARION: "order-confirmation", 
     CHECKOUT: "checkout",
     SELLER_FORGOT_PASSWORD: "SellerForgotPassword",
-    SELLER_CHANGE_PASSWORD: "SellerChangePassword"
+    SELLER_CHANGE_PASSWORD: "SellerChangePassword",
+    FORGOT_PASSWORD: "ForgotPassword",
+    CHANGE_PASSWORD: "ChangePassword"
 }
 
 export default PathConstants

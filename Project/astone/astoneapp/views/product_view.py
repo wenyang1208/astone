@@ -17,27 +17,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# @api_view(['GET']) # request type    
-# def GetProductView(request):
-#     if request.method == 'PUT':
-#         pk = request.data.get('id', '')
-#         try:
-#             name = request.get('name')
-#             currency = request.get('currency')
-#             price = request.get('price')
-#             quantity = request.get('quantity')
-#             rating = request.get('rating')
-#             product_instance, changes = product_instance.update(name, currency, price, quantity)
-
-#             return Response(f"Product updated successfully with changes: {changes}")
-                
-#         except Exception:
-#             return Response(f"Product with id {pk} does not exist", status=404)
-#     products = Product.objects.all()
-#     serializer = ProductSerializer(products, many=True)
-#     return Response(serializer.data)
-            
-
 class ProductListCreate(generics.ListCreateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]

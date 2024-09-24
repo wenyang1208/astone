@@ -1,10 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import generics, status
 from ..models.user import CustomUser
-from ..serializers.user_serializer import UserSerializer
+from ..serializers.user_serializer import *
 from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth.hashers import make_password, check_password
+from django.http import Http404
+from django.core.mail import send_mail
 
 @api_view(['POST'])
 def register_user(request):
@@ -77,3 +79,42 @@ def update_user_details(request, email):
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def forgot_password(request):
+    serializer = UserForgotPasswordSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    email = serializer.validated_data['email']
+
+    # Verify if the user exists with the given email
+    user = CustomUser.objects.filter(email=email).first()
+    if user:
+        link = f"http://localhost:3000/changePassword/{user.id}/"
+        send_mail(
+            subject='Password Reset Request',
+            message='You requested a password reset',
+            from_email='astoneecommerce3170@gmail.com',
+            recipient_list=[email],
+            fail_silently=False,
+            html_message=f"<p>To change your password, click on this link: </p><p>{link}</p>"
+        )
+        return Response({'bool': True, 'msg': 'Please check your email for the reset link'}, status=status.HTTP_200_OK)
+    else:
+        return Response({'bool': False, 'msg': 'Invalid email address'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['PUT', 'PATCH'])
+def change_password(request, user_id):
+    try:
+        user = CustomUser.objects.get(id=user_id)
+    except CustomUser.DoesNotExist:
+        return Response({'detail': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UserChangePasswordSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    
+    password = serializer.validated_data['password']
+    user.password = make_password(password)  # Manually hash the new password using make_password
+    user.save()
+
+    return Response({'bool': True, 'msg': 'Password has been successfully changed'}, status=status.HTTP_200_OK)

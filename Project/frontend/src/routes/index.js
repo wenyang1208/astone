@@ -25,6 +25,8 @@ const Checkout = React.lazy(() => import("../pages/checkout"));
 const OrderConfirmation = React.lazy(() => import("../pages/orderConfirmation"));
 const SellerForgotPassword = React.lazy(() => import("../pages/seller/sellerForgotPassword"));
 const SellerChangePassword = React.lazy(() => import("../pages/seller/sellerChangePassword"));
+const ForgotPassword = React.lazy(() => import("../pages/forgotPassword"));
+const ChangePassword = React.lazy(() => import("../pages/changePassword"));
 
 
 const routes = [
@@ -50,7 +52,8 @@ const routes = [
     { path: PathConstants.ORDER_CONFIRMARION, element: <OrderConfirmation /> },
     { path: PathConstants.SELLER_FORGOT_PASSWORD, element: <SellerForgotPassword /> },
     { path: `${PathConstants.SELLER_CHANGE_PASSWORD}/:id`, element: <SellerChangePassword/> },
-
+    { path: PathConstants.FORGOT_PASSWORD, element: <ForgotPassword /> },
+    { path: `${PathConstants.CHANGE_PASSWORD}/:id`, element: <ChangePassword/> },
 ]
 
 export default routes

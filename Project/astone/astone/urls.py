@@ -51,5 +51,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
     path('promotions/', PromotionListCreate.as_view(), name='promotions'),
     path('seller/seller-forgot-password/', SellerForgotPassword.as_view(), name='seller_forgot_password'),
-    path('seller/seller-change-password/<int:user_id>/', SellerChangePassword.as_view(), name='change-seller-password')
+    path('seller/seller-change-password/<int:user_id>/', SellerChangePassword.as_view(), name='change-seller-password'),
+    path('forgot-password/', forgot_password, name='forgot-password'),
+    path('change-password/<int:user_id>/', change_password, name='change-password')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
