@@ -16,6 +16,7 @@ function SellerProductView() {
     const [product, setProduct] = useState(null);
     const [editOpen, setEditOpen] = useState(false);
     const [promotionOpen, setPromotionOpen] = useState(false);
+    const [amountSaved, setAmountSaved] = useState(null);
     const navigate = useNavigate();
     const BASE_URL = 'http://localhost:8000';
     const [editProduct, setEditProduct] = useState({
@@ -86,7 +87,6 @@ function SellerProductView() {
     const handleEditClose = () => setEditOpen(false);
     const handlePromotionOpen = () => setPromotionOpen(true);
     const handlePromotionClose = () => {
-        console.log('hi');
         setPromotionOpen(false);
         setAfterPromotionPrice(null);
         setPromotion({
@@ -115,8 +115,11 @@ function SellerProductView() {
             if (!isNaN(discountPercentage) && !isNaN(original_price) && discountPercentage > 0 && discountPercentage <= 100) {
                 const discountedPrice = original_price * (1 - (discountPercentage / 100));
                 setAfterPromotionPrice(discountedPrice.toFixed(2));
+                const savedAmount = original_price - discountedPrice;
+                setAmountSaved(savedAmount.toFixed(2));
             } else {
                 setAfterPromotionPrice(null);
+                setAmountSaved(null);
             }
         }
     };
@@ -234,6 +237,9 @@ function SellerProductView() {
                                 </Typography>
                                 <Typography variant="h5" color="primary" gutterBottom>
                                     Sale Price: {product.currency} {product.price}
+                                </Typography>
+                                <Typography variant="h5" color="primary" gutterBottom>
+                                    You save: {product.currency} {(product.original_price-product.price).toFixed(2)}
                                 </Typography>
                             </>
                         ) : (
@@ -401,6 +407,11 @@ function SellerProductView() {
                     {afterPromotionPrice && (
                         <Typography variant="body1" sx={{ mt: 2 }}>
                             New Price After Promotion: {product.currency} {afterPromotionPrice}
+                        </Typography>
+                    )}
+                    {amountSaved && (
+                        <Typography variant="body1" sx={{ mt: 2 }}>
+                            You Save: {product.currency} {amountSaved}
                         </Typography>
                     )}
                 </DialogContent>
