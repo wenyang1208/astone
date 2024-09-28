@@ -8,7 +8,6 @@ import {
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import EditIcon from '@mui/icons-material/Edit';
-import image from './crew-neck.png';
 import { PromotionService } from '../../services/PromotionService';
 
 function SellerProductView() {
@@ -43,36 +42,32 @@ function SellerProductView() {
         try {
             const res = await productService.getProductById(id);
             if (res && res.data) {
-                setProduct({
+                // Include promotion details if they exist
+                const productData = {
                     name: res.data.name,
                     description: res.data.description,
                     price: res.data.price,
+                    original_price: res.data.original_price || res.data.price, // Ensure original price is set
                     stock: res.data.stock,
                     images: BASE_URL + res.data.images[0].image_url,
                     sizes: res.data.sizes,
                     colors: res.data.colors,
                     category: res.data.category
-                });
-                console.log(res.data);
-                setEditProduct({
-                    name: res.data.name,
-                    description: res.data.description,
-                    price: res.data.price,
-                    stock: res.data.stock,
-                    images: BASE_URL + res.data.images[0].image_url,
-                    sizes: res.data.sizes,
-                    colors: res.data.colors
-                });
-                setExistingImages(res.data.images);
-                // Initialize promotion if it exists
+                };
+    
                 if (res.data.promotion) {
-                    setPromotion({
-                        discountPercentage: res.data.promotion.discountPercentage.toString(),
+                    // Fetch and calculate promotion details
+                    productData.promotion = {
+                        discountPercentage: res.data.promotion.discountPercentage,
                         startDate: res.data.promotion.startDate,
                         endDate: res.data.promotion.endDate
-                    });
-                    setAfterPromotionPrice(res.data.price.toString());
+                    };
+    
+                    const amountSaved = productData.original_price - productData.price;
+                    setAmountSaved(amountSaved.toFixed(2));
                 }
+    
+                setProduct(productData);
             }
         } catch (error) {
             console.error('Error fetching product:', error);
@@ -229,7 +224,7 @@ function SellerProductView() {
                 <Grid item xs={12} md={6}>
                     <Paper elevation={3} sx={{ p: 4 }}>
                         <Typography variant="h4" gutterBottom>{product.name}</Typography>
-                        <Rating value={4} readOnly sx={{ mb: 2 }} />
+                        <Rating value={0} readOnly sx={{ mb: 2 }} />
                         {product.price < product.original_price ? (
                             <>
                                 <Typography variant="h6" color="textSecondary" style={{ textDecoration: 'line-through' }}>
@@ -239,7 +234,7 @@ function SellerProductView() {
                                     Sale Price: {product.currency} {product.price}
                                 </Typography>
                                 <Typography variant="h5" color="primary" gutterBottom>
-                                    You save: {product.currency} {(product.original_price-product.price).toFixed(2)}
+                                    Amount save: {product.currency} {(product.original_price-product.price).toFixed(2)}
                                 </Typography>
                             </>
                         ) : (
@@ -411,7 +406,7 @@ function SellerProductView() {
                     )}
                     {amountSaved && (
                         <Typography variant="body1" sx={{ mt: 2 }}>
-                            You Save: {product.currency} {amountSaved}
+                            Amount save: {product.currency} {amountSaved}
                         </Typography>
                     )}
                 </DialogContent>
