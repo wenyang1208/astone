@@ -88,7 +88,7 @@ export default function Footer() {
             <Link href="/support" color="inherit" display="block">
               Support
             </Link>
-            <Link href="/#" color="inherit" display="block">
+            <Link href = "/returnPolicy" color="inherit" display="block">
               Return Policy
             </Link>
             <Link href="/privacyPolicy" color="inherit" display="block">
