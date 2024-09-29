@@ -30,6 +30,16 @@ const purpleTheme = createTheme({
   },
 });
 
+// List of FAQs (questions and answers)
+const faqs = 
+[
+  {question: "What is your return policy?", answer: "You can return any item within 30 days of purchase." },
+  {question: "How long does shipping take?", answer: "Shipping usually takes between 3-5 business days." },
+  {question: "Can I track my order?", answer: "Yes, you will receive a tracking number once your order has been shipped." },
+  { question: "How to reset password?", answer: "You may perform a self-password reset by clicking on the 'Forgot Password' link. You will receive an email to reset your account password." },
+  {question: "What payment methods do you accept?", answer: "We currently accept only bank transfers." }
+]
+
 const FAQ = () => {
   return (
     <ThemeProvider theme={purpleTheme}>
@@ -42,7 +52,7 @@ const FAQ = () => {
             Frequently Asked Questions
           </Typography>
           {/* FAQ Accordions */}
-          {[1, 2, 3, 4, 5].map((num) => (
+          {faqs.map((faq, num) => (
             <Accordion
               key={num}
               sx={{
@@ -61,11 +71,11 @@ const FAQ = () => {
                   borderRadius: '8px', // Also apply to summary for full effect
                 }}
               >
-                <Typography color="textPrimary">Question {num}</Typography>
+                <Typography color="textPrimary"> Question {num+1}: {faq.question} </Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Typography color="textPrimary">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  {faq.answer}
                 </Typography>
               </AccordionDetails>
             </Accordion>
