@@ -45,7 +45,10 @@ const PrivacyPolicy = () => {
                 </div>
                 
                 <div style = {styles.paragraph}>
-                • We will take necessary and appropriate measures to safely manage Personal Data and Sensitive Personal Data.
+                • We will take necessary and appropriate measures to safely manage Personal Data and Sensitive Personal Data.<br/>
+                </div>
+                
+                <div style = {styles.paragraph}>
                 • We will collect/use/disclose personal data without the consent of individual in case of: necessary for purpose, life threatening situation, publicly available data, national interest, investigations, evaluation purpose, artistic purpose, news activity, provision of legal services, collected by credit bureau, employment purpose, disclosed by public agency, etc.<br/>
                 </div>
                 
