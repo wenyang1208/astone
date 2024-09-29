@@ -42,37 +42,46 @@ function SellerProductView() {
         try {
             const res = await productService.getProductById(id);
             if (res && res.data) {
-                // Include promotion details if they exist
-                const productData = {
+                setProduct({
                     name: res.data.name,
                     description: res.data.description,
                     price: res.data.price,
-                    original_price: res.data.original_price || res.data.price, // Ensure original price is set
                     stock: res.data.stock,
                     images: BASE_URL + res.data.images[0].image_url,
                     sizes: res.data.sizes,
                     colors: res.data.colors,
-                    category: res.data.category
-                };
-    
+                    category: res.data.category,
+                    currency: res.data.currency,
+                    original_price : res.data.original_price || res.data.price
+                });
+                console.log(res.data);
+                setEditProduct({
+                    name: res.data.name,
+                    description: res.data.description,
+                    price: res.data.price,
+                    stock: res.data.stock,
+                    images: BASE_URL + res.data.images[0].image_url,
+                    sizes: res.data.sizes,
+                    colors: res.data.colors
+                });
+                setExistingImages(res.data.images);
+
+                // Initialize promotion if it exists
                 if (res.data.promotion) {
-                    // Fetch and calculate promotion details
-                    productData.promotion = {
-                        discountPercentage: res.data.promotion.discountPercentage,
+                    setPromotion({
+                        discountPercentage: res.data.promotion.discountPercentage.toString(),
                         startDate: res.data.promotion.startDate,
                         endDate: res.data.promotion.endDate
-                    };
-    
-                    const amountSaved = productData.original_price - productData.price;
-                    setAmountSaved(amountSaved.toFixed(2));
+                    });
+                    setAfterPromotionPrice(res.data.price.toString());
+                    console.log("wertyuytre"+res.data.promotion.discountPercentage.toString());
                 }
-    
-                setProduct(productData);
             }
         } catch (error) {
             console.error('Error fetching product:', error);
         }
     };
+
 
     useEffect(() => {
         console.log(product);
@@ -103,7 +112,7 @@ function SellerProductView() {
     const handlePromotionChange = (e) => {
         const { name, value } = e.target;
         setPromotion(prev => ({ ...prev, [name]: value }));
-    
+        
         if (name === 'discountPercentage' && product) {
             const discountPercentage = parseFloat(value);
             const original_price = parseFloat(product.original_price || product.price);
@@ -118,6 +127,7 @@ function SellerProductView() {
             }
         }
     };
+    
 
     const handleSaveChanges = async () => {
         const productService = new ProductService();
@@ -156,30 +166,37 @@ function SellerProductView() {
     };
 
     const handleApplyPromotion = async () => {
-        const productService = new ProductService();
         const promotionService = new PromotionService();
+        const productService = new ProductService();
         try {
+            // Update product details with the new price after promotion
             const updatedProduct = {
                 ...product,
-                original_price: product.original_price || product.price,
-                price: afterPromotionPrice,
+                original_price: product.original_price || product.price,  // Set original_price only if not already set
+                price: afterPromotionPrice,  // Apply the discounted price
             };
+    
+            // Promotion payload to be sent to the backend
             const addPromotion = {
                 product_id: id,
                 discountPercentage: parseFloat(promotion.discountPercentage),
                 startDate: promotion.startDate,
                 endDate: promotion.endDate
-            }
+            };
+    
+            // Apply the promotion and update the product
             const resPromotion = await promotionService.createPromotion(addPromotion);
-            const res = await productService.editProduct(id, updatedProduct);
-            if (res && res.status === 200 && resPromotion.status === 201) {
-                setProduct(res.data);
+            const resProductUpdate = await productService.editProduct(id, updatedProduct);
+    
+            if (resProductUpdate.status === 200 && resPromotion.status === 201) {
+                setProduct(resProductUpdate.data);
                 handlePromotionClose();
             }
         } catch (error) {
             console.error('Error applying promotion:', error);
         }
     };
+    
 
     useEffect(() => {
         console.log(product)
