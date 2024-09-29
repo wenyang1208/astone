@@ -27,6 +27,7 @@ const SellerForgotPassword = React.lazy(() => import("../pages/seller/sellerForg
 const SellerChangePassword = React.lazy(() => import("../pages/seller/sellerChangePassword"));
 const ForgotPassword = React.lazy(() => import("../pages/forgotPassword"));
 const ChangePassword = React.lazy(() => import("../pages/changePassword"));
+const PrivacyPolicy = React.lazy(() => import("../pages/privacyPolicy"));
 
 
 const routes = [
@@ -54,6 +55,7 @@ const routes = [
     { path: `${PathConstants.SELLER_CHANGE_PASSWORD}/:id`, element: <SellerChangePassword/> },
     { path: PathConstants.FORGOT_PASSWORD, element: <ForgotPassword /> },
     { path: `${PathConstants.CHANGE_PASSWORD}/:id`, element: <ChangePassword/> },
+    {path: PathConstants.PRIVACY_POLICY, element: <PrivacyPolicy />}
 ]
 
 export default routes
