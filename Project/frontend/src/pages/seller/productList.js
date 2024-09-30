@@ -251,7 +251,6 @@ const ProductList = () => {
             <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Shop Statistics</Typography>
             <Typography variant="body1">Total Products: {products.length}</Typography>
             <Typography variant="body1">Joined: {new Date(seller.user.date_joined.substring(0,10)).toLocaleDateString('en-GB')}</Typography>
-            {/* Add more shop statistics here */}
           </Grid>
         </Grid>
       </Paper>
@@ -280,8 +279,8 @@ const ProductList = () => {
             <Paper 
               elevation={2}
               sx={{ 
-                p: 2, 
-                borderRadius: '8px',
+                p: 2,
+                // borderRadius: '8px',
                 backgroundColor: '#ffffff',
                 transition: 'all 0.3s ease-in-out',
                 '&:hover': { 
@@ -289,7 +288,11 @@ const ProductList = () => {
                   boxShadow: '0 6px 12px rgba(0,0,0,0.15)',
                 }, 
                 position: 'relative',
-                cursor: 'pointer'
+                cursor: 'pointer',
+                height: '400px', // Set a minimum height for each Paper component
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
               }}
               onMouseEnter={() => handleMouseEnter(output.id)}
               onMouseLeave={handleMouseLeave}
@@ -300,13 +303,17 @@ const ProductList = () => {
                           src={output.images[0].image_url}                                 
                           alt="Product Photo" 
                           style={{ 
-                            width: '200px'
+                            width: '240px',
+                            height: '240px',
+                            objectFit: 'contain',
+                            alignSelf: 'center',
+
                           }} 
                       />
                   :
-                      <img src={image} alt="Product Photo" style={{ width: '200px' }} />
+                      <img src={image} alt="Product Photo" style={{ width: '240px' }} />
               }
-              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>{output.name}</Typography>
+              <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mt: 1 }}>{output.name}</Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
                 ID: ast{String(output.id).padStart(8, '0')}
               </Typography>
@@ -334,7 +341,9 @@ const ProductList = () => {
                     right: '10px', 
                     cursor: 'pointer',
                     color: '#ff4444',
-                    '&:hover': { color: '#cc0000' }
+                    '&:hover': { 
+                      color: '#cc0000',
+                    },    
                   }}
                   onClick={(e) => {
                     e.stopPropagation();

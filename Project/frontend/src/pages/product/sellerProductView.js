@@ -16,6 +16,7 @@ function SellerProductView() {
     const [editOpen, setEditOpen] = useState(false);
     const [promotionOpen, setPromotionOpen] = useState(false);
     const [amountSaved, setAmountSaved] = useState(null);
+    const [daysUntilStart, setDaysUntilStart] = useState(null);
     const navigate = useNavigate();
     const BASE_URL = 'http://localhost:8000';
     const [editProduct, setEditProduct] = useState({
@@ -52,7 +53,7 @@ function SellerProductView() {
                     colors: res.data.colors,
                     category: res.data.category,
                     currency: res.data.currency,
-                    original_price : res.data.original_price || res.data.price
+                    original_price: res.data.original_price
                 });
                 console.log(res.data);
                 setEditProduct({
@@ -67,14 +68,30 @@ function SellerProductView() {
                 setExistingImages(res.data.images);
 
                 // Initialize promotion if it exists
+                // const promotionService = new PromotionService();
+                // const promotionRes = await promotionService.getPromotions();
                 if (res.data.promotion) {
                     setPromotion({
                         discountPercentage: res.data.promotion.discountPercentage.toString(),
                         startDate: res.data.promotion.startDate,
                         endDate: res.data.promotion.endDate
                     });
-                    setAfterPromotionPrice(res.data.price.toString());
-                    console.log("wertyuytre"+res.data.promotion.discountPercentage.toString());
+
+                    console.log('Promotion:', res.data.promotion);
+                    const today = new Date();
+                    const startDate = new Date(res.data.promotion.startDate);
+                    const endDate = new Date(res.data.promotion.endDate);
+                    // Calculate days until promotion starts
+                    const timeDiff = startDate - today;
+                    const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+                    if (daysLeft > 0) {
+                        setDaysUntilStart(daysLeft);
+                    } else {
+                        setDaysUntilStart(null);
+                    }
+            
+                setAfterPromotionPrice(res.data.price.toString());
+                //setAmountSaved((res.data.original_price - afterPromotionPrice).toFixed(2));
                 }
             }
         } catch (error) {
@@ -93,11 +110,11 @@ function SellerProductView() {
     const handlePromotionClose = () => {
         setPromotionOpen(false);
         setAfterPromotionPrice(null);
-        setPromotion({
-            discountPercentage: '',
-            startDate: '',
-            endDate: ''
-        });
+        // setPromotion({
+        //     discountPercentage: '',
+        //     startDate: '',
+        //     endDate: ''
+        // });
     };
 
     const handleInputChange = (e) => {
@@ -126,6 +143,7 @@ function SellerProductView() {
                 setAmountSaved(null);
             }
         }
+        console.log(promotion);
     };
     
 
@@ -135,17 +153,25 @@ function SellerProductView() {
             const updatedProduct = {
                 name: editProduct.name,
                 description: editProduct.description,
-                price: editProduct.price,
+                //price: editProduct.price,
                 original_price: editProduct.price,
                 stock: editProduct.stock,
             };
+
+            // if (!product.original_price) {
+            //     updatedProduct.original_price = editProduct.price;
+            // }
+
             const formData = new FormData(); // Create a new FormData instance
 
             // Append other product fields to formData
             formData.append('name', updatedProduct.name);
             formData.append('description', updatedProduct.description);
-            formData.append('price', updatedProduct.price);
-            formData.append('original_price', updatedProduct.original_price);
+            formData.append('price', updatedProduct.original_price);
+            // if (!product.original_price) {
+            //     formData.append('original_price', updatedProduct.original_price); // Append original price only if needed
+            // }
+            //formData.append('original_price', updatedProduct.original_price);
             formData.append('stock', updatedProduct.stock);
 
             // if (editProduct.images && editProduct.images.length > 0) {
@@ -172,8 +198,8 @@ function SellerProductView() {
             // Update product details with the new price after promotion
             const updatedProduct = {
                 ...product,
-                original_price: product.original_price || product.price,  // Set original_price only if not already set
                 price: afterPromotionPrice,  // Apply the discounted price
+                //original_price: product.original_price,  // Set original_price only if not already set
             };
     
             // Promotion payload to be sent to the backend
@@ -192,6 +218,7 @@ function SellerProductView() {
                 setProduct(resProductUpdate.data);
                 handlePromotionClose();
             }
+
         } catch (error) {
             console.error('Error applying promotion:', error);
         }
@@ -205,6 +232,9 @@ function SellerProductView() {
     const handleBack = () => {
         navigate('/productlist'); // This will navigate to the previous page in the history
     };
+
+    const today = new Date().toISOString().split('T')[0]; 
+
 
     if (!product) {
         return <Typography>Loading...</Typography>;
@@ -250,8 +280,12 @@ function SellerProductView() {
                                 <Typography variant="h5" color="primary" gutterBottom>
                                     Sale Price: {product.currency} {product.price}
                                 </Typography>
-                                <Typography variant="h5" color="primary" gutterBottom>
+                                
+                                <Typography variant="body1" color="primary" gutterBottom>
                                     Amount save: {product.currency} {(product.original_price-product.price).toFixed(2)}
+                                </Typography>
+                                <Typography>
+                                    Valid from {promotion.startDate} to {promotion.endDate}
                                 </Typography>
                             </>
                         ) : (
@@ -403,6 +437,9 @@ function SellerProductView() {
                         InputLabelProps={{
                             shrink: true,
                         }}
+                        inputProps={{
+                            min: today, // Restrict selection to today and future
+                        }}
                     />
                     <TextField
                         name="endDate"
@@ -414,6 +451,9 @@ function SellerProductView() {
                         margin="dense"
                         InputLabelProps={{
                             shrink: true,
+                        }}
+                        inputProps={{
+                            min: promotion.startDate || today, // Ensure end date can't be before start date
                         }}
                     />
                     {afterPromotionPrice && (
