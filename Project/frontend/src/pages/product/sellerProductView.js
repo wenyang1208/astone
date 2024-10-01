@@ -110,10 +110,8 @@ function SellerProductView() {
     const handleEditClose = () => setEditOpen(false);
     const handlePromotionOpen = () => {
         setPromotionOpen(true);
-        if (product.promotion) {
-            // End promotion
+        if (product.promotion){
             handleEndPromotion();
-            return;
         }
     };
 
@@ -129,9 +127,37 @@ function SellerProductView() {
 
     const handleEndPromotion = async () => {
         const promotionService = new PromotionService();
-            promotionService.endPromotion(product.id);
-            setProduct({ ...product, promotion: null });
-    }
+        const productService = new ProductService();
+    
+        try {
+            // End promotion via the service
+            const res = await promotionService.endPromotion(product.id);
+    
+            if (res && res.status === 200) {
+                // Remove promotion details from the product state after ending promotion
+                const updatedProduct = {
+                    ...product,
+                    promotion: null, // Clear promotion details
+                    price: product.original_price, // Reset the price to the original price
+                };
+    
+                // Update the product via the product service
+                const productUpdateRes = await productService.editProduct(product.id, updatedProduct);
+    
+                if (productUpdateRes && productUpdateRes.status === 200) {
+                    // Update local state with the updated product
+                    setProduct(productUpdateRes.data);
+                    setPromotionOpen(false); // Close the dialog
+                } else {
+                    console.error('Error updating product after ending promotion:', productUpdateRes);
+                }
+            } else {
+                console.error('Error ending promotion:', res);
+            }
+        } catch (error) {
+            console.error('Error in handleEndPromotion:', error);
+        }
+    };
 
     const handleInputChange = (e) => {
         const { name, value, files } = e.target;
@@ -251,6 +277,16 @@ function SellerProductView() {
 
     const today = new Date().toISOString().split('T')[0]; 
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        if (isNaN(date)) return '';  // Handle invalid dates
+        const day = date.getDate();
+        const month = date.getMonth() + 1;  // Months are 0-indexed
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    };
+    
+
 
     if (!product) {
         return <Typography>Loading...</Typography>;
@@ -301,8 +337,9 @@ function SellerProductView() {
                                     Amount save: {product.currency} {(product.original_price-product.price).toFixed(2)}
                                 </Typography>
                                 <Typography>
-                                    Valid from {promotion.startDate} to {promotion.endDate}
+                                    Valid from {formatDate(promotion.startDate)} to {formatDate(promotion.endDate)}
                                 </Typography>
+
                             </>
                         ) : (
                             <Typography variant="h5" color="primary" gutterBottom>
@@ -344,13 +381,14 @@ function SellerProductView() {
                             >
                                 Edit Product
                             </Button>
-                            <Button 
+                            <Button
                                 variant="outlined" 
                                 startIcon={<LocalOfferIcon />}
                                 onClick={handlePromotionOpen}
                             >
                                 {product.promotion ? 'End Promotion' : 'Apply Promotion'}
                             </Button>
+                            
                         </Box>
                     </Paper>
                 </Grid>
@@ -433,6 +471,20 @@ function SellerProductView() {
 
             {product.promotion ? (
                 <Dialog open={promotionOpen} onClose={handlePromotionClose}>
+                <DialogTitle>End Promotion</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1" gutterBottom>
+                        Are you sure you want to end the promotion?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
+                    <Button onClick={handleEndPromotion} color="primary">End Promotion</Button>
+                </DialogActions>
+                </Dialog>
+                
+            ) : (
+                <Dialog open={promotionOpen} onClose={handlePromotionClose}>
                     <DialogTitle>Apply Promotion</DialogTitle>
                     <DialogContent>
                         <TextField
@@ -487,19 +539,6 @@ function SellerProductView() {
                     <DialogActions>
                         <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
                         <Button onClick={handleApplyPromotion} color="primary">Apply</Button>
-                    </DialogActions>
-                </Dialog>
-            ) : (
-                <Dialog open={promotionOpen} onClose={handlePromotionClose}>
-                    <DialogTitle>End Promotion</DialogTitle>
-                    <DialogContent>
-                        <Typography variant="body1" gutterBottom>
-                            Are you sure you want to end the promotion?
-                        </Typography>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
-                        <Button onClick={handleEndPromotion} color="primary">End Promotion</Button>
                     </DialogActions>
                 </Dialog>
             )}
