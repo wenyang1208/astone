@@ -53,7 +53,7 @@ function SellerProductView() {
                     colors: res.data.colors,
                     category: res.data.category,
                     currency: res.data.currency,
-                    original_price: res.data.original_price,
+                    original_price: res.data.original_price || res.data.price,
                     promotion: res.data.promotions
                 });
                 setEditProduct({
@@ -74,9 +74,9 @@ function SellerProductView() {
                 if (res.data.promotions) {
                     console.log('Promotion:', res.data.promotions);
                     setPromotion({
-                        discountPercentage: res.data.promotions.discountPercentage.toString(),
-                        startDate: res.data.promotions.startDate,
-                        endDate: res.data.promotions.endDate
+                        discountPercentage: res.data.promotions.discount_percentage.toString(),
+                        startDate: res.data.promotions.start_date,
+                        endDate: res.data.promotions.end_date
                     });
 
                     console.log('Promotion:', res.data.promotions);
@@ -108,7 +108,15 @@ function SellerProductView() {
 
     const handleEditOpen = () => setEditOpen(true);
     const handleEditClose = () => setEditOpen(false);
-    const handlePromotionOpen = () => setPromotionOpen(true);
+    const handlePromotionOpen = () => {
+        setPromotionOpen(true);
+        if (product.promotion) {
+            // End promotion
+            handleEndPromotion();
+            return;
+        }
+    };
+
     const handlePromotionClose = () => {
         setPromotionOpen(false);
         setAfterPromotionPrice(null);
@@ -118,6 +126,12 @@ function SellerProductView() {
         //     endDate: ''
         // });
     };
+
+    const handleEndPromotion = async () => {
+        const promotionService = new PromotionService();
+            promotionService.endPromotion(product.id);
+            setProduct({ ...product, promotion: null });
+    }
 
     const handleInputChange = (e) => {
         const { name, value, files } = e.target;
@@ -335,7 +349,7 @@ function SellerProductView() {
                                 startIcon={<LocalOfferIcon />}
                                 onClick={handlePromotionOpen}
                             >
-                                {product.original_price ? 'Add Promotion' : 'Apply Promotion'}
+                                {product.promotion ? 'End Promotion' : 'Apply Promotion'}
                             </Button>
                         </Box>
                     </Paper>
@@ -417,63 +431,79 @@ function SellerProductView() {
                 </DialogActions>
             </Dialog>
 
-            <Dialog open={promotionOpen} onClose={handlePromotionClose}>
-                <DialogTitle>Apply Promotion</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        name="discountPercentage"
-                        label="Discount Percentage"
-                        value={promotion.discountPercentage}
-                        onChange={handlePromotionChange}
-                        fullWidth
-                        margin="dense"
-                    />
-                    <TextField
-                        name="startDate"
-                        label="Start Date"
-                        type="date"
-                        value={promotion.startDate}
-                        onChange={handlePromotionChange}
-                        fullWidth
-                        margin="dense"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        inputProps={{
-                            min: today, // Restrict selection to today and future
-                        }}
-                    />
-                    <TextField
-                        name="endDate"
-                        label="End Date"
-                        type="date"
-                        value={promotion.endDate}
-                        onChange={handlePromotionChange}
-                        fullWidth
-                        margin="dense"
-                        InputLabelProps={{
-                            shrink: true,
-                        }}
-                        inputProps={{
-                            min: promotion.startDate || today, // Ensure end date can't be before start date
-                        }}
-                    />
-                    {afterPromotionPrice && (
-                        <Typography variant="body1" sx={{ mt: 2 }}>
-                            New Price After Promotion: {product.currency} {afterPromotionPrice}
+            {product.promotion ? (
+                <Dialog open={promotionOpen} onClose={handlePromotionClose}>
+                    <DialogTitle>Apply Promotion</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            name="discountPercentage"
+                            label="Discount Percentage"
+                            value={promotion.discountPercentage}
+                            onChange={handlePromotionChange}
+                            fullWidth
+                            margin="dense"
+                        />
+                        <TextField
+                            name="startDate"
+                            label="Start Date"
+                            type="date"
+                            value={promotion.startDate}
+                            onChange={handlePromotionChange}
+                            fullWidth
+                            margin="dense"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            inputProps={{
+                                min: today, // Restrict selection to today and future
+                            }}
+                        />
+                        <TextField
+                            name="endDate"
+                            label="End Date"
+                            type="date"
+                            value={promotion.endDate}
+                            onChange={handlePromotionChange}
+                            fullWidth
+                            margin="dense"
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                            inputProps={{
+                                min: promotion.startDate || today, // Ensure end date can't be before start date
+                            }}
+                        />
+                        {afterPromotionPrice && (
+                            <Typography variant="body1" sx={{ mt: 2 }}>
+                                New Price After Promotion: {product.currency} {afterPromotionPrice}
+                            </Typography>
+                        )}
+                        {amountSaved && (
+                            <Typography variant="body1" sx={{ mt: 2 }}>
+                                Amount save: {product.currency} {amountSaved}
+                            </Typography>
+                        )}
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
+                        <Button onClick={handleApplyPromotion} color="primary">Apply</Button>
+                    </DialogActions>
+                </Dialog>
+            ) : (
+                <Dialog open={promotionOpen} onClose={handlePromotionClose}>
+                    <DialogTitle>End Promotion</DialogTitle>
+                    <DialogContent>
+                        <Typography variant="body1" gutterBottom>
+                            Are you sure you want to end the promotion?
                         </Typography>
-                    )}
-                    {amountSaved && (
-                        <Typography variant="body1" sx={{ mt: 2 }}>
-                            Amount save: {product.currency} {amountSaved}
-                        </Typography>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
-                    <Button onClick={handleApplyPromotion} color="primary">Apply</Button>
-                </DialogActions>
-            </Dialog>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
+                        <Button onClick={handleEndPromotion} color="primary">End Promotion</Button>
+                    </DialogActions>
+                </Dialog>
+            )}
+
         </Box>
     );
 }
