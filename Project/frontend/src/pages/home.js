@@ -76,7 +76,7 @@ const Home = () => {
           {product.description}
         </Typography>
         <Typography variant="body2" style={styles.price} component="p">
-          {product.original_price > 0 ? (
+          {product.original_price > product.price ? (
             <>
               {/* Original price with strikethrough */}
               <span style={{ textDecoration: 'line-through', color: 'grey', marginRight: '10px' }}>
