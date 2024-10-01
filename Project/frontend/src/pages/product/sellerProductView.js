@@ -110,53 +110,13 @@ function SellerProductView() {
     const handleEditClose = () => setEditOpen(false);
     const handlePromotionOpen = () => {
         setPromotionOpen(true);
-        if (product.promotion){
-            handleEndPromotion();
-        }
     };
 
     const handlePromotionClose = () => {
         setPromotionOpen(false);
         setAfterPromotionPrice(null);
-        // setPromotion({
-        //     discountPercentage: '',
-        //     startDate: '',
-        //     endDate: ''
-        // });
     };
 
-    const handleEndPromotion = async () => {
-        const promotionService = new PromotionService();
-        const productService = new ProductService();
-    
-        try {
-            // End promotion via the service
-            const res = await promotionService.endPromotion(product.promotion.id);
-    
-            if (res && res.status === 204) {
-                // Remove promotion details from the product state after ending promotion
-                const updatedProduct = {
-                    ...product,
-                    price: product.original_price, // Reset the price to the original price
-                };
-                // Update the product via the product service
-                const productUpdateRes = await productService.editProduct(id, updatedProduct);
-    
-                if (productUpdateRes && productUpdateRes.status === 200) {
-                    // Update local state with the updated product
-                    setProduct(productUpdateRes.data);
-                    setPromotionOpen(false); // Close the dialog
-                } else {
-                    console.error('Error updating product after ending promotion:', productUpdateRes);
-                }
-            } else {
-                console.log(res.status);
-                console.error('Error ending promotion:', res);
-            }
-        } catch (error) {
-            console.error('Error in handleEndPromotion:', error);
-        }
-    };
 
     const handleInputChange = (e) => {
         const { name, value, files } = e.target;
@@ -285,7 +245,38 @@ function SellerProductView() {
         return `${day}/${month}/${year}`;
     };
     
-
+    const handleEndPromotion = async () => {
+        const promotionService = new PromotionService();
+        const productService = new ProductService();
+    
+        try {
+            // End promotion via the service
+            const res = await promotionService.endPromotion(product.promotion.id);
+    
+            if (res && res.status === 204) {
+                // Remove promotion details from the product state after ending promotion
+                const updatedProduct = {
+                    ...product,
+                    price: product.original_price, // Reset the price to the original price
+                };
+                // Update the product via the product service
+                const productUpdateRes = await productService.editProduct(id, updatedProduct);
+    
+                if (productUpdateRes && productUpdateRes.status === 200) {
+                    // Update local state with the updated product
+                    setProduct(productUpdateRes.data);
+                    setPromotionOpen(false); // Close the dialog
+                } else {
+                    console.error('Error updating product after ending promotion:', productUpdateRes);
+                }
+            } else {
+                console.log(res.status);
+                console.error('Error ending promotion:', res);
+            }
+        } catch (error) {
+            console.error('Error in handleEndPromotion:', error);
+        }
+    };
 
     if (!product) {
         return <Typography>Loading...</Typography>;
