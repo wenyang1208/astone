@@ -53,9 +53,9 @@ function SellerProductView() {
                     colors: res.data.colors,
                     category: res.data.category,
                     currency: res.data.currency,
-                    original_price: res.data.original_price
+                    original_price: res.data.original_price,
+                    promotion: res.data.promotions
                 });
-                console.log(res.data);
                 setEditProduct({
                     name: res.data.name,
                     description: res.data.description,
@@ -70,17 +70,19 @@ function SellerProductView() {
                 // Initialize promotion if it exists
                 // const promotionService = new PromotionService();
                 // const promotionRes = await promotionService.getPromotions();
-                if (res.data.promotion) {
+                console.log(res.data.promotions);
+                if (res.data.promotions) {
+                    console.log('Promotion:', res.data.promotions);
                     setPromotion({
-                        discountPercentage: res.data.promotion.discountPercentage.toString(),
-                        startDate: res.data.promotion.startDate,
-                        endDate: res.data.promotion.endDate
+                        discountPercentage: res.data.promotions.discountPercentage.toString(),
+                        startDate: res.data.promotions.startDate,
+                        endDate: res.data.promotions.endDate
                     });
 
-                    console.log('Promotion:', res.data.promotion);
+                    console.log('Promotion:', res.data.promotions);
                     const today = new Date();
-                    const startDate = new Date(res.data.promotion.startDate);
-                    const endDate = new Date(res.data.promotion.endDate);
+                    const startDate = new Date(res.data.promotions.startDate);
+                    const endDate = new Date(res.data.promotions.endDate);
                     // Calculate days until promotion starts
                     const timeDiff = startDate - today;
                     const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
