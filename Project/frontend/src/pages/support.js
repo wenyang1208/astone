@@ -29,7 +29,22 @@ const ContactForm = () => {
   );
 };
 
+const SupportContact = () => (
+  <div>
+    <h2>Need Immediate Help?</h2>
+    <p>Contact us at our support hotline: <strong>800-123-4567</strong></p>
+    <p>Or click on the live chat button to speak to an agent now.</p>
+  </div>
+);
 
+const ContactInfo = () => (
+  <div>
+    <h2>Contact Us</h2>
+    <p>Email: support@astone.com</p>
+    <p>Phone: 800-123-4567</p>
+    <p>Support hours: Monday-Friday, 9 AM - 6 PM</p>
+  </div>
+);
 
 const Support = () => {
   return (
