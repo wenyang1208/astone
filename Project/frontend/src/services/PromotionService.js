@@ -35,7 +35,8 @@ export class PromotionService {
 
     async endPromotion (id) {
         try {
-            const res = await axios.delete(`http://localhost:8000/promotions/`);
+            const res = await axios.delete(`http://localhost:8000/promotions/${id}/delete/`);
+            console.log(id);
             return res;
         } catch (error) {
             console.error('Error ending promotion:', error);

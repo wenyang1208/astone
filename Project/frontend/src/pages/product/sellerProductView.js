@@ -131,18 +131,16 @@ function SellerProductView() {
     
         try {
             // End promotion via the service
-            const res = await promotionService.endPromotion(product.id);
+            const res = await promotionService.endPromotion(product.promotion.id);
     
-            if (res && res.status === 200) {
+            if (res && res.status === 204) {
                 // Remove promotion details from the product state after ending promotion
                 const updatedProduct = {
                     ...product,
-                    promotion: null, // Clear promotion details
                     price: product.original_price, // Reset the price to the original price
                 };
-    
                 // Update the product via the product service
-                const productUpdateRes = await productService.editProduct(product.id, updatedProduct);
+                const productUpdateRes = await productService.editProduct(id, updatedProduct);
     
                 if (productUpdateRes && productUpdateRes.status === 200) {
                     // Update local state with the updated product
@@ -152,6 +150,7 @@ function SellerProductView() {
                     console.error('Error updating product after ending promotion:', productUpdateRes);
                 }
             } else {
+                console.log(res.status);
                 console.error('Error ending promotion:', res);
             }
         } catch (error) {

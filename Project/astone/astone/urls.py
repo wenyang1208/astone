@@ -50,6 +50,7 @@ urlpatterns = [
     path('seller/<int:pk>/', SellerGetView.as_view(), name='get_seller'),
     path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
     path('promotions/', PromotionListCreate.as_view(), name='promotions'),
+    path('promotions/<int:promotion_id>/delete/', PromotionDelete.as_view(), name='delete_promotions'),
     path('seller/seller-forgot-password/', SellerForgotPassword.as_view(), name='seller_forgot_password'),
     path('seller/seller-change-password/<int:user_id>/', SellerChangePassword.as_view(), name='change-seller-password'),
     path('forgot-password/', forgot_password, name='forgot-password'),
