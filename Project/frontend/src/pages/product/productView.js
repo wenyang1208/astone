@@ -142,7 +142,7 @@ function ProductView() {
               </Typography>
               <Typography variant="h5" color="textSecondary" gutterBottom>
                 {/* Original price with strikethrough */}
-                {product?.original_price > 0 && (
+                {product?.original_price > product?.price && (
                   <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
                     {product.currency} {product.original_price}
                   </span>
@@ -151,7 +151,7 @@ function ProductView() {
                 {product?.currency} {product?.price}
               </Typography>
               {/* Display savings if original_price exists */}
-              {product?.original_price > 0 && (
+              {product?.original_price > product?.price && (
                 <Typography variant="body1" color="red">
                   Amount saved: {product.currency} {calculateSavings(product.original_price, product.price)}
                 </Typography>
