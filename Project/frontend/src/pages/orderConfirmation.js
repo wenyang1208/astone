@@ -3,6 +3,24 @@ import { Container, Typography, Box, Button, Dialog, DialogActions, DialogConten
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Reusable Dialog Component
+function ConfirmationDialog({ open, onClose, onConfirm, title, content }) {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <Typography variant="body1" gutterBottom>
+          {content}
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">Cancel</Button>
+        <Button onClick={onConfirm} color="primary">Confirm</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 function OrderConfirmationPage({ orderDetails }) {
   const [dialogType, setDialogType] = useState(null); // 'return' or 'cancel'
 
