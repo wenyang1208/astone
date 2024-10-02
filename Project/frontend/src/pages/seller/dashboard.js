@@ -61,7 +61,6 @@ const Dashboard = () => {
         const fetchTodoData = async () => {
             try {
                 const response = await sellerService.getSellerById(sellerId);
-                console.log(response.data.todo);
                 setTodoData(response.data.todo);
             } catch (error) {
                 console.error('Failed to fetch todo data:', error);
