@@ -70,7 +70,7 @@ const ProductList = () => {
   };
 
   const handleMouseEnterDelete = (productId) => {
-    setHoveredProductId(productId);
+    
   };
 
   const handleMouseLeave = () => {
@@ -103,11 +103,6 @@ const ProductList = () => {
     navigate(`/products/${productId}`);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem(ACCESS_TOKEN); // Remove the token from localStora
-    navigate('/loginSeller'); // Redirect to the login page
-  };
-
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
   if (!seller) return <Typography>No seller data found</Typography>;
@@ -134,7 +129,7 @@ const ProductList = () => {
               }
             }></hr>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>Products</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>My Products</Typography>
             <Link to="/product/create" style={{ textDecoration: 'none' }}>
               <Button 
                 variant="contained"
@@ -239,18 +234,18 @@ const ProductList = () => {
           open={openDialog}
           onClose={handleCloseDialog}
         >
-          <DialogTitle>Confirm Deletion</DialogTitle>
+          <DialogTitle>Remove Product ID: ast{String(selectedProductId).padStart(8, '0')}</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Are you sure you want to remove this product from your shop?
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleConfirmRemoveProduct} sx={{ color: '#ff4444' }}>
-              Confirm
-            </Button>
             <Button onClick={handleCloseDialog} sx={{ color: '#7D0DC3' }}>
               Cancel
+            </Button>
+            <Button onClick={handleConfirmRemoveProduct} sx={{ color: '#ff4444' }}>
+              Confirm
             </Button>
           </DialogActions>
         </Dialog>

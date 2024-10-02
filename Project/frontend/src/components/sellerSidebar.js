@@ -8,23 +8,23 @@ const SellerSidebar = () => {
     return (
         <>
         <Toolbar />
-        <List>
-            <ListItemButton component={Link} to="/sellerDashboard">
-                <ListItemText primary="Dashboard" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/productlist">
-                <ListItemText primary="My Products" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/finance">
-                <ListItemText primary="Finance" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/sellerProfile">
-                <ListItemText primary="My Shop Profile" />
-            </ListItemButton>
-            <ListItemButton component={Link} to="/faq">
-                <ListItemText primary="FAQ" />
-            </ListItemButton>
-        </List>
+            <List>
+                <ListItemButton component={Link} to="/sellerDashboard">
+                    <ListItemText primary="Dashboard" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/productlist">
+                    <ListItemText primary="My Products" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/finance">
+                    <ListItemText primary="Finance" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/sellerProfile">
+                    <ListItemText primary="My Shop Profile" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/faq">
+                    <ListItemText primary="FAQ" />
+                </ListItemButton>
+            </List>
         </>
     );
 }

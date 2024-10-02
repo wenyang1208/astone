@@ -180,7 +180,7 @@ const SellerProfile = () => {
         <Grid item xs={1.5}>
           <SellerSidebar />
         </Grid>
-    <Grid item xs={9}>
+    <Grid item xs>
     <Container>
     <Paper elevation={3} sx={{ p: 4, mb: 4, backgroundColor: '#ffffff' }}>
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
