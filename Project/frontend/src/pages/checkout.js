@@ -14,6 +14,7 @@ function CheckoutPage() {
   const [contactNumber, setContactNumber] = useState('');
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [finalPrice, setFinalPrice] = useState(0); 
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [usePoints, setUsePoints] = useState(false);
@@ -65,6 +66,14 @@ function CheckoutPage() {
     fetchCartItems();
     fetchUserPoints();
   }, []);
+
+  useEffect(() => {
+    setFinalPrice(parseFloat(usePoints ? totalPrice - discount : totalPrice));
+  }, [totalPrice, discount, usePoints]);
+
+  useEffect(() => {
+    console.log(totalPrice);
+  }, [totalPrice]);
   const handlePlaceOrder = async () => {
     setLoading(true);
     setError(null);
@@ -184,8 +193,13 @@ function CheckoutPage() {
             })}
           </List>
           <Typography variant="h6" gutterBottom>
-            Total Price: {`Total: MYR ${totalPrice}`}
+            Total Price: {`MYR ${totalPrice}`}
           </Typography>
+          {usePoints && (
+            <Typography variant="h6" gutterBottom>
+              Discounted Price: {`MYR ${finalPrice.toFixed(2)}`}
+            </Typography>
+          )}
 
           <FormControlLabel
             control={<Checkbox checked={usePoints} onChange={handleUsePointsChange} />}
