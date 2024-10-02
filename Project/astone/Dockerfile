@@ -4,10 +4,6 @@ ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
 WORKDIR /app
-
-
-RUN apt-get update 
-
 COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
-COPY . .
+COPY . /app
