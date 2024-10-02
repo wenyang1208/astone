@@ -16,7 +16,7 @@ export class ProductService {
 
     async getProducts() {
         try {
-            const res = await axios.get('https://astone-backend-app.onrender.com/products/')
+            const res = await axios.get('http://localhost:8000/products/')
             return res;
         } catch (error) {
             console.error('Error getting products:', error);
@@ -26,7 +26,7 @@ export class ProductService {
 
     async getProductById(id) {
         try {
-            const res = await axios.get(`https://astone-backend-app.onrender.com/products/${id}/`);
+            const res = await axios.get(`http://localhost:8000/products/${id}/`);
             return res;
         } catch (error) {
             console.error(`Error getting product ${id}:`, error);
@@ -35,7 +35,7 @@ export class ProductService {
     }
 
     async editProduct(id, productData) {
-        return axios.put(`https://astone-backend-app.onrender.com/products/${id}/edit`, productData);
+        return axios.put(`http://localhost:8000/products/${id}/edit`, productData);
     }
 
     async createProduct (data) {
@@ -68,7 +68,7 @@ export class ProductService {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
 
-            const res = await api.post('https://astone-backend-app.onrender.com/auth_products/', formData, {
+            const res = await api.post('http://localhost:8000/auth_products/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -84,7 +84,7 @@ catch (error) {
 
     async deleteProduct(productId) {
         try {
-            const res = await axios.delete(`https://astone-backend-app.onrender.com/products/${productId}/`);
+            const res = await axios.delete(`http://localhost:8000/products/${productId}/`);
             
             return res;
         } catch (error) {

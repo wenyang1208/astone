@@ -68,7 +68,7 @@ export class ProductService {
                 console.log(pair[0]+ ', ' + pair[1]); 
             }
 
-            const res = await api.post('https://astone-backend-app.onrender.com/auth_products/', formData, {
+            const res = await api.post('http://localhost:8000/auth_products/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -84,7 +84,7 @@ catch (error) {
 
     async deleteProduct(productId) {
         try {
-            const res = await axios.delete(`https://astone-backend-app.onrender.com/products/${productId}/`);
+            const res = await axios.delete(`http://localhost:8000/products/${productId}/`);
             
             return res;
         } catch (error) {

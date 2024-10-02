@@ -84,7 +84,7 @@ catch (error) {
 
     async deleteProduct(productId) {
         try {
-            const res = await axios.delete(`https://astone-backend-app.onrender.com/products/${productId}/`);
+            const res = await axios.delete(`http://localhost:8000/products/${productId}/`);
             
             return res;
         } catch (error) {

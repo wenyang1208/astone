@@ -20,7 +20,7 @@ export class OrderService {
             const formData = new FormData();
             formData.append('address', address);
             console.log(formData);
-            const res = await axios.post('https://astone-backend-app.onrender.com/place_order/', formData);
+            const res = await axios.post('http://localhost:8000/place_order/', formData);
             return res;
         } catch (error) {
             console.error('Error placing order:', error);
@@ -35,7 +35,7 @@ export class OrderService {
             formData.append('color', color);
             formData.append('quantity', quantity);
 
-            const res = await axios.post(`https://astone-backend-app.onrender.com/update_cart/${productId}/`, formData);
+            const res = await axios.post(`http://localhost:8000/update_cart/${productId}/`, formData);
             return res;
         } catch (error) {
             console.error(`Error updating cart item ${productId}:`, error);
@@ -45,7 +45,7 @@ export class OrderService {
 
     async getCart() {
         try {
-            const res = await axios.get('https://astone-backend-app.onrender.com/cart/');
+            const res = await axios.get('http://localhost:8000/cart/');
             return res;
         } catch (error) {
             console.error('Error getting cart:', error);
@@ -55,7 +55,7 @@ export class OrderService {
 
     async getOrderDetails(orderId) {
         try {
-            const res = await axios.get(`https://astone-backend-app.onrender.com/order/${orderId}/`);
+            const res = await axios.get(`http://localhost:8000/order/${orderId}/`);
             return res;
         } catch (error) {
             console.error(`Error getting order ${orderId}:`, error);

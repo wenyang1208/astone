@@ -55,7 +55,7 @@ export class OrderService {
 
     async getOrderDetails(orderId) {
         try {
-            const res = await axios.get(`https://astone-backend-app.onrender.com/order/${orderId}/`);
+            const res = await axios.get(`http://localhost:8000/order/${orderId}/`);
             return res;
         } catch (error) {
             console.error(`Error getting order ${orderId}:`, error);
