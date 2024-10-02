@@ -1,88 +1,88 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Grid, Paper, Typography, Button, Divider} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import SellerSidebar from '../../components/sellerSidebar';
+import SellerHeader from '../../components/sellerHeader';
 
-const StatsContainer = styled(Box)({
-    textAlign: 'center',
-    padding: '16px',
-    position: 'relative',
-  });
-  
-const TodoCard = ({ value, label, showDivider = true }) => (
-<StatsContainer>
-    <Typography variant="h4" 
-        sx={{ 
-            color: '#1976d2', 
-            fontWeight: 500, 
-            mb: 0.5 
-        }}>
-        {value}
-    </Typography>
-    <Typography variant="body2" 
-        sx={{ 
-            color: '#666',
-            fontSize: '0.95rem'
-        }}>
-        {label}
-    </Typography>
-    {showDivider && (
-        <Divider 
-            orientation="vertical" 
+function Dashboard() {
+    const StatsContainer = styled(Box)({
+        textAlign: 'center',
+        padding: '16px',
+        position: 'relative',
+    });
+    
+    const TodoCard = ({ value, label, showDivider = true }) => (
+    <StatsContainer>
+        <Typography variant="h4" 
             sx={{ 
-                position: 'absolute',
-                right: 0,
-                top: '20%',
-                height: '65%'
-            }} 
-        />
-    )}
-</StatsContainer>
-);
+                color: '#1976d2', 
+                fontWeight: 500, 
+                mb: 0.5 
+            }}>
+            {value}
+        </Typography>
+        <Typography variant="body2" 
+            sx={{ 
+                color: '#666',
+                fontSize: '0.95rem'
+            }}>
+            {label}
+        </Typography>
+        {showDivider && (
+            <Divider 
+                orientation="vertical" 
+                sx={{ 
+                    position: 'absolute',
+                    right: 0,
+                    top: '20%',
+                    height: '65%'
+                }} 
+            />
+        )}
+    </StatsContainer>
+    );
 
-const TodoRow = ({ items }) => (
-<Grid container>
-    {items.map((item, index) => (
-    <Grid item xs={3} key={item.label}>
-        <TodoCard 
-            value={item.value} 
-            label={item.label} 
-            showDivider={index < items.length - 1}
-        />
+    const TodoRow = ({ items }) => (
+    <Grid container>
+        {items.map((item, index) => (
+        <Grid item xs={3} key={item.label}>
+            <TodoCard 
+                value={item.value} 
+                label={item.label} 
+                showDivider={index < items.length - 1}
+            />
+        </Grid>
+        ))}
     </Grid>
-    ))}
-</Grid>
-);
+    );
 
-  const firstRowItems = [
-    { value: "4", label: "Unpaid" },
-    { value: "82", label: "To-Process Shipment" },
-    { value: "59", label: "Processed Shipment" },
-    { value: "6", label: "Pending Cancellation" }
-  ];
+    const firstRowItems = [
+        { value: "4", label: "Unpaid" },
+        { value: "82", label: "To-Process Shipment" },
+        { value: "59", label: "Processed Shipment" },
+        { value: "6", label: "Pending Cancellation" }
+    ];
 
-  const secondRowItems = [
-    { value: "0", label: "Pending Return/Refund" },
-    { value: "21", label: "Removed Products" },
-    { value: "11", label: "Sold Products" },
-    { value: "1", label: "Pending Promotion" }
-  ];
+    const secondRowItems = [
+        { value: "0", label: "Pending Return/Refund" },
+        { value: "21", label: "Removed Products" },
+        { value: "11", label: "Sold Products" },
+        { value: "1", label: "Pending Promotion" }
+    ];
 
-const Dashboard = () => {
+
     return (
         <Box sx={{ display: 'flex' }}>
+            <SellerHeader sx={{ position: 'fixed', zIndex: 1200 }} />
             <Grid container>
                 <Grid item xs={1.5}>
                     <SellerSidebar />
                 </Grid>
-                <Grid item xs>
-                    <Box sx={{ flexGrow: 1, p: 3, backgroundColor: '#f5f5f5' }}>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>
-                            Dashboard
-                        </Typography>
+                <Grid item xs sx = {{backgroundColor: '#f5f5f5'}}>
+                    <Box sx={{ flexGrow: 1, p: 3}}>
                         {/* To Do List */}
-                        <Paper sx={{ p: 3, mb: 3 }}>
-                            <Typography variant="h5">
+                        <Paper sx={{ p: 3, pt: 2, mb: 3, mt:8 }}>
+                            <Typography variant="h5" sx = {{fontWeight: 600, fontSize: 30}}>
                             To Do List
                             </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -97,8 +97,8 @@ const Dashboard = () => {
                         </Paper>
 
                         {/* Business Insights */}
-                        <Paper sx={{ p: 3, mb: 3 }}>
-                            <Typography variant="h5">
+                        <Paper sx={{ p: 3, pt: 2}}>
+                            <Typography variant="h5" sx = {{fontWeight: 600, fontSize: 30}}>
                             Business Insights
                             </Typography>
 
@@ -134,19 +134,6 @@ const Dashboard = () => {
                                 </Grid>
                                 </Grid>
                             </Grid>
-                        </Paper>
-
-                        {/* Marketing Centre */}
-                        <Paper sx={{ p: 3 }}>
-                            <Typography variant="h6" gutterBottom>
-                            Marketing Centre
-                            </Typography>
-                            <Typography variant="body1" sx={{ mb: 2 }}>
-                            Your advertisement credit has fallen to MYR0.00.
-                            </Typography>
-                            <Button variant="contained" color="primary">
-                            Top Up
-                            </Button>
                         </Paper>
                     </Box>
                 </Grid>

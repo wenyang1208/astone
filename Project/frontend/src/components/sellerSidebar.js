@@ -7,7 +7,7 @@ import { ListItem, ListItemButton, ListItemText } from '@mui/material';
 const SellerSidebar = () => {
     return (
         <>
-        <Toolbar />
+        <Toolbar sx = {{pt: 3}}/>
             <List>
                 <ListItemButton component={Link} to="/sellerDashboard">
                     <ListItemText primary="Dashboard" />

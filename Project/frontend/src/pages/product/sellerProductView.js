@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ProductService } from '../../services/ProductService';
 import { 
   Typography, Button, TextField, Dialog, DialogActions, DialogContent, 
-  DialogTitle, Box, Grid, Paper, Chip, Rating, Divider
+  DialogTitle, Box, Grid, Paper, Chip, Rating, Divider, CircularProgress
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
@@ -17,6 +17,7 @@ function SellerProductView() {
     const [promotionOpen, setPromotionOpen] = useState(false);
     const [amountSaved, setAmountSaved] = useState(null);
     const [daysUntilStart, setDaysUntilStart] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const BASE_URL = 'http://localhost:8000';
     const [editProduct, setEditProduct] = useState({
@@ -68,8 +69,6 @@ function SellerProductView() {
                 setExistingImages(res.data.images);
 
                 // Initialize promotion if it exists
-                // const promotionService = new PromotionService();
-                // const promotionRes = await promotionService.getPromotions();
                 console.log(res.data.promotions);
                 if (res.data.promotions) {
                     console.log('Promotion:', res.data.promotions);
@@ -101,7 +100,6 @@ function SellerProductView() {
         }
     };
 
-
     useEffect(() => {
         console.log(product);
     }, [product] )
@@ -112,9 +110,10 @@ function SellerProductView() {
         setPromotionOpen(true);
     };
 
-    const handlePromotionClose = () => {
+    const handlePromotionClose = async () => {
         setPromotionOpen(false);
         setAfterPromotionPrice(null);
+        
     };
 
 
@@ -147,63 +146,48 @@ function SellerProductView() {
         console.log(promotion);
     };
     
-
     const handleSaveChanges = async () => {
+        setIsLoading(true);
         const productService = new ProductService();
         try {
             const updatedProduct = {
                 name: editProduct.name,
                 description: editProduct.description,
-                //price: editProduct.price,
                 original_price: editProduct.price,
                 stock: editProduct.stock,
             };
 
-            // if (!product.original_price) {
-            //     updatedProduct.original_price = editProduct.price;
-            // }
-
-            const formData = new FormData(); // Create a new FormData instance
-
-            // Append other product fields to formData
+            const formData = new FormData();
             formData.append('name', updatedProduct.name);
             formData.append('description', updatedProduct.description);
             formData.append('price', updatedProduct.original_price);
-            // if (!product.original_price) {
-            //     formData.append('original_price', updatedProduct.original_price); // Append original price only if needed
-            // }
-            //formData.append('original_price', updatedProduct.original_price);
             formData.append('stock', updatedProduct.stock);
 
-            // if (editProduct.images && editProduct.images.length > 0) {
-            //     editProduct.images.forEach((image, index) => {
-            //         console.log(image);
-            //         formData.append('images', image);
-            //     });
-            // }
             const res = await productService.editProduct(id, updatedProduct);
             console.log(res);
             if (res && res.status === 200) {
-                setProduct(res.data);
-                handleEditClose();
+                setTimeout(() => {
+                    setProduct(res.data);
+                    handleEditClose();
+                    setIsLoading(false);
+                }, 1000); // 1 second delay
             }
         } catch (error) {
             console.error('Error updating product:', error);
+            setIsLoading(false);
         }
     };
 
     const handleApplyPromotion = async () => {
+        setIsLoading(true);
         const promotionService = new PromotionService();
         const productService = new ProductService();
         try {
-            // Update product details with the new price after promotion
             const updatedProduct = {
                 ...product,
-                price: afterPromotionPrice,  // Apply the discounted price
-                //original_price: product.original_price,  // Set original_price only if not already set
+                price: afterPromotionPrice,
             };
     
-            // Promotion payload to be sent to the backend
             const addPromotion = {
                 product_id: id,
                 discountPercentage: parseFloat(promotion.discountPercentage),
@@ -211,20 +195,66 @@ function SellerProductView() {
                 endDate: promotion.endDate
             };
     
-            // Apply the promotion and update the product
             const resPromotion = await promotionService.createPromotion(addPromotion);
             const resProductUpdate = await productService.editProduct(id, updatedProduct);
     
             if (resProductUpdate.status === 200 && resPromotion.status === 201) {
-                setProduct(resProductUpdate.data);
-                handlePromotionClose();
+                setTimeout(() => {
+                    setProduct({
+                        ...resProductUpdate.data,
+                        promotion: resPromotion.data
+                    });
+                    handlePromotionClose();
+                    setIsLoading(false);
+                }, 1000); // 1 second delay
             }
-
         } catch (error) {
             console.error('Error applying promotion:', error);
+            setIsLoading(false);
         }
     };
+
+    const handleEndPromotion = async () => {
+        setIsLoading(true);
+        const promotionService = new PromotionService();
+        const productService = new ProductService();
     
+        try {
+            const res = await promotionService.endPromotion(product.promotion.id);
+    
+            if (res && res.status === 204) {
+                const updatedProduct = {
+                    ...product,
+                    price: product.original_price,
+                };
+                const productUpdateRes = await productService.editProduct(id, updatedProduct);
+    
+                if (productUpdateRes && productUpdateRes.status === 200) {
+                    setTimeout(() => {
+                        setProduct(productUpdateRes.data);
+                        setPromotionOpen(false);
+                        setPromotion({ 
+                            discountPercentage: '',
+                            startDate: '',
+                            endDate: ''
+                        });
+                        setAmountSaved(null);
+                        setAfterPromotionPrice(null);
+                        setIsLoading(false);
+                    }, 1000); // 1 second delay
+                } else {
+                    console.error('Error updating product after ending promotion:', productUpdateRes);
+                    setIsLoading(false);
+                }
+            } else {
+                console.error('Error ending promotion:', res);
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error('Error in handleEndPromotion:', error);
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         console.log(product)
@@ -245,38 +275,7 @@ function SellerProductView() {
         return `${day}/${month}/${year}`;
     };
     
-    const handleEndPromotion = async () => {
-        const promotionService = new PromotionService();
-        const productService = new ProductService();
     
-        try {
-            // End promotion via the service
-            const res = await promotionService.endPromotion(product.promotion.id);
-    
-            if (res && res.status === 204) {
-                // Remove promotion details from the product state after ending promotion
-                const updatedProduct = {
-                    ...product,
-                    price: product.original_price, // Reset the price to the original price
-                };
-                // Update the product via the product service
-                const productUpdateRes = await productService.editProduct(id, updatedProduct);
-    
-                if (productUpdateRes && productUpdateRes.status === 200) {
-                    // Update local state with the updated product
-                    setProduct(productUpdateRes.data);
-                    setPromotionOpen(false); // Close the dialog
-                } else {
-                    console.error('Error updating product after ending promotion:', productUpdateRes);
-                }
-            } else {
-                console.log(res.status);
-                console.error('Error ending promotion:', res);
-            }
-        } catch (error) {
-            console.error('Error in handleEndPromotion:', error);
-        }
-    };
 
     if (!product) {
         return <Typography>Loading...</Typography>;
@@ -527,8 +526,10 @@ function SellerProductView() {
                         )}
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handlePromotionClose} color="primary">Cancel</Button>
-                        <Button onClick={handleApplyPromotion} color="primary">Apply</Button>
+                        <Button onClick={handlePromotionClose} color="primary" disabled={isLoading}>Cancel</Button>
+                        <Button onClick={handleApplyPromotion} color="primary" disabled={isLoading}>
+                            {isLoading ? <CircularProgress size={24} /> : 'Apply'}
+                        </Button>
                     </DialogActions>
                 </Dialog>
             )}
