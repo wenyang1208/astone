@@ -9,7 +9,7 @@ const SellerSidebar = () => {
         <>
         <Toolbar />
         <List>
-            <ListItemButton component={Link} to="/sellerProfile">
+            <ListItemButton component={Link} to="/dashboard">
                 <ListItemText primary="Dashboard" />
             </ListItemButton>
             <ListItemButton component={Link} to="/productlist">
@@ -21,7 +21,7 @@ const SellerSidebar = () => {
             <ListItemButton component={Link} to="/sellerProfile">
                 <ListItemText primary="My Shop Profile" />
             </ListItemButton>
-            <ListItemButton component={Link} to="/page3">
+            <ListItemButton component={Link} to="/faq">
                 <ListItemText primary="FAQ" />
             </ListItemButton>
         </List>
