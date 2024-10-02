@@ -37,7 +37,7 @@ const SellerProfile = () => {
         try {
         const sellerData = await sellerService.getSellerById(sellerId);
         setSeller(sellerData.data);
-        console.log(sellerData.data);
+        
         const productData = await productService.getAuthProducts();
         setProducts(productData.data);
         
