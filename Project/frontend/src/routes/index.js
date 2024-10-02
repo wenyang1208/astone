@@ -29,6 +29,7 @@ const SellerChangePassword = React.lazy(() => import("../pages/seller/sellerChan
 const ForgotPassword = React.lazy(() => import("../pages/forgotPassword"));
 const ChangePassword = React.lazy(() => import("../pages/changePassword"));
 const SellerDashboard = React.lazy(() => import("../pages/seller/dashboard"));
+const Finance = React.lazy(() => import("../pages/seller/finance"));
 
 
 const routes = [
@@ -57,7 +58,8 @@ const routes = [
     { path: `${PathConstants.SELLER_CHANGE_PASSWORD}/:id`, element: <SellerChangePassword/> },
     { path: PathConstants.FORGOT_PASSWORD, element: <ForgotPassword /> },
     { path: `${PathConstants.CHANGE_PASSWORD}/:id`, element: <ChangePassword/> },
-    { path : PathConstants.SELLER_DASHBOARD, element: <ProtectedRoute><SellerDashboard /></ProtectedRoute> }
+    { path : PathConstants.SELLER_DASHBOARD, element: <ProtectedRoute><SellerDashboard /></ProtectedRoute> },
+    { path : PathConstants.SELLER_FINANCE, element: <ProtectedRoute><Finance /></ProtectedRoute> }
 ]
 
 export default routes

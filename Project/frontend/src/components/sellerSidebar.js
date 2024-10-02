@@ -9,13 +9,13 @@ const SellerSidebar = () => {
         <>
         <Toolbar />
         <List>
-            <ListItemButton component={Link} to="/dashboard">
+            <ListItemButton component={Link} to="/sellerDashboard">
                 <ListItemText primary="Dashboard" />
             </ListItemButton>
             <ListItemButton component={Link} to="/productlist">
                 <ListItemText primary="My Products" />
             </ListItemButton>
-            <ListItemButton component={Link} to="/page2">
+            <ListItemButton component={Link} to="/finance">
                 <ListItemText primary="Finance" />
             </ListItemButton>
             <ListItemButton component={Link} to="/sellerProfile">
