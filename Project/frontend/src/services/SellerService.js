@@ -72,4 +72,10 @@ export class SellerService {
             return null;
         }
     }
+    
+    async incrementShipment(sellerId, toProcessedShipment) {
+        console.log(toProcessedShipment);
+        return axios.post(`http://localhost:8000/seller/${sellerId}/increment-shipment/`, toProcessedShipment);
+      }
+
 }

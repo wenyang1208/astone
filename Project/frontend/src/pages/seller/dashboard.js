@@ -76,6 +76,7 @@ const TodoRow = ({ items }) => (
         const fetchTodoData = async () => {
             try {
                 const response = await sellerService.getSellerById(sellerId);
+                console.log(response.data);
                 setTodoData(response.data.todo);
             } catch (error) {
                 console.error('Failed to fetch todo data:', error);
