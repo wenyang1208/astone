@@ -11,7 +11,8 @@ services:
       - .env
     depends_on:
       - postgres_db
-    
+    env_file:
+      - fileName
 
   postgres_db:
     image: postgres:latest
