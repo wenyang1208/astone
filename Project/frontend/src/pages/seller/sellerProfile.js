@@ -8,6 +8,7 @@ import { SellerService } from '../../services/SellerService';
 import { ProductService } from '../../services/ProductService';
 import { jwtDecode } from 'jwt-decode';
 import SellerSidebar from '../../components/sellerSidebar';
+import SellerHeader from '../../components/sellerHeader';
 import { TextField, FormHelperText } from '@mui/material';
 
 const sellerService = new SellerService();
@@ -66,7 +67,7 @@ const SellerProfile = () => {
         setIsEditing(false);
         const updatedData = await sellerService.getSellerById(sellerId);
         setSeller(updatedData.data);
-        navigate(`/productlist/`);
+        navigate(`/sellerProfile`);
         } else {
         // Specific error for shop name
         if (response.message && response.message.includes('A seller with this shop name already exists.')) {
@@ -109,123 +110,113 @@ const SellerProfile = () => {
     console.log(`no need to complete: ${!isProfileComplete}`);
     return (
     <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
-    <Container maxWidth="md">
-            {notification && (
-            <Typography color="error" sx={{ mb: 2 }}>
-                {notification}
-            </Typography>
-            )}
-        <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
-        <Typography variant="h4" gutterBottom>
-            {isEditing ? 'Edit Your Profile' : 'Complete Your Profile'}
-        </Typography>
-        <Box component="form" noValidate sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-            <Grid item xs={12}>
-                <TextField
-                name="shopName"
-                required
-                fullWidth
-                id="shopName"
-                label="Shop Name"
-                value={formValues.shopName ||''}
-                onChange={handleShopName}
-                error={!!shopNameError}
-                />
-                {shopNameError && (
-                <FormHelperText error>{shopNameError}</FormHelperText>
+        <Container maxWidth="md">
+                {notification && (
+                <Typography color="error" sx={{ mb: 2 }}>
+                    {notification}
+                </Typography>
                 )}
-            </Grid>
-            <Grid item xs={12}>
-            <TextField
-                name="phone_number"
-                required
-                fullWidth
-                id="phone"
-                label="Phone Number"
-                value={seller.phone_number || ''}
-                onChange={handleChange}
-                />
-            </Grid>
-            <Grid item xs={12}>
-                <TextField
-                name="address"
-                required
-                fullWidth
-                id="address"
-                label="Address"
-                value={seller.address || ''}
-                onChange={handleChange}
-                />
-            </Grid>
-            </Grid>
-            <Button
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleSave}
-            >
-            Save Profile
-            </Button>
-        </Box>
-        </Paper>
-    </Container>
+            <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
+                <Typography variant="h4" gutterBottom>
+                    {isEditing ? 'Edit Your Profile' : 'Complete Your Profile'}
+                </Typography>
+                <Box component="form" noValidate sx={{ mt: 3 }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <TextField
+                            name="shopName"
+                            required
+                            fullWidth
+                            id="shopName"
+                            label="Shop Name"
+                            value={formValues.shopName ||''}
+                            onChange={handleShopName}
+                            error={!!shopNameError}
+                            />
+                            {shopNameError && (
+                            <FormHelperText error>{shopNameError}</FormHelperText>
+                            )}
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                                name="phone_number"
+                                required
+                                fullWidth
+                                id="phone"
+                                label="Phone Number"
+                                value={seller.phone_number || ''}
+                                onChange={handleChange}
+                                />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
+                            name="address"
+                            required
+                            fullWidth
+                            id="address"
+                            label="Address"
+                            value={seller.address || ''}
+                            onChange={handleChange}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 3, mb: 2 }}
+                        onClick={handleSave}
+                    >
+                        Save Profile
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
     </Box>
     );
 }
 
 
     return(
-    <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
+    <Box sx={{ display: 'flex', backgroundColor: '#f5f5f5', minHeight: '100vh'}}>
+        <SellerHeader sx={{ position: 'fixed', zIndex: 1200 }} />
         <Grid container>
-        <Grid item xs={1.5}>
-          <SellerSidebar />
+            <Grid item xs={1.5} sx = {{backgroundColor: '#ffffff'}}>
+                <SellerSidebar />
+            </Grid>
+            <Grid item xs sx = {{p: 3, pt: 10}}>
+                <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                    <Grid item xs={12} sm={6}>
+                        <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a'}}>
+                            {seller.shop_name}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={6} container justifyContent="flex-end">
+                        <Button 
+                            variant="outlined" 
+                            startIcon={<EditIcon />} 
+                            onClick={handleEdit}
+                            sx={{ borderColor: '#7D0DC3', color: '#7D0DC3', mr: 2 }}
+                        >
+                            Edit Profile
+                        </Button>
+                    </Grid>
+                </Grid>
+                <Divider sx={{ mb: 2 }} />
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Seller Information</Typography>
+                        <Typography variant="body1">Name: {seller.user.first_name} {seller.user.last_name}</Typography>
+                        <Typography variant="body1">Email: {seller.user.username}</Typography>
+                        <Typography variant="body1">Phone: {seller.phone_number}</Typography>
+                        <Typography variant="body1">Address: {seller.address}</Typography>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Shop Statistics</Typography>
+                        <Typography variant="body1">Total Products: {products.length}</Typography>
+                        <Typography variant="body1">Joined: {new Date(seller.user.date_joined.substring(0,10)).toLocaleDateString('en-GB')}</Typography>
+                    </Grid>
+                </Grid>
+            </Grid>
         </Grid>
-    <Grid item xs>
-    <Container>
-    <Paper elevation={3} sx={{ p: 4, mb: 4, backgroundColor: '#ffffff' }}>
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
-        <Grid item xs={12} sm={6}>
-            <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a' }}>
-            {seller.shop_name}
-            </Typography>
-        </Grid>
-        <Grid item xs={12} sm={6} container justifyContent="flex-end">
-            <Button 
-            variant="outlined" 
-            startIcon={<EditIcon />} 
-            onClick={handleEdit}
-            sx={{ borderColor: '#7D0DC3', color: '#7D0DC3', mr: 2 }}
-            >
-            Edit Profile
-            </Button>
-            <Button 
-            variant="contained" 
-            color="error" 
-            onClick={handleLogout}
-            >
-            Logout
-            </Button>
-        </Grid>
-        </Grid>
-        <Divider sx={{ mb: 2 }} />
-        <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Seller Information</Typography>
-            <Typography variant="body1">Name: {seller.user.first_name} {seller.user.last_name}</Typography>
-            <Typography variant="body1">Email: {seller.user.username}</Typography>
-            <Typography variant="body1">Phone: {seller.phone_number}</Typography>
-            <Typography variant="body1">Address: {seller.address}</Typography>
-        </Grid>
-        <Grid item xs={12} md={6}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: '#7D0DC3' }}>Shop Statistics</Typography>
-            <Typography variant="body1">Total Products: {products.length}</Typography>
-            <Typography variant="body1">Joined: {new Date(seller.user.date_joined.substring(0,10)).toLocaleDateString('en-GB')}</Typography>
-        </Grid>
-        </Grid>
-    </Paper>
-    </Container>
-    </Grid>
-    </Grid>
     </Box>
     
     );

@@ -2,18 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Container, Box, Typography, Grid, Paper, Avatar, TextField, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Rating, FormHelperText } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit'; 
-import Divider from '@mui/material/Divider'; 
 import { SellerService } from '../../services/SellerService';
 import { ProductService } from '../../services/ProductService';
 import { ACCESS_TOKEN } from '../../constant';
 import { jwtDecode } from 'jwt-decode';
 import image from '../product/crew-neck.png';
 import SellerSidebar from '../../components/sellerSidebar';
+import SellerHeader from '../../components/sellerHeader';
 
 const sellerService = new SellerService();
 const productService = new ProductService();
-const BASE_URL = 'http://localhost:8000';
 const ProductList = () => {
   const [seller, setSeller] = useState(null);
   const [products, setProducts] = useState([]);
@@ -52,18 +50,6 @@ const ProductList = () => {
 
     fetchData();
   }, [sellerId]);
-
-  const handleEdit = () => {
-    setIsEditing(true);
-  };
-
-  const handleShopName = (event) => {
-    const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
-    if (shopNameError) {
-      setShopNameError('');
-    }
-  };
 
   const handleMouseEnter = (productId) => {
     setHoveredProductId(productId);
@@ -107,18 +93,17 @@ const ProductList = () => {
   if (error) return <Typography color="error">{error}</Typography>;
   if (!seller) return <Typography>No seller data found</Typography>;
 
-  
-
   return (
-    <Box sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', width: '100%', py: 4 }}>
+    <Box sx={{ display: 'flex' }}>
+      <SellerHeader sx={{ position: 'fixed', zIndex: 1200 }} />
       <Grid container>
         <Grid item xs={1.5}>
           <SellerSidebar />
         </Grid>
-      <Grid item xs={9}>
-        <Container>
-          <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a'}}>
-                {seller.shop_name}
+      <Grid item xs >
+      <Box sx={{ flexGrow: 1, p: 3, backgroundColor: '#f5f5f5' }}>
+          <Typography variant="h3" sx={{ fontWeight: 'bold', color: '#4a4a4a', mt: 8}}>
+              {seller.shop_name}
           </Typography>
           <hr 
             style = {
@@ -249,7 +234,7 @@ const ProductList = () => {
             </Button>
           </DialogActions>
         </Dialog>
-      </Container>
+      </Box>
       </Grid>
     </Grid>
     </Box>

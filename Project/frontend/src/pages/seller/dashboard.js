@@ -6,33 +6,49 @@ import SellerSidebar from '../../components/sellerSidebar';
 import { SellerService } from '../../services/SellerService';
 import { ACCESS_TOKEN } from '../../constant';
 import { jwtDecode } from 'jwt-decode';
+import SellerHeader from '../../components/sellerHeader';
 
-const StatsContainer = styled(Box)({
-    textAlign: 'center',
-    padding: '16px',
-    position: 'relative',
-});
+function Dashboard() {
+    const StatsContainer = styled(Box)({
+        textAlign: 'center',
+        padding: '16px',
+        position: 'relative',
+    });
 
-const sellerService = new SellerService();
-const token = localStorage.getItem(ACCESS_TOKEN);
-const sellerId = jwtDecode(token).seller_id;
-
-const TodoCard = ({ value, label, showDivider = true }) => (
+    const sellerService = new SellerService();
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    const sellerId = jwtDecode(token).seller_id;
+    
+    const TodoCard = ({ value, label, showDivider = true }) => (
     <StatsContainer>
-        <Typography variant="h4" sx={{ color: '#1976d2', fontWeight: 500, mb: 0.5 }}>
+        <Typography variant="h4" 
+            sx={{ 
+                color: '#1976d2', 
+                fontWeight: 500, 
+                mb: 0.5 
+            }}>
             {value}
         </Typography>
-        <Typography variant="body2" sx={{ color: '#666', fontSize: '0.95rem' }}>
+        <Typography variant="body2" 
+            sx={{ 
+                color: '#666',
+                fontSize: '0.95rem'
+            }}>
             {label}
         </Typography>
         {showDivider && (
-            <Divider
-                orientation="vertical"
-                sx={{ position: 'absolute', right: 0, top: '20%', height: '65%' }}
+            <Divider 
+                orientation="vertical" 
+                sx={{ 
+                    position: 'absolute',
+                    right: 0,
+                    top: '20%',
+                    height: '65%'
+                }} 
             />
         )}
     </StatsContainer>
-);
+    );
 
 const TodoRow = ({ items }) => (
     <Grid container>
@@ -44,7 +60,6 @@ const TodoRow = ({ items }) => (
     </Grid>
 );
 
-const Dashboard = () => {
     const [todoData, setTodoData] = useState({
         unpaid: 0,
         toProcessShipment: 0,
@@ -86,18 +101,16 @@ const Dashboard = () => {
 
     return (
         <Box sx={{ display: 'flex' }}>
+            <SellerHeader sx={{ position: 'fixed', zIndex: 1200 }} />
             <Grid container>
                 <Grid item xs={1.5}>
                     <SellerSidebar />
                 </Grid>
-                <Grid item xs>
-                    <Box sx={{ flexGrow: 1, p: 3, backgroundColor: '#f5f5f5' }}>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 3 }}>
-                            Dashboard
-                        </Typography>
+                <Grid item xs sx = {{backgroundColor: '#f5f5f5'}}>
+                    <Box sx={{ flexGrow: 1, p: 3}}>
                         {/* To Do List */}
-                        <Paper sx={{ p: 3, mb: 3 }}>
-                            <Typography variant="h5">
+                        <Paper sx={{ p: 3, pt: 2, mb: 3, mt:8 }}>
+                            <Typography variant="h5" sx = {{fontWeight: 600, fontSize: 30}}>
                                 To Do List
                             </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -112,9 +125,9 @@ const Dashboard = () => {
                         </Paper>
 
                         {/* Business Insights */}
-                        <Paper sx={{ p: 3, mb: 3 }}>
-                            <Typography variant="h5">
-                                Business Insights
+                        <Paper sx={{ p: 3, pt: 2}}>
+                            <Typography variant="h5" sx = {{fontWeight: 600, fontSize: 30}}>
+                            Business Insights
                             </Typography>
 
                             {/* Stats */}
@@ -154,13 +167,13 @@ const Dashboard = () => {
                         {/* Marketing Centre */}
                         <Paper sx={{ p: 3 }}>
                             <Typography variant="h6" gutterBottom>
-                                Marketing Centre
+                            Marketing Centre
                             </Typography>
                             <Typography variant="body1" sx={{ mb: 2 }}>
-                                Your advertisement credit has fallen to MYR0.00.
+                            Your advertisement credit has fallen to MYR0.00.
                             </Typography>
                             <Button variant="contained" color="primary">
-                                Top Up
+                            Top Up
                             </Button>
                         </Paper>
                     </Box>
