@@ -12,7 +12,7 @@ export class UserService {
             formData.append('address', address);
             formData.append('password', password);
 
-            const res = await axios.post('https://astone-backend-app.onrender.com/register/', formData);
+            const res = await axios.post('https://astone-backend-app.onrender.com0/register/', formData);
             return res;
         } catch (error) {
             console.error('Error registering user:', error);
@@ -26,7 +26,7 @@ export class UserService {
             formData.append('email', email);
             formData.append('password', password);
 
-            const res = await axios.post('https://astone-backend-app.onrender.com/login/', formData);
+            const res = await axios.post('http://localhost:8000/login/', formData);
             return res;
         } catch (error) {
             console.error('Error logging in user:', error);
@@ -36,7 +36,7 @@ export class UserService {
 
     async get_user_details(email) {
         try {
-            const res = await axios.get(`https://astone-backend-app.onrender.com/user/${email}/`);
+            const res = await axios.get(`http://localhost:8000/user/${email}/`);
             return res;
         } catch (error) {
             console.error(`Error getting user details for user ${email}:`, error);
@@ -46,7 +46,7 @@ export class UserService {
 
     async updateUser(email, userDetails) {
         try {
-            const res = await axios.put(`https://astone-backend-app.onrender.com/userupdate/${email}/`, userDetails);
+            const res = await axios.put(`http://localhost:8000/userupdate/${email}/`, userDetails);
             return res;
         } catch (error) {
             console.error(`Error updating user details for user ${email}:`, error.response?.data || error.message);
@@ -57,7 +57,7 @@ export class UserService {
     async requestPasswordReset(data)
     {
         try {
-            const res = await axios.post('https://astone-backend-app.onrender.com/forgot-password/', data);
+            const res = await axios.post('http://localhost:8000/forgot-password/', data);
             return res;
         } catch (error) {
             console.log(data);
@@ -70,7 +70,7 @@ export class UserService {
     {
         try {
             console.log(data);
-            const res = await axios.put(`https://astone-backend-app.onrender.com/change-password/${user_id}/`, data);
+            const res = await axios.put(`http://localhost:8000/change-password/${user_id}/`, data);
             return res;
         } catch (error) {
             console.log(data);

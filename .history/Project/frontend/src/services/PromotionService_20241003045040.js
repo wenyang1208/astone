@@ -26,7 +26,7 @@ export class PromotionService {
         
         };
         console.log('Final data being sent:', promotionData);
-        const res = await axios.post('https://astone-backend-app.onrender.com/promotions/', promotionData);
+        const res = await axios.post('http://localhost:8000/promotions/', promotionData);
         return res;
         } catch (error) {
             console.error('Error creating product:', error);

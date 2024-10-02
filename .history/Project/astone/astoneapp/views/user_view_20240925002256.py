@@ -89,7 +89,7 @@ def forgot_password(request):
     # Verify if the user exists with the given email
     user = CustomUser.objects.filter(email=email).first()
     if user:
-        link = f"https://astone-frontend.vercel.app/changePassword/{user.id}/"
+        link = f"http://localhost:3000/changePassword/{user.id}/"
         send_mail(
             subject='Password Reset Request',
             message='You requested a password reset',

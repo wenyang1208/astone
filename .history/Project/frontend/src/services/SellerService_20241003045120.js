@@ -36,7 +36,7 @@ export class SellerService {
         try {
             console.log('Sending PUT request to:', `https://astone-backend-app.onrender.com/seller/${id}/`);
             console.log('Data:', sellerData);
-            const res = await axios.put(`https://astone-backend-app.onrender.com/seller/${id}/`, sellerData);
+            const res = await axios.put(`http://localhost:8000/seller/${id}/`, sellerData);
             return res;
         } catch (error) {
             console.error('Error editing seller:', error.response?.data || error.message);
@@ -51,7 +51,7 @@ export class SellerService {
     async requestPasswordReset(data)
     {
         try {
-            const res = await axios.post('https://astone-backend-app.onrender.com/seller/seller-forgot-password/', data);
+            const res = await axios.post('http://localhost:8000/seller/seller-forgot-password/', data);
             return res;
         } catch (error) {
             console.log(data);
@@ -64,7 +64,7 @@ export class SellerService {
     {
         try {
             console.log(data);
-            const res = await axios.put(`https://astone-backend-app.onrender.com/seller/seller-change-password/${seller_id}/`, data);
+            const res = await axios.put(`http://localhost:8000/seller/seller-change-password/${seller_id}/`, data);
             return res;
         } catch (error) {
             console.log(data);

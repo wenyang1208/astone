@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import MyAppBar from '../components/appBar';
 
 const Men = () => {
-  const BASE_URL = 'https://astone-backend-app.onrender.com';
+  const BASE_URL = 'http://localhost:8000';
 
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -41,7 +41,7 @@ const Men = () => {
 
     productService.getProducts()
       .then(res => {
-        const menproducts = res.data.filter(product => product.gender.toLowerCase() === "f");
+        const menproducts = res.data.filter(product => product.gender.toLowerCase() === "m");
         setProducts(menproducts);
         setFilters(extractFilters(menproducts));
       })
@@ -56,7 +56,7 @@ const Men = () => {
       const filtered = products.filter(product =>
         (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
         (selectedClothingTypes.length === 0 || selectedClothingTypes.some(type => product.category.includes(type))) &&
-        (product.gender.toLowerCase() === "f") &&
+        (product.gender.toLowerCase() === "m") &&
         product.price >= priceRange[0] && product.price <= priceRange[1] &&
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -66,7 +66,7 @@ const Men = () => {
 
       productService.getProducts()
         .then(res => {
-          const menProducts = res.data.filter(product => product.gender.toLowerCase() === "f");
+          const menProducts = res.data.filter(product => product.gender.toLowerCase() === "m");
           setProducts(menProducts);
           setFilters(extractFilters(menProducts));
         })
@@ -246,8 +246,7 @@ const Men = () => {
             <Typography>No products found</Typography>
           ) : (
             <Grid container spacing={4}>
-              {
-                sortedProducts.map(product => (
+              {sortedProducts.map(product => (
                 <Grid item key={product.id} xs={12} sm={6} md={3}>
                   <ProductCard product={product} />
                 </Grid>

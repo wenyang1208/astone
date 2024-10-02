@@ -30,7 +30,7 @@ const Aston = ({ className, divClassName }) => {
   );
 };
 
-const BASE_URL = 'https://astone-backend-app.onrender.com';
+const BASE_URL = 'http://localhost:8000';
 
 
 function ProductView() {

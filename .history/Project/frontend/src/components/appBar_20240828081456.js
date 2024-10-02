@@ -34,7 +34,7 @@ function MyAppBar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
-  const BASE_URL = 'https://astone-backend-app.onrender.com';
+  const BASE_URL = 'http://localhost:8000';
 
   const fetchCartItems = async () => {
     const orderService = new OrderService();

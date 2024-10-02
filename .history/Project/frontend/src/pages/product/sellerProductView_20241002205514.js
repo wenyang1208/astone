@@ -17,7 +17,7 @@ function SellerProductView() {
     const [editOpen, setEditOpen] = useState(false);
     const [promotionOpen, setPromotionOpen] = useState(false);
     const navigate = useNavigate();
-    const BASE_URL = 'https://astone-backend-app.onrender.com';
+    const BASE_URL = 'http://localhost:8000';
     const [editProduct, setEditProduct] = useState({
         name: '',
         description: '',

@@ -12,7 +12,7 @@ import image from '../product/crew-neck.png';
 
 const sellerService = new SellerService();
 const productService = new ProductService();
-const BASE_URL = 'https://astone-backend-app.onrender.com';
+const BASE_URL = 'http://localhost:8000';
 const ProductList = () => {
   const [seller, setSeller] = useState(null);
   const [products, setProducts] = useState([]);
