@@ -2,20 +2,28 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from astoneapp.models.product import Product
+from astoneapp.models.user import CustomUser
 from astoneapp.models.cart import Cart, CartItem
 from astoneapp.serializers.product_serializer import ProductSerializer
 
-def get_single_cart():
-    cart, created = Cart.objects.get_or_create(id=1)
+def get_user_by_email(email):
+    print(email)
+    return get_object_or_404(CustomUser, email=email)
+
+def get_single_cart(user):
+    cart = Cart.objects.filter(user=user).first()
+    if not cart:
+        cart = Cart.objects.create(user=user)
     return cart
 
 @api_view(['POST'])
 def add_to_cart(request, product_id):
+    email = request.data.get('email')
+    user = get_user_by_email(email)
     product = get_object_or_404(Product, id=product_id)
-    cart = get_single_cart()
+    cart = get_single_cart(user)
     size = request.data.get('size')
     color = request.data.get('color')
-    item_key = f"{product_id}_{size}_{color}"
 
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
@@ -32,8 +40,10 @@ def add_to_cart(request, product_id):
 
 @api_view(['POST'])
 def update_cart_item(request, product_id):
+    email = request.data.get('email')
+    user = get_user_by_email(email)
     product = get_object_or_404(Product, id=product_id)
-    cart = get_single_cart()
+    cart = get_single_cart(user)
     size = request.data.get('size')
     color = request.data.get('color')
     quantity = request.data.get('quantity')
@@ -55,9 +65,11 @@ def update_cart_item(request, product_id):
 
     return Response({'message': message})
 
-@api_view(['GET'])
+@api_view(['POST'])
 def cart_detail(request):
-    cart = get_single_cart()
+    email = request.data.get('email')
+    user = get_user_by_email(email)
+    cart = get_single_cart(user)
     cart_items = CartItem.objects.filter(cart=cart)
     total_price = sum(item.product.price * item.quantity for item in cart_items)
     

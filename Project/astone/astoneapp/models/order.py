@@ -1,8 +1,9 @@
 from django.db import models, transaction
 from astoneapp.models.product import Product
+from astoneapp.models.user import CustomUser
 
 class Order(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     is_paid = models.BooleanField(default=False)

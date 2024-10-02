@@ -1,8 +1,10 @@
 from django.db import models, transaction
 from astoneapp.models.product import Product
+from astoneapp.models.user import CustomUser
+
 
 class Cart(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class CartItem(models.Model):

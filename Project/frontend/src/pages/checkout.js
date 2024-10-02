@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
+import { UserService } from '../services/UserService';
 
 function CheckoutPage() {
   const BASE_URL = 'http://localhost:8000';
@@ -15,17 +16,46 @@ function CheckoutPage() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [usePoints, setUsePoints] = useState(false);
+  const [userPoints, setUserPoints] = useState(0);
+  const [discount, setDiscount] = useState(0);
 
   const fetchCartItems = async () => {
     const orderService = new OrderService();
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        console.error('User email not found. Please log in.');
+        return;
+    }
+
     try {
-      const res = await orderService.getCart();
-      if (res && res.data) {
-        setCartItems(res.data.cart_items);
-        setTotalPrice(res.data.total_price.toFixed(2));
-      }
+        const res = await orderService.getCart(userEmail);
+        if (res && res.data) {
+            setCartItems(res.data.cart_items);
+            setTotalPrice(res.data.total_price.toFixed(2));
+        }
     } catch (error) {
-      console.error('Error fetching cart items:', error);
+        console.error('Error fetching cart items:', error);
+    }
+  };
+
+  const fetchUserPoints = async () => {
+    const orderService = new OrderService();
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        console.error('User email not found. Please log in.');
+        return;
+    }
+
+    try {
+        const res = await new UserService().get_user_details(userEmail);
+        if (res && res.data) {
+            setUserPoints(res.data.points);
+        }
+    } catch (error) {
+        console.error('Error fetching user points:', error);
     }
   };
 
@@ -33,27 +63,40 @@ function CheckoutPage() {
 
   useEffect(() => {
     fetchCartItems();
+    fetchUserPoints();
   }, []);
-
   const handlePlaceOrder = async () => {
     setLoading(true);
     setError(null);
     const orderService = new OrderService();
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        setError('User email not found. Please log in.');
+        setLoading(false);
+        return;
+    }
+
     try {
-      console.log(address);
-      const res = await orderService.placeOrder(address);
-      if (res && res.data) {
-        const orderId = res.data.order_id;
-        const orderRes = await orderService.getOrderDetails(orderId);
-        if (orderRes && orderRes.data) {
-          setOrderDetails(orderRes.data);
+        let finalTotalPrice = totalPrice;
+        if (usePoints) {
+            finalTotalPrice -= discount;
+            await orderService.deductPoints(userEmail, discount);
         }
-      }
+
+        const res = await orderService.placeOrder(address, userEmail);
+        if (res && res.data) {
+            const orderId = res.data.order_id;
+            const orderRes = await orderService.getOrderDetails(orderId, userEmail);
+            if (orderRes && orderRes.data) {
+                setOrderDetails(orderRes.data);
+            }
+        }
     } catch (error) {
-      console.error('Error placing order:', error);
-      setError('Failed to place order. Please try again.');
+        console.error('Error placing order:', error);
+        setError('Failed to place order. Please try again.');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
 
@@ -74,6 +117,16 @@ function CheckoutPage() {
       alert('Payment successful!');
       // navigate('/order-confirmation', { state: { orderDetails } });
     }, 2000); // Simulate payment processing time
+  };
+
+  const handleUsePointsChange = (event) => {
+    setUsePoints(event.target.checked);
+    if (event.target.checked) {
+      const maxDiscount = Math.min(userPoints, totalPrice);
+      setDiscount(maxDiscount);
+    } else {
+      setDiscount(0);
+    }
   };
 
   return (
@@ -134,6 +187,16 @@ function CheckoutPage() {
             Total Price: {`Total: MYR ${totalPrice}`}
           </Typography>
 
+          <FormControlLabel
+            control={<Checkbox checked={usePoints} onChange={handleUsePointsChange} />}
+            label={`Use points (${userPoints} available)`}
+          />
+          {usePoints && (
+            <Typography variant="body2" color="textSecondary">
+              Discount: MYR {discount.toFixed(2)}
+            </Typography>
+          )}
+
           <TextField
             label="Recipient name"
             value={recipient}
@@ -169,7 +232,7 @@ function CheckoutPage() {
       <Dialog open={paymentOpen} onClose={handleClosePayment}>
         <DialogTitle>Payment</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">Total Price: {`MYR ${totalPrice}`}</Typography>
+          <Typography variant="body1">Total Price: {`MYR ${totalPrice - discount}`}</Typography>
           <Typography variant="body2">Enter your payment details below:</Typography>
           <TextField label="Card Number" fullWidth margin="normal" />
           <TextField label="Expiry Date" type="date" fullWidth margin="normal" InputLabelProps={{ shrink: true }} />          
