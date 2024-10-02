@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Grid, Paper, Typography, Button, Divider} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Box, Grid, Paper, Typography, Button, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import SellerSidebar from '../../components/sellerSidebar';
+import { SellerService } from '../../services/SellerService';
+import { ACCESS_TOKEN } from '../../constant';
+import { jwtDecode } from 'jwt-decode';
 import SellerHeader from '../../components/sellerHeader';
 
 function Dashboard() {
@@ -10,6 +14,10 @@ function Dashboard() {
         padding: '16px',
         position: 'relative',
     });
+
+    const sellerService = new SellerService();
+    const token = localStorage.getItem(ACCESS_TOKEN);
+    const sellerId = jwtDecode(token).seller_id;
     
     const TodoCard = ({ value, label, showDivider = true }) => (
     <StatsContainer>
@@ -42,34 +50,55 @@ function Dashboard() {
     </StatsContainer>
     );
 
-    const TodoRow = ({ items }) => (
+const TodoRow = ({ items }) => (
     <Grid container>
         {items.map((item, index) => (
-        <Grid item xs={3} key={item.label}>
-            <TodoCard 
-                value={item.value} 
-                label={item.label} 
-                showDivider={index < items.length - 1}
-            />
-        </Grid>
+            <Grid item xs={3} key={item.label}>
+                <TodoCard value={item.value} label={item.label} showDivider={index < items.length - 1} />
+            </Grid>
         ))}
     </Grid>
-    );
+);
+
+    const [todoData, setTodoData] = useState({
+        unpaid: 0,
+        toProcessShipment: 0,
+        processedShipment: 0,
+        pendingCancellation: 0,
+        pendingReturnRefund: 0,
+        removedProducts: 0,
+        soldProducts: 0,
+        pendingPromotion: 0,
+    });
+
+    // Fetch todo data when the component mounts
+    useEffect(() => {
+        const fetchTodoData = async () => {
+            try {
+                const response = await sellerService.getSellerById(sellerId);
+                console.log(response.data.todo);
+                setTodoData(response.data.todo);
+            } catch (error) {
+                console.error('Failed to fetch todo data:', error);
+            }
+        };
+
+        fetchTodoData();
+    }, []);
 
     const firstRowItems = [
-        { value: "4", label: "Unpaid" },
-        { value: "82", label: "To-Process Shipment" },
-        { value: "59", label: "Processed Shipment" },
-        { value: "6", label: "Pending Cancellation" }
+        { value: todoData.unpaid, label: "Unpaid" },
+        { value: todoData.to_processed_shipment, label: "To-Process Shipment" },
+        { value: todoData.processed_shipment, label: "Processed Shipment" },
+        { value: todoData.pending_cancellation, label: "Pending Cancellation" },
     ];
 
     const secondRowItems = [
-        { value: "0", label: "Pending Return/Refund" },
-        { value: "21", label: "Removed Products" },
-        { value: "11", label: "Sold Products" },
-        { value: "1", label: "Pending Promotion" }
+        { value: todoData.pending_return, label: "Pending Return/Refund" },
+        { value: todoData.removed_product, label: "Removed Products" },
+        { value: todoData.sold_product, label: "Sold Products" },
+        { value: todoData.pending_promotion, label: "Pending Promotion" },
     ];
-
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -83,10 +112,10 @@ function Dashboard() {
                         {/* To Do List */}
                         <Paper sx={{ p: 3, pt: 2, mb: 3, mt:8 }}>
                             <Typography variant="h5" sx = {{fontWeight: 600, fontSize: 30}}>
-                            To Do List
+                                To Do List
                             </Typography>
                             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                            Things you need to deal with
+                                Things you need to deal with
                             </Typography>
                             <Box sx={{ mb: 2 }}>
                                 <TodoRow items={firstRowItems} />
@@ -105,41 +134,54 @@ function Dashboard() {
                             {/* Stats */}
                             <Grid container spacing={3} sx={{ mb: 3 }}>
                                 <Grid item xs={12} md={4}>
-                                <Grid sx={{ p: 2 }}>
-                                    <Typography variant="body1" color="text.secondary">Visitors</Typography>
-                                    <Typography variant="h4">1,572</Typography>
-                                    <Typography variant="body2" color="success.main">
-                                    vs yesterday 5.72% ↑
-                                    </Typography>
-                                </Grid>
-                                </Grid>
-
-                                <Grid item xs={12} md={4}>
-                                <Grid sx={{ p: 2 }}>
-                                    <Typography variant="body1" color="text.secondary">Orders</Typography>
-                                    <Typography variant="h4">5</Typography>
-                                    <Typography variant="body2" color="error.main">
-                                    vs yesterday 58.33% ↓
-                                    </Typography>
-                                </Grid>
+                                    <Grid sx={{ p: 2 }}>
+                                        <Typography variant="body1" color="text.secondary">Visitors</Typography>
+                                        <Typography variant="h4">1,572</Typography>
+                                        <Typography variant="body2" color="success.main">
+                                            vs yesterday 5.72% ↑
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
 
                                 <Grid item xs={12} md={4}>
-                                <Grid sx={{ p: 2 }}>
-                                    <Typography variant="body1" color="text.secondary">Total Sales</Typography>
-                                    <Typography variant="h4">MYR 0.32</Typography>
-                                    <Typography variant="body2" color="error.main">
-                                    vs yesterday RM 50 ↓
-                                    </Typography>
+                                    <Grid sx={{ p: 2 }}>
+                                        <Typography variant="body1" color="text.secondary">Orders</Typography>
+                                        <Typography variant="h4">5</Typography>
+                                        <Typography variant="body2" color="error.main">
+                                            vs yesterday 58.33% ↓
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
+
+                                <Grid item xs={12} md={4}>
+                                    <Grid sx={{ p: 2 }}>
+                                        <Typography variant="body1" color="text.secondary">Total Sales</Typography>
+                                        <Typography variant="h4">MYR 0.32</Typography>
+                                        <Typography variant="body2" color="error.main">
+                                            vs yesterday RM 50 ↓
+                                        </Typography>
+                                    </Grid>
                                 </Grid>
                             </Grid>
+                        </Paper>
+
+                        {/* Marketing Centre */}
+                        <Paper sx={{ p: 3 }}>
+                            <Typography variant="h6" gutterBottom>
+                            Marketing Centre
+                            </Typography>
+                            <Typography variant="body1" sx={{ mb: 2 }}>
+                            Your advertisement credit has fallen to MYR0.00.
+                            </Typography>
+                            <Button variant="contained" color="primary">
+                            Top Up
+                            </Button>
                         </Paper>
                     </Box>
                 </Grid>
             </Grid>
         </Box>
-        );
-    };
-        
+    );
+};
+
 export default Dashboard;

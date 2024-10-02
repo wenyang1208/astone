@@ -20,6 +20,9 @@ class SellerRegisterView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
+        seller_id = response.data.get('id')
+        seller = Seller.objects.get(id=seller_id)
+        Todo.objects.create(seller=seller)
         response.data = {'message': 'Seller created successfully'}
         return response
     

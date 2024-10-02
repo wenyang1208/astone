@@ -22,3 +22,5 @@ admin.site.register(Order)
 admin.site.register(OrderItem)
 admin.site.register(CustomUser)
 
+from .models.todo import Todo
+admin.site.register(Todo)
