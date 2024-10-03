@@ -31,6 +31,8 @@ function CreateProduct() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [popoverOpen, setPopoverOpen] = React.useState(false);
   const productService = new ProductService();
+
+  const [colorName, setColorName] = React.useState(''); // Stores the user input for color name
   const [color, setColor] = React.useState('#fff');
   const [colors, setColors] = React.useState([]);
   const formik = useFormik({
@@ -116,12 +118,26 @@ function CreateProduct() {
     formik.setFieldValue('categories', selectedOptions.map(option => ({ code: option.value, name: option.label })));
   };
 
+//   const handleAddColor = () => {
+//     const colorName = ntc.name(color)[1];
+//     const newColor = { name: colorName, hex: color };
+//     const updatedColors = [...colors, newColor];
+//     setColors(updatedColors);
+//     formik.setFieldValue('colors', updatedColors);
+//   };
+
   const handleAddColor = () => {
-    const colorName = ntc.name(color)[1];
-    const newColor = { name: colorName, hex: color };
-    const updatedColors = [...colors, newColor];
-    setColors(updatedColors);
-    formik.setFieldValue('colors', updatedColors);
+    const hexCode = colorNameToHex(colorName);
+    if (colorName) {
+      const newColor = {name: colorName, hex: hexCode};
+      const updatedColors = [...colors, newColor];
+      setColors(updatedColors);
+      formik.setFieldValue('colors', updatedColors);
+
+      setColorName(''); // Clear input field after adding
+    } else {
+      alert('Invalid color name! Please enter a valid color.');
+    }
   };
 
 const handleRemoveColor = (index) => {
@@ -129,6 +145,21 @@ const handleRemoveColor = (index) => {
   setColors(updatedColors);
   formik.setFieldValue('colors', updatedColors); // Update the formik values when a color is removed
 };
+
+  // Function to convert color name to hex code
+  const colorNameToHex = (colorName) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.style.color = colorName;
+    document.body.appendChild(tempDiv);
+    const computedColor = window.getComputedStyle(tempDiv).color;
+    document.body.removeChild(tempDiv);
+
+    const rgbValues = computedColor.match(/\d+/g); // Extract RGB values
+    if (!rgbValues) return null;
+
+    const hexCode = `#${((1 << 24) + (+rgbValues[0] << 16) + (+rgbValues[1] << 8) + +rgbValues[2]).toString(16).slice(1).toUpperCase()}`;
+    return hexCode;
+  };
   
   const handleSizeChange = selectedOptions => {
     // Map selected options to format required by Formik
@@ -248,11 +279,18 @@ const handleRemoveColor = (index) => {
 
             <FormControl fullWidth margin="normal">
               <Typography>Color</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <ChromePicker
+              <Box sx={{ display: 'flex', alignItems: 'center', marginTop: 2 }}>
+                <TextField
+                    label="Enter Color Name"
+                    value={colorName}
+                    onChange={(e) => setColorName(e.target.value)}
+                    fullWidth
+                    style={{ backgroundColor: 'white' }}
+                />
+                {/* <ChromePicker
                   color={color}
                   onChange={(updatedColor) => setColor(updatedColor.hex)}
-                />
+                /> */}
                 <Button onClick={handleAddColor} sx={{ marginLeft: 2, backgroundColor: '#b357ff', color: 'white' }}>
                   Add Color
                 </Button>
@@ -270,6 +308,7 @@ const handleRemoveColor = (index) => {
                 ))}
               </List>
             </FormControl>
+
             <FormControl fullWidth margin="normal">
             <Typography sx={{ display: 'flex', alignItems: 'center' }}>Sizes
               <IconButton 
