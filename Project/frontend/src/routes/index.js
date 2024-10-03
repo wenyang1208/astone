@@ -28,13 +28,10 @@ const SellerForgotPassword = React.lazy(() => import("../pages/seller/sellerForg
 const SellerChangePassword = React.lazy(() => import("../pages/seller/sellerChangePassword"));
 const ForgotPassword = React.lazy(() => import("../pages/forgotPassword"));
 const ChangePassword = React.lazy(() => import("../pages/changePassword"));
-<<<<<<< HEAD
 const SellerDashboard = React.lazy(() => import("../pages/seller/dashboard"));
 const Finance = React.lazy(() => import("../pages/seller/finance"));
-=======
 const PrivacyPolicy = React.lazy(() => import("../pages/privacyPolicy"));
 const ReturnPolicy = React.lazy(() => import("../pages/returnPolicy"));
->>>>>>> group2-feature/US22-cancelling-orders
 
 
 const routes = [
@@ -63,13 +60,10 @@ const routes = [
     { path: `${PathConstants.SELLER_CHANGE_PASSWORD}/:id`, element: <SellerChangePassword/> },
     { path: PathConstants.FORGOT_PASSWORD, element: <ForgotPassword /> },
     { path: `${PathConstants.CHANGE_PASSWORD}/:id`, element: <ChangePassword/> },
-<<<<<<< HEAD
     { path : PathConstants.SELLER_DASHBOARD, element: <ProtectedRoute><SellerDashboard /></ProtectedRoute> },
-    { path : PathConstants.SELLER_FINANCE, element: <ProtectedRoute><Finance /></ProtectedRoute> }
-=======
+    { path : PathConstants.SELLER_FINANCE, element: <ProtectedRoute><Finance /></ProtectedRoute> },
     {path: PathConstants.PRIVACY_POLICY, element: <PrivacyPolicy />},
     {path: PathConstants.RETURN_POLICY, element: <ReturnPolicy />}
->>>>>>> group2-feature/US22-cancelling-orders
 ]
 
 export default routes
