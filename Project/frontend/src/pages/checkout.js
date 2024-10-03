@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
-import { SellerService } from '../services/SellerService';
 
 function CheckoutPage() {
   const BASE_URL = 'https://astone-backend-app.onrender.com';
@@ -85,6 +84,52 @@ function CheckoutPage() {
     }, 2000); // Simulate payment processing time
   };
 
+  // for return order
+  const [returnInitiated, setReturnInitiated] = useState(false); 
+  const [openReturnDialog, setOpenReturnDialog] = useState(false); 
+  // for cancel order
+  const [cancelInitiated, setCancelInitiated] = useState(false);  
+  const [openCancelDialog, setOpenCancelDialog] = useState(false); 
+
+  // Function to handle opening the return confirmation dialog
+  const handleReturnClick = () => {
+    setOpenReturnDialog(true);
+  };
+
+  // Function to handle opening the cancel confirmation dialog
+  const handleCancelClick = () => {
+    setOpenCancelDialog(true);
+  };
+
+  // Function to handle confirming the return
+  const confirmReturn = () => {
+    setReturnInitiated(true);
+    setOpenReturnDialog(false);
+  };
+
+    // Function to handle confirming the cancel
+    const confirmCancel = () => {
+      setCancelInitiated(true);
+      setOpenCancelDialog(false);
+      cancelNotification();
+    };
+
+  // Function to handle closing the dialog without returning
+  const handleCloseDialog = () => {
+    setReturnInitiated(false);
+    setOpenReturnDialog(false);
+  };
+
+  
+  // Function to show cancel is successful performed
+  const cancelNotification = () => {
+    toast.success('Your order has been succesfully cancelled!', 
+    {
+        position:"top-center",
+        autoClose: 3000
+    });
+  };
+
   return (
     <Container>
       <Typography variant="h4" gutterBottom marginTop="5%">
@@ -109,6 +154,19 @@ function CheckoutPage() {
             Address: {orderDetails.address}
           </Typography>
           {/* Add more order details as needed */}
+                    {/* Return Product Button */}
+                    {!returnInitiated && (
+            <Button variant="contained" color="primary" onClick={handleReturnClick} sx={{ mt: 2 }}>
+              Return Product
+            </Button>
+          )}
+
+          {/* Cancel Order Button */}
+          {!cancelInitiated && !returnInitiated && (
+            <Button variant="contained" color="primary" onClick={handleCancelClick} sx={{ mt: 2, ml: 2 }}>
+              Cancel Order
+            </Button>
+          )}
         </Box>
       ) : (
         <Box>
@@ -193,6 +251,44 @@ function CheckoutPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Dialog for Return Confirmation */}
+      <Dialog open={openReturnDialog} onClose={handleCloseDialog}>
+        <DialogTitle> Confirm Return</DialogTitle>
+        <DialogContent>
+          <Typography variant = 'body1' gutterBottom>
+            Are you sure you want to return this product?
+          </Typography>
+            <Typography variant="h7" gutterBottom>
+            Refund Details
+          </Typography>
+          <Typography variant="body2" >
+            Order ID: 123445
+          </Typography>
+          <Typography variant="body2">
+            Refund Amount: 34.5
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">Cancel</Button>
+          <Button onClick={confirmReturn} color="primary">Confirm Return</Button>
+        </DialogActions>
+      </Dialog>
+
+        {/* Dialog for Cancel Confirmation */}
+        <Dialog open={openCancelDialog} onClose={handleCloseDialog}>
+        <DialogTitle>Confirm Cancelation</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to cancel this order?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">Back</Button>
+          <Button onClick={confirmCancel} color="primary">Confirm Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      <ToastContainer />
+
     </Container>
   );
 }
