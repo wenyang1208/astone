@@ -20,7 +20,7 @@ class SellerRegisterView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        response.data = {'message': 'Seller created successfully'}
+        response.data = {'message': 'Seller and associated Todo created successfully'}
         return response
     
 class SellerGetView(APIView):     

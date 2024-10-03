@@ -19,7 +19,6 @@ export class OrderService {
         try {
             const formData = new FormData();
             formData.append('address', address);
-            console.log(formData);
             const res = await axios.post('http://localhost:8000/place_order/', formData);
             return res;
         } catch (error) {

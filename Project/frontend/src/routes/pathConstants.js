@@ -17,13 +17,16 @@ const PathConstants = {
     SETTINGS: "settings",
     LOGIN_SELLER: "loginSeller",
     SIGNUP_SELLER: "signupSeller",
+    SELLER_PROFILE: "sellerProfile",
     COMPARE_PRODUCTS: "compare",
     ORDER_CONFIRMARION: "order-confirmation", 
     CHECKOUT: "checkout",
     SELLER_FORGOT_PASSWORD: "SellerForgotPassword",
     SELLER_CHANGE_PASSWORD: "SellerChangePassword",
     FORGOT_PASSWORD: "ForgotPassword",
-    CHANGE_PASSWORD: "ChangePassword"
+    CHANGE_PASSWORD: "ChangePassword",
+    SELLER_DASHBOARD: "sellerDashboard",
+    SELLER_FINANCE: "finance",
 }
 
 export default PathConstants

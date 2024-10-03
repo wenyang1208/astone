@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404, render
-import json
 from django.db import transaction
 from rest_framework.decorators import api_view
 from rest_framework import status, generics
@@ -12,7 +11,8 @@ from astoneapp.models.image import Image # import model
 from rest_framework.response import Response
 from astoneapp.serializers.product_serializer import * # import serializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-import jwt
+from django.db.models import Prefetch
+from astoneapp.models.promotion import *
 import logging
 
 logger = logging.getLogger(__name__)
@@ -23,7 +23,9 @@ class ProductListCreate(generics.ListCreateAPIView):
     parser_classes = [MultiPartParser, FormParser]
     def get_queryset(self):
         user_id = self.request.user.seller
-        return Product.objects.filter(seller=user_id).prefetch_related('images')
+        # promotion can be null, this can handle the situation
+        promotion_prefetch = Prefetch('promotions', queryset=Promotion.objects.all())
+        return Product.objects.filter(seller=user_id).prefetch_related('images', promotion_prefetch)
 
     def perform_create(self, serializer):
         if serializer.is_valid():
