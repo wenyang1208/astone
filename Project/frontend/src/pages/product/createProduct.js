@@ -24,6 +24,7 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
 import { ProductService } from '../../services/ProductService';
+import zIndex from '@mui/material/styles/zIndex';
 
 function CreateProduct() {
   const navigate = useNavigate();
@@ -149,6 +150,10 @@ const handleRemoveColor = (index) => {
   };
   
   const customSelectStyles = {
+    menu: (provided) => ({
+        ...provided,
+        zIndex: 1000, // Ensure drop down is above other elements
+    }),
     control: (provided) => ({
       ...provided,
       minHeight: '50px',
@@ -157,6 +162,7 @@ const handleRemoveColor = (index) => {
       '&:hover': {
         borderColor: '#aaa',
       },
+      zIndex: 1, // For the control, this (dropdown?) can be lower than the menu
     }),
     multiValue: (provided) => ({
       ...provided,
@@ -226,7 +232,7 @@ const handleRemoveColor = (index) => {
                 style={{ backgroundColor: 'white' }}
               />
             </FormControl>
-            <FormControl fullWidth margin="normal">
+            {/* <FormControl fullWidth margin="normal">
               <Typography>Category</Typography>
               <Select
                 isMulti
@@ -238,7 +244,8 @@ const handleRemoveColor = (index) => {
                 value={formik.values.category}
                 styles={customSelectStyles}
               />
-            </FormControl>
+            </FormControl> */}
+
             <FormControl fullWidth margin="normal">
               <Typography>Color</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
