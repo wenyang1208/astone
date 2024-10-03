@@ -20,6 +20,7 @@ const SignUp = React.lazy(() => import("../pages/signup"));
 const Settings = React.lazy(() => import("../pages/settings"));
 const LoginSeller = React.lazy(() => import("../pages/seller/loginSeller"));
 const SignUpSeller = React.lazy(() => import("../pages/seller/signupSeller"));
+const SellerProfile = React.lazy(() => import("../pages/seller/sellerProfile"));
 const CompareProducts = React.lazy(() => import("../pages/compareproducts"));
 const Checkout = React.lazy(() => import("../pages/checkout"));
 const OrderConfirmation = React.lazy(() => import("../pages/orderConfirmation"));
@@ -27,6 +28,8 @@ const SellerForgotPassword = React.lazy(() => import("../pages/seller/sellerForg
 const SellerChangePassword = React.lazy(() => import("../pages/seller/sellerChangePassword"));
 const ForgotPassword = React.lazy(() => import("../pages/forgotPassword"));
 const ChangePassword = React.lazy(() => import("../pages/changePassword"));
+const SellerDashboard = React.lazy(() => import("../pages/seller/dashboard"));
+const Finance = React.lazy(() => import("../pages/seller/finance"));
 
 
 const routes = [
@@ -47,6 +50,7 @@ const routes = [
     { path: PathConstants.SETTINGS, element: <Settings /> },
     { path: PathConstants.LOGIN_SELLER, element: <LoginSeller /> },
     { path: PathConstants.SIGNUP_SELLER, element: <SignUpSeller /> },
+    { path: PathConstants.SELLER_PROFILE, element: <ProtectedRoute><SellerProfile /></ProtectedRoute> },
     { path: PathConstants.COMPARE_PRODUCTS, element: <CompareProducts /> },
     { path: PathConstants.CHECKOUT, element: <Checkout /> },
     { path: PathConstants.ORDER_CONFIRMARION, element: <OrderConfirmation /> },
@@ -54,6 +58,8 @@ const routes = [
     { path: `${PathConstants.SELLER_CHANGE_PASSWORD}/:id`, element: <SellerChangePassword/> },
     { path: PathConstants.FORGOT_PASSWORD, element: <ForgotPassword /> },
     { path: `${PathConstants.CHANGE_PASSWORD}/:id`, element: <ChangePassword/> },
+    { path : PathConstants.SELLER_DASHBOARD, element: <ProtectedRoute><SellerDashboard /></ProtectedRoute> },
+    { path : PathConstants.SELLER_FINANCE, element: <ProtectedRoute><Finance /></ProtectedRoute> }
 ]
 
 export default routes

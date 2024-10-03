@@ -1,7 +1,13 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from astoneapp.models.seller import Seller
+from astoneapp.models.todo import Todo
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class TodoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Todo
+        fields = '__all__'
 
 class SellerTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -31,10 +37,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class SellerSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    todo = TodoSerializer(many=False, read_only=True)
     class Meta:
         model = Seller
         # Specific fields that are not included in the user auth features
-        fields = ['user', 'gender', 'phone_number', 'address', 'shop_name']
+        fields = ['user', 'gender', 'phone_number', 'address', 'shop_name','todo']
 
     def create(self, validated_data):
         # Extract nested data for the User model (first name, last name, ...)
@@ -47,6 +54,7 @@ class SellerSerializer(serializers.ModelSerializer):
             address=validated_data['address'],
             shop_name=validated_data['shop_name'],
         )
+        Todo.objects.create(seller=seller)
         return seller
     
 class SellerForgotPasswordSerializer(serializers.Serializer):

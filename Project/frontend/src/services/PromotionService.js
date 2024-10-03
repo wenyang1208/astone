@@ -1,5 +1,4 @@
 import axios from 'axios';
-import api from '../api';
 
 export class PromotionService {
 
@@ -33,5 +32,17 @@ export class PromotionService {
             return null;
         }
     }
+
+    async endPromotion (id) {
+        try {
+            const res = await axios.delete(`http://localhost:8000/promotions/${id}/delete/`);
+            console.log(id);
+            return res;
+        } catch (error) {
+            console.error('Error ending promotion:', error);
+            return null;
+        }
+    }
+
 
 }

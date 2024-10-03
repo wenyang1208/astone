@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
+import { SellerService } from '../services/SellerService';
 
 function CheckoutPage() {
   const BASE_URL = 'https://astone-backend-app.onrender.com';
@@ -39,13 +40,21 @@ function CheckoutPage() {
     setLoading(true);
     setError(null);
     const orderService = new OrderService();
+    const sellerService = new SellerService();
     try {
-      console.log(address);
       const res = await orderService.placeOrder(address);
       if (res && res.data) {
         const orderId = res.data.order_id;
         const orderRes = await orderService.getOrderDetails(orderId);
         if (orderRes && orderRes.data) {
+          for(let i = 0; i < orderRes.data.order_items.length; i++){
+            const orderItem = orderRes.data.order_items[i];
+            const sellerId = orderItem.product.seller;
+            const toProcessedShipment = orderItem.quantity;
+            await sellerService.incrementShipment(sellerId, {
+              to_processed_shipment: toProcessedShipment,
+            });
+          }
           setOrderDetails(orderRes.data);
         }
       }

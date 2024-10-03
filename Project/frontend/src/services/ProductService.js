@@ -53,6 +53,7 @@ export class ProductService {
             formData.append('sizes', sizes);
             formData.append('currency', currency);
             formData.append('price', price);
+            formData.append('original_price', price);
             formData.append('stock', stock);
             formData.append('rating', rating);
             formData.append('brand', brand);
