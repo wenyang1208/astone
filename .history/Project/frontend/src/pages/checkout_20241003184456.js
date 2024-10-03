@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
-import { SellerService } from '../services/SellerService';
+import { OrderService } from '../services/OrderService';
 
 function CheckoutPage() {
   const BASE_URL = 'https://astone-backend-app.onrender.com';
