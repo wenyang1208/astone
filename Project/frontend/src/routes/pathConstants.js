@@ -25,13 +25,10 @@ const PathConstants = {
     SELLER_CHANGE_PASSWORD: "SellerChangePassword",
     FORGOT_PASSWORD: "ForgotPassword",
     CHANGE_PASSWORD: "ChangePassword",
-<<<<<<< HEAD
     SELLER_DASHBOARD: "sellerDashboard",
     SELLER_FINANCE: "finance",
-=======
     PRIVACY_POLICY: "privacyPolicy",
     RETURN_POLICY: "returnPolicy"
->>>>>>> group2-feature/US22-cancelling-orders
 }
 
 export default PathConstants
