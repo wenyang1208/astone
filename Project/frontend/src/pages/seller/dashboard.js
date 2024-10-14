@@ -178,7 +178,7 @@ function Dashboard() {
                         </Paper>
 
                         {/* Marketing Centre */}
-                        <Paper sx={{ p: 3 }}>
+                        <Paper sx={{ p: 3, mt: 3 }}>
                             <Typography variant="h6" gutterBottom>
                             Marketing Centre
                             </Typography>

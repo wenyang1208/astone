@@ -1,13 +1,42 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {
+  Container, Box, TextField, Button, Typography, CssBaseline, Grid, Stepper, Step, StepLabel,
+  Select, MenuItem, FormControl, InputLabel, Paper, InputAdornment, IconButton, Alert
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import HomeIcon from '@mui/icons-material/Home';
+import LockIcon from '@mui/icons-material/Lock';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import axios from 'axios';
-import Header2 from '../../components/header2'; // Adjust the import path if necessary
 
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(4),
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .1)',
+  borderRadius: '15px',
+}));
 
-const defaultTheme = createTheme();
-
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': {
+      borderColor: theme.palette.primary.light,
+    },
+    '&:hover fieldset': {
+      borderColor: theme.palette.primary.main,
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: theme.palette.primary.dark,
+    },
+  },
+}));
 
 const SignupSeller = () => {
   const [activeStep, setActiveStep] = useState(0);
@@ -23,9 +52,11 @@ const SignupSeller = () => {
     passwordConfirm: ''
   });
   const [formErrors, setFormErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
-  const steps = ['Let\'s Begin!', 'Optional', 'Almost There!'];
+  const steps = ['Basic Info', 'Additional Info', 'Create Password'];
 
   const handleNext = () => {
     if (validateStep(activeStep)) {
@@ -42,13 +73,31 @@ const SignupSeller = () => {
     setFormValues({ ...formValues, [name]: value });
   };
 
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePhone = (phone) => {
+    const cleanedPhone = phone.replace(/\D/g, '');
+    return cleanedPhone.length >= 7 && cleanedPhone.length <= 15 && /^([1-9]\d{0,3})?\d+$/.test(cleanedPhone);
+  };
+
   const validateStep = (step) => {
     const errors = {};
     if (step === 0) {
       if (!formValues.firstName) errors.firstName = 'First name is required';
       if (!formValues.lastName) errors.lastName = 'Last name is required';
-      if (!formValues.email) errors.email = 'Email is required';
+      if (!formValues.email) {
+        errors.email = 'Email is required';
+      } else if (!validateEmail(formValues.email)) {
+        errors.email = 'Invalid email format';
+      }
       if (formValues.email !== formValues.emailConfirm) errors.emailConfirm = 'Emails do not match';
+    } else if (step === 1) {
+      if (formValues.phone && !validatePhone(formValues.phone)) {
+        errors.phone = 'Invalid phone number format';
+      }
     } else if (step === 2) {
       if (!formValues.password) errors.password = 'Password is required';
       if (formValues.password !== formValues.passwordConfirm) errors.passwordConfirm = 'Passwords do not match';
@@ -60,23 +109,6 @@ const SignupSeller = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateStep(2)) {
-      // Send form data to the API
-      // const response = await fetch('http://localhost:8000/seller/register/', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(formValues),
-      // });
-      // console.log(response);
-      // if (response.ok) {
-      //   // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
-      //   console.log('Signup successful');
-      //   navigate('/loginseller'); // Redirect to login page after successful signup
-      // } else {
-      //   // Handle errors from the API
-      //   console.log('Signup failed');
-      // }
       try {
         const response = await axios.post('http://localhost:8000/seller/register/', {
           user: {
@@ -108,31 +140,31 @@ const SignupSeller = () => {
     switch (step) {
       case 0:
         return (
-          <Box component="form" sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}>
+          <>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  margin="normal"
+                <StyledTextField
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
                   name="firstName"
                   autoComplete="given-name"
-                  autoFocus
                   value={formValues.firstName}
                   onChange={handleChange}
                   error={!!formErrors.firstName}
                   helperText={formErrors.firstName}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PersonIcon color="primary" />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  margin="normal"
+                <StyledTextField
                   required
                   fullWidth
                   id="lastName"
@@ -143,10 +175,17 @@ const SignupSeller = () => {
                   onChange={handleChange}
                   error={!!formErrors.lastName}
                   helperText={formErrors.lastName}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PersonIcon color="primary" />
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>
-            <TextField
+            <StyledTextField
               margin="normal"
               required
               fullWidth
@@ -158,8 +197,15 @@ const SignupSeller = () => {
               onChange={handleChange}
               error={!!formErrors.email}
               helperText={formErrors.email}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
             />
-            <TextField
+            <StyledTextField
               margin="normal"
               required
               fullWidth
@@ -171,28 +217,19 @@ const SignupSeller = () => {
               onChange={handleChange}
               error={!!formErrors.emailConfirm}
               helperText={formErrors.emailConfirm}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <Button
-                onClick={handleNext}
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 2, mb: 2, pt:1.2, pb: 1.2, borderRadius: '30px', backgroundColor: '#A020F0',
-                  '&:hover': { backgroundColor: '#7D0DC3' }, color: 'white', width: '40%'
-                }}
-              >
-                Next
-              </Button>
-            </Box>
-            <Typography variant="body2" color="textSecondary" align="center" sx={{ mb: 1 }}>
-              Already have an account? <Link to="/loginSeller" style={{ textDecoration: 'none', color: 'blue' }}>Log In</Link>
-            </Typography>
-          </Box>
+          </>
         );
       case 1:
         return (
-          <Box component="form" sx={{ mt: 1 }}>
+          <>
             <FormControl fullWidth sx={{ mt: 2 }}>
               <InputLabel id="gender-label">Gender</InputLabel>
               <Select
@@ -208,7 +245,7 @@ const SignupSeller = () => {
                 <MenuItem value="other">Other</MenuItem>
               </Select>
             </FormControl>
-            <TextField
+            <StyledTextField
               margin="normal"
               fullWidth
               id="phone"
@@ -217,8 +254,17 @@ const SignupSeller = () => {
               autoComplete="tel"
               value={formValues.phone}
               onChange={handleChange}
+              error={!!formErrors.phone}
+              helperText={formErrors.phone}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <PhoneIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
             />
-            <TextField
+            <StyledTextField
               margin="normal"
               fullWidth
               id="address"
@@ -227,83 +273,84 @@ const SignupSeller = () => {
               autoComplete="street-address"
               value={formValues.address}
               onChange={handleChange}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <HomeIcon color="primary" />
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <Button
-                onClick={handleNext}
-                fullWidth
-                variant="contained"
-                sx={{
-                  mt: 2, mb: 2, pt:1.2, pb: 1.2, borderRadius: '30px', backgroundColor: '#A020F0',
-                  '&:hover': { backgroundColor: '#7D0DC3' }, color: 'white', width: '40%'
-                }}
-              >
-                Next
-              </Button>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%'}}>
-              <Button
-                onClick={handleBack}
-                fullWidth
-                variant="text"
-                sx={{
-                  mt: 1, mb: 1, pt:1.2, pb: 1.2, borderRadius: '30px', color: '#A020F0',
-                  width: '40%'
-                }}
-              >
-                Back
-              </Button>
-            </Box>
-          </Box>
+          </>
         );
       case 2:
         return (
-          <Box component="form" sx={{ mt: 1 }} onSubmit={handleSubmit}>
-            <TextField
+          <>
+            <StyledTextField
               margin="normal"
               required
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="new-password"
               value={formValues.password}
               onChange={handleChange}
               error={!!formErrors.password}
               helperText={formErrors.password}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon color="primary" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <TextField
+            <StyledTextField
               margin="normal"
               required
               fullWidth
               name="passwordConfirm"
               label="Confirm Password"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               id="passwordConfirm"
               autoComplete="new-password"
               value={formValues.passwordConfirm}
               onChange={handleChange}
               error={!!formErrors.passwordConfirm}
               helperText={formErrors.passwordConfirm}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon color="primary" />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      edge="end"
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Create Account
-            </Button>
-            <Button
-              onClick={handleBack}
-              fullWidth
-              variant="text"
-              sx={{ mb: 2 }}
-            >
-              Back
-            </Button>
-          </Box>
+          </>
         );
       default:
         return 'Unknown step';
@@ -311,32 +358,68 @@ const SignupSeller = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <Box sx={{ 
+      backgroundColor: '#e7def3', 
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
       <CssBaseline />
       <Container maxWidth="lg">
-        <Header2 />
-        <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '80vh' }}>
-          <Grid item xs={12} sm={8} md={5}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <Stepper activeStep={activeStep} sx={{ width: '100%', mb: 2 }}>
-                {steps.map((label, index) => (
-                  <Step key={index}>
+        <Box sx={{ position: 'absolute', top: 16, left: 16 }}>
+          <Link to="/">
+            <IconButton color="primary">
+              <ArrowBackIcon />
+            </IconButton>
+          </Link>
+        </Box>
+        <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
+          <Grid item xs={12} sm={8} md={6}>
+            <StyledPaper>
+              <Typography component="h1" variant="h4" sx={{ mb: 3, color: 'primary.main', fontWeight: 'bold' }}>
+                Seller Sign Up
+              </Typography>
+              <Stepper activeStep={activeStep} alternativeLabel sx={{ width: '100%', mb: 4 }}>
+                {steps.map((label) => (
+                  <Step key={label}>
                     <StepLabel>{label}</StepLabel>
                   </Step>
                 ))}
               </Stepper>
-              {getStepContent(activeStep)}
-            </Box>
+              <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+                {getStepContent(activeStep)}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+                  <Button
+                    onClick={handleBack}
+                    disabled={activeStep === 0}
+                    sx={{ mr: 1 }}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+                    sx={{
+                      py: 1.5, px: 4, borderRadius: '30px', 
+                      backgroundColor: 'primary.main',
+                      '&:hover': { backgroundColor: 'primary.dark' },
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {activeStep === steps.length - 1 ? 'Create Account' : 'Next'}
+                  </Button>
+                </Box>
+              </Box>
+              {activeStep === 0 && (
+                <Typography variant="body2" color="textSecondary" align="center" sx={{ mt: 2 }}>
+                  Already have an account? <Link to="/loginSeller" style={{ textDecoration: 'none', color: 'primary.main' }}>Log In</Link>
+                </Typography>
+              )}
+            </StyledPaper>
           </Grid>
         </Grid>
       </Container>
-    </ThemeProvider>
+    </Box>
   );
 };
 
