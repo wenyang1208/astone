@@ -82,16 +82,37 @@ function CreateProduct() {
         errors.description = 'Description is required';
       }
       // Add more validation rules as needed
+    //   if (!values.category) {
+    //     errors.category = 'Category is required';
+    //   }
+    //   if (!values.colors) {
+    //     errors.color = 'Color is required';
+    //   }
+    //   if (!values.size) {
+    //     errors.size = 'Size is required';
+    //   }
+    //   if (!values.gender) {
+    //     errors.gender = 'Gender is required';
+    //   }
+      if (!values.price) {
+        errors.price = 'Price is required';
+      }
+      if (!values.brand) {
+        errors.brand = 'Brand is required';
+      }
+      if (!values.stock) {
+        errors.stock = 'Stock is required';
+      }
 
       return errors;
     },
   });
 
   const categoryOptions = [
-    { value: 'unisex', label: 'Unisex' },
-    { value: 'men', label: 'Men' },
-    { value: 'women', label: 'Women' },
-    { value: 'kids', label: 'Kids' },
+    // { value: 'unisex', label: 'Unisex' },
+    // { value: 'men', label: 'Men' },
+    // { value: 'women', label: 'Women' },
+    // { value: 'kids', label: 'Kids' },
     { value: 'top', label: 'Top' },
     { value: 'bottom', label: 'Bottom' },
     { value: 'accessories', label: 'Accessories' },
@@ -263,7 +284,7 @@ const handleRemoveColor = (index) => {
                 style={{ backgroundColor: 'white' }}
               />
             </FormControl>
-            {/* <FormControl fullWidth margin="normal">
+            <FormControl fullWidth margin="normal">
               <Typography>Category</Typography>
               <Select
                 isMulti
@@ -275,7 +296,7 @@ const handleRemoveColor = (index) => {
                 value={formik.values.category}
                 styles={customSelectStyles}
               />
-            </FormControl> */}
+            </FormControl>
 
             <FormControl fullWidth margin="normal">
               <Typography>Color</Typography>
@@ -359,6 +380,8 @@ const handleRemoveColor = (index) => {
                 classNamePrefix="select"
                 onChange={handleGenderChange}
                 value={genderOptions.find(option => option.value === formik.values.gender)}
+                // error={formik.touched.gender && Boolean(formik.errors.gender)}
+                // helperText={formik.touched.gender && formik.errors.gender}
                 styles={customSelectStyles}
               />
           </FormControl>
@@ -398,6 +421,8 @@ const handleRemoveColor = (index) => {
                   type="text"
                   onChange={formik.handleChange}
                   value={formik.values.brand}
+                  error={formik.touched.brand && Boolean(formik.errors.brand)}
+                  helperText={formik.touched.brand && formik.errors.brand}
                   style={{ backgroundColor: 'white' }}
                 />
               </FormControl>
