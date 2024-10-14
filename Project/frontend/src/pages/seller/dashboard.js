@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Box, Grid, Paper, Typography, Button, Divider } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -18,47 +19,58 @@ function Dashboard() {
     const sellerService = new SellerService();
     const token = localStorage.getItem(ACCESS_TOKEN);
     const sellerId = jwtDecode(token).seller_id;
+    const navigate = useNavigate();
     
-    const TodoCard = ({ value, label, showDivider = true }) => (
-    <StatsContainer>
-        <Typography variant="h4" 
-            sx={{ 
-                color: '#1976d2', 
-                fontWeight: 500, 
-                mb: 0.5 
-            }}>
-            {value}
-        </Typography>
-        <Typography variant="body2" 
-            sx={{ 
-                color: '#666',
-                fontSize: '0.95rem'
-            }}>
-            {label}
-        </Typography>
-        {showDivider && (
-            <Divider 
-                orientation="vertical" 
+    const TodoCard = ({ value, label, showDivider = true, onClick }) => (
+        <StatsContainer onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+            <Typography variant="h4" 
                 sx={{ 
-                    position: 'absolute',
-                    right: 0,
-                    top: '20%',
-                    height: '65%'
-                }} 
-            />
-        )}
-    </StatsContainer>
+                    color: '#1976d2', 
+                    fontWeight: 500, 
+                    mb: 0.5 
+                }}>
+                {value}
+            </Typography>
+            <Typography variant="body2" 
+                sx={{ 
+                    color: '#666',
+                    fontSize: '0.95rem'
+                }}>
+                {label}
+            </Typography>
+            {showDivider && (
+                <Divider 
+                    orientation="vertical" 
+                    sx={{ 
+                        position: 'absolute',
+                        right: 0,
+                        top: '20%',
+                        height: '65%'
+                    }} 
+                />
+            )}
+        </StatsContainer>
     );
 
-const TodoRow = ({ items }) => (
-    <Grid container>
-        {items.map((item, index) => (
-            <Grid item xs={3} key={item.label}>
-                <TodoCard value={item.value} label={item.label} showDivider={index < items.length - 1} />
-            </Grid>
-        ))}
-    </Grid>
-);
+    const TodoRow = ({ items }) => (
+        <Grid container>
+            {items.map((item, index) => (
+                <Grid item xs={3} key={item.label}>
+                    <TodoCard 
+                        value={item.value} 
+                        label={item.label} 
+                        showDivider={index < items.length - 1} 
+                        onClick={item.onClick}
+                    />
+                </Grid>
+            ))}
+        </Grid>
+    );
+
+    const handleToProcessShipmentClick = () => {
+        navigate('/shipment');
+    };
+
 
     const [todoData, setTodoData] = useState({
         unpaid: 0,
@@ -88,7 +100,7 @@ const TodoRow = ({ items }) => (
 
     const firstRowItems = [
         { value: todoData.unpaid, label: "Unpaid" },
-        { value: todoData.to_processed_shipment, label: "To-Process Shipment" },
+        { value: todoData.to_processed_shipment, label: "To-Process Shipment", onClick: handleToProcessShipmentClick },
         { value: todoData.processed_shipment, label: "Processed Shipment" },
         { value: todoData.pending_cancellation, label: "Pending Cancellation" },
     ];

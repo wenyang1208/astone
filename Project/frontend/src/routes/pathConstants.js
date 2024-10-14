@@ -27,6 +27,7 @@ const PathConstants = {
     CHANGE_PASSWORD: "ChangePassword",
     SELLER_DASHBOARD: "sellerDashboard",
     SELLER_FINANCE: "finance",
+    SELLER_SHIPMENT: "shipment"
 }
 
 export default PathConstants

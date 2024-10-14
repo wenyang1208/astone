@@ -48,8 +48,7 @@ export class SellerService {
         }
     }
 
-    async requestPasswordReset(data)
-    {
+    async requestPasswordReset(data) {
         try {
             const res = await axios.post('http://localhost:8000/seller/seller-forgot-password/', data);
             return res;
@@ -60,8 +59,7 @@ export class SellerService {
         }
     }
 
-    async changePassword(seller_id, data)
-    {
+    async changePassword(seller_id, data) {
         try {
             console.log(data);
             const res = await axios.put(`http://localhost:8000/seller/seller-change-password/${seller_id}/`, data);
@@ -76,6 +74,15 @@ export class SellerService {
     async incrementShipment(sellerId, toProcessedShipment) {
         console.log(toProcessedShipment);
         return axios.post(`http://localhost:8000/seller/${sellerId}/increment-shipment/`, toProcessedShipment);
-      }
+    }
 
+    async getProductsToShip(sellerId) {
+        try {
+            const res = await axios.get(`http://localhost:8000/seller/${sellerId}/products-to-ship/`);
+            return res.data;
+        } catch (error) {
+            console.error('Error fetching products to ship:', error.response?.data || error.message);
+            return null;
+        }
+    }
 }
