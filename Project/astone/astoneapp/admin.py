@@ -23,4 +23,11 @@ admin.site.register(OrderItem)
 admin.site.register(CustomUser)
 
 from .models.todo import Todo
+from .models.notification import Notification
+
+# To customise how the notification display at the admin site
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ['id','notif_subject','notif_for','notifiread_status']
+
 admin.site.register(Todo)
+admin.site.register(Notification)

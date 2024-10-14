@@ -1,5 +1,6 @@
 from django.db import models, transaction
 from astoneapp.models.product import Product
+from astoneapp.models.seller import Seller
 
 class Order(models.Model):
     # user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -9,6 +10,7 @@ class Order(models.Model):
     address = models.CharField(max_length=255, help_text="Delivery address", default="")
 
 class OrderItem(models.Model):
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     size = models.CharField(max_length=10, default='M', help_text="Size of the product")
