@@ -20,3 +20,20 @@ def increment_processed_shipment(request, seller_id):
         return Response({"error": "Todo not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])
+def increment_shipment(request, seller_id):
+    try:
+        todo = Todo.objects.get(seller_id=seller_id)
+        processed_shipment = request.data.get('processed_shipment', 0)
+        
+        # Increment the to_processed_shipment by the provided amount
+        todo.processed_shipment = F('processed_shipment') + processed_shipment
+        todo.save()
+        todo.refresh_from_db()
+        
+        return Response({"success": True, "processed_shipment": todo.processed_shipment}, status=status.HTTP_200_OK)
+    except Todo.DoesNotExist:
+        return Response({"error": "Todo not found"}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -76,6 +76,11 @@ export class SellerService {
         return axios.post(`http://localhost:8000/seller/${sellerId}/increment-shipment/`, toProcessedShipment);
     }
 
+    async incrementProcessedShipment(sellerId, processedShipment) {
+        console.log(processedShipment);
+        return axios.post(`http://localhost:8000/seller/${sellerId}/increment-processed-shipment/`, processedShipment);
+    }
+
     async getProductsToShip(sellerId) {
         try {
             const res = await axios.get(`http://localhost:8000/seller/${sellerId}/products-to-ship/`);

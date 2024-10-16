@@ -39,7 +39,12 @@ const Shipment = () => {
         const updatedTodo = dashboardData.data.todo;
         updatedTodo.to_processed_shipment -= 1;
         updatedTodo.processed_shipment += 1;
-        //await sellerService.updateSellerTodo(sellerId, updatedTodo);
+        await sellerService.incrementShipment(sellerId, {
+          to_processed_shipment: -1
+        });
+        await sellerService.incrementProcessedShipment(sellerId, {
+          processed_shipment: 1
+        });
       } catch (error) {
         console.error('Failed to update dashboard data:', error);
       }

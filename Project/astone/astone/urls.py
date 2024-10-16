@@ -58,5 +58,6 @@ urlpatterns = [
     path('forgot-password/', forgot_password, name='forgot-password'),
     path('change-password/<int:user_id>/', change_password, name='change-password'),
     path('seller/<int:seller_id>/increment-shipment/', increment_processed_shipment, name='increase_processed_shipment'),
+    path('seller/<int:seller_id>/increment-processed-shipment/', increment_shipment, name='increase_shipment'),
     path('seller/<int:pk>/orders/', SellerOrdersView.as_view(), name='seller-orders'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
