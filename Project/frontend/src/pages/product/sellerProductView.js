@@ -19,7 +19,7 @@ function SellerProductView() {
     const [daysUntilStart, setDaysUntilStart] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-    const BASE_URL = 'http://localhost:8000';
+    const BASE_URL = 'https://astone-backend-app.onrender.com';
     const [editProduct, setEditProduct] = useState({
         name: '',
         description: '',

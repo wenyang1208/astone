@@ -20,7 +20,7 @@ function ProductList() {
     const [hoveredProductId, setHoveredProductId] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [selectedProductId, setSelectedProductId] = useState(null);
-    const BASE_URL = 'http://localhost:8000';
+    const BASE_URL = 'https://astone-backend-app.onrender.com';
     useEffect(() => {
         const fetchProducts = async () => {
             const productService = new ProductService();

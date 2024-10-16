@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import MyAppBar from '../components/appBar';
 
 const Men = () => {
-  const BASE_URL = 'http://localhost:8000';
+  const BASE_URL = 'https://astone-backend-app.onrender.com';
 
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -51,34 +51,29 @@ const Men = () => {
   }, []);
 
   useEffect(() => {
-    console.log(1);
     if (filterFlag !== null && filterFlag) {
       const filtered = products.filter(product =>
         (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
         (selectedClothingTypes.length === 0 || selectedClothingTypes.some(type => product.category.includes(type))) &&
-        (product.gender.toLowerCase() === "f") &&
         product.price >= priceRange[0] && product.price <= priceRange[1] &&
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setProducts(filtered);
+      setSortedProducts(filtered);
     } else {
       const productService = new ProductService();
-
       productService.getProducts()
         .then(res => {
-          const menProducts = res.data.filter(product => product.gender.toLowerCase() === "f");
-          setProducts(menProducts);
-          setFilters(extractFilters(menProducts));
+          const womenProducts = res.data.filter(product => product.gender.toLowerCase() === "f");
+          setSortedProducts(womenProducts);
         })
         .catch(err => {
           console.error('Error fetching products:', err);
         });
     }
-  }, [filterFlag]);
+  }, [filterFlag, products, selectedBrands, selectedClothingTypes, priceRange, searchTerm]);
 
   useEffect(() => {
-    console.log(2);
-    const sorted = [...products].sort((a, b) => {
+    const sorted = [...sortedProducts].sort((a, b) => {
       if (sortOrder === 'asc') {
         return a.price - b.price;
       } else {
@@ -86,7 +81,7 @@ const Men = () => {
       }
     });
     setSortedProducts(sorted);
-  }, [sortOrder, products]);
+  }, [sortOrder]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -122,7 +117,7 @@ const Men = () => {
     setSearchTerm('');
     setSelectedBrands([]);
     setSelectedClothingTypes([]);
-    setPriceRange([0, 100]);
+    setPriceRange([0, 500]);
     setFilterFlag(false);
   };
 
@@ -215,7 +210,7 @@ const Men = () => {
                 onChange={handlePriceRangeChange}
                 valueLabelDisplay="auto"
                 min={0}
-                max={100}
+                max={500}
                 style={{ marginBottom: '20px' }}
               />
             </div>

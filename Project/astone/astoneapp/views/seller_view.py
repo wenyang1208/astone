@@ -63,7 +63,7 @@ class SellerForgotPassword(generics.CreateAPIView):
             # Verify if seller exists with the given email
             seller = User.objects.filter(email=email).first()
             if seller:
-                 link = f"http://localhost:3000/sellerChangePassword/{seller.id}/"
+                 link = f"https://astone-frontend.vercel.app/sellerChangePassword/{seller.id}/"
                  send_mail(
                     subject='Verify Account',
                     message='Please verify your account',

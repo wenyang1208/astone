@@ -12,6 +12,7 @@ import SellerHeader from '../../components/sellerHeader';
 
 const sellerService = new SellerService();
 const productService = new ProductService();
+const BASE_URL = 'https://astone-backend-app.onrender.com';
 const ProductList = () => {
   const [seller, setSeller] = useState(null);
   const [products, setProducts] = useState([]);

@@ -29,7 +29,7 @@ const mainBanner = {
 };
 
 const Home = () => {
-  const BASE_URL = "http://localhost:8000";
+  const BASE_URL = "https://astone-backend-app.onrender.com";
 
   const [products, setProducts] = useState([]);
   const [visibleItems, setVisibleItems] = useState(8);

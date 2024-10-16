@@ -10,6 +10,7 @@ import { OrderService } from '../services/OrderService';
 import LoginButton from './loginButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { UserService } from '../services/UserService';
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   backgroundImage: `url(${backgroundImage})`,
@@ -32,28 +33,57 @@ function MyAppBar() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [userPoints, setUserPoints] = useState(0);
   const navigate = useNavigate();
 
-  const BASE_URL = 'http://localhost:8000';
+  const BASE_URL = 'https://astone-backend-app.onrender.com';
 
   const fetchCartItems = async () => {
     const orderService = new OrderService();
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        console.error('User email not found. Please log in.');
+        return;
+    }
+
     try {
-      const res = await orderService.getCart();
-      if (res && res.data) {
-        const cartItems = res.data.cart_items;
-        const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-        setCartItemCount(itemCount);
-        setCartItems(cartItems);
-        setTotalPrice(res.data.total_price.toFixed(2));
-      }
+        const res = await orderService.getCart(userEmail);
+        if (res && res.data) {
+            const cartItems = res.data.cart_items;
+            const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+            setCartItemCount(itemCount);
+            setCartItems(cartItems);
+            setTotalPrice(res.data.total_price.toFixed(2));
+        }
     } catch (error) {
-      console.error('Error fetching cart items:', error);
+        console.error('Error fetching cart items:', error);
+    }
+  };
+
+  const fetchUserPoints = async () => {
+    const orderService = new OrderService();
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        console.error('User email not found. Please log in.');
+        return;
+    }
+
+    try {
+        const res = await new UserService().get_user_details(userEmail);
+        if (res && res.data) {
+            console.log(res);
+            setUserPoints(res.data.points);
+        }
+    } catch (error) {
+        console.error('Error fetching user points:', error);
     }
   };
 
   useEffect(() => {
     fetchCartItems();
+    fetchUserPoints();
   }, []);
 
   const handleCartClick = () => {
@@ -66,24 +96,38 @@ function MyAppBar() {
 
   const handleIncrement = async (item) => {
     const orderService = new OrderService();
-    try {
-      await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity + 1);
-      fetchCartItems();
-    } catch (error) {
-      console.error('Error updating cart item:', error);
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        console.error('User email not found. Please log in.');
+        return;
     }
-  };
 
-  const handleDecrement = async (item) => {
+    try {
+        await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity + 1, userEmail);
+        fetchCartItems();
+    } catch (error) {
+        console.error('Error updating cart item:', error);
+    }
+};
+
+const handleDecrement = async (item) => {
     const orderService = new OrderService();
+    const userEmail = localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        console.error('User email not found. Please log in.');
+        return;
+    }
+
     try {
-      await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity - 1);
-      fetchCartItems();
+        await orderService.updateCartItem(item.product_id, item.size, item.color, item.quantity - 1, userEmail);
+        fetchCartItems();
     } catch (error) {
-      console.error('Error updating cart item:', error);
+        console.error('Error updating cart item:', error);
     }
   };
-
+  
   const handleCheckout = () => {
     navigate('/checkout');
   };
@@ -118,6 +162,9 @@ function MyAppBar() {
             ))}
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography variant="body2" sx={{ marginRight: 2 }}>
+              Points: {userPoints}
+            </Typography>
             <IconButton color="inherit" onClick={handleCartClick}>
               <Badge badgeContent={cartItemCount} color="secondary">
                 <ShoppingCartIcon />

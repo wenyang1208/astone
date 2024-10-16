@@ -109,8 +109,25 @@ const SignupSeller = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (validateStep(2)) {
+      // Send form data to the API
+      // const response = await fetch('http://localhost:8000/seller/register/', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(formValues),
+      // });
+      // console.log(response);
+      // if (response.ok) {
+      //   // Handle successful signup (e.g., navigate to a different page, show a success message, etc.)
+      //   console.log('Signup successful');
+      //   navigate('/loginseller'); // Redirect to login page after successful signup
+      // } else {
+      //   // Handle errors from the API
+      //   console.log('Signup failed');
+      // }
       try {
-        const response = await axios.post('http://localhost:8000/seller/register/', {
+        const response = await axios.post('https://astone-backend-app.onrender.com/seller/register/', {
           user: {
             username: formValues.email,
             first_name: formValues.firstName,
