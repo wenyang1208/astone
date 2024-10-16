@@ -3,7 +3,6 @@ import { Container, Typography, Button, CircularProgress, Box, TextField, List, 
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
 import {ToastContainer, toast} from 'react-toastify';
-
 import { SellerService } from '../services/SellerService';
 import { UserService } from '../services/UserService';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
@@ -100,6 +99,7 @@ function CheckoutPage() {
       const res = await orderService.placeOrder(address, userEmail);
       if (res && res.data) {
         const orderId = res.data.order_id;
+        const sellerService = new SellerService();
         const orderRes = await orderService.getOrderDetails(orderId, userEmail);
         if (orderRes && orderRes.data) {
           for(let i = 0; i < orderRes.data.order_items.length; i++){
