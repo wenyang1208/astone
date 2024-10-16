@@ -22,7 +22,7 @@ export class OrderService {
             formData.append('address', address);
             formData.append('email', email);
 
-            const res = await axios.post('http://astone-backend-app.onrender.com/place_order/', formData);
+            const res = await axios.post('https://astone-backend-app.onrender.com/place_order/', formData);
             return res;
         } catch (error) {
             console.error('Error placing order:', error);
@@ -51,7 +51,7 @@ export class OrderService {
             const formData = new FormData();
             formData.append('email', email);
     
-            const res = await axios.get('http://astone-backend-app.onrender.com/cart/', formData);
+            const res = await axios.post('https://astone-backend-app.onrender.com/cart/', formData);
             return res;
         } catch (error) {
             console.error('Error getting cart:', error);
@@ -61,7 +61,7 @@ export class OrderService {
 
     async getOrderDetails(orderId, email) {
         try {
-            const res = await axios.get(`http://astone-backend-app.onrender.com/order/${orderId}/`, {
+            const res = await axios.get(`https://astone-backend-app.onrender.com/order/${orderId}/`, {
                 params: { email }
             });
             return res;
@@ -73,7 +73,7 @@ export class OrderService {
 
     async updateOrderDetails(orderItemId, data) {
         try {
-            const res = await axios.patch(`http://astone-backend-app.onrender.com/order/${orderItemId}/edit`,data);
+            const res = await axios.patch(`https://astone-backend-app.onrender.com/order/${orderItemId}/edit`,data);
             console.log(res.data);
             return res;
         } catch (error) {
@@ -88,7 +88,7 @@ export class OrderService {
             formData.append('email', email);
             formData.append('points', points);
 
-            const res = await axios.post('http://astone-backend-app.onrender.com/deduct_points/', formData);
+            const res = await axios.post('https://astone-backend-app.onrender.com/deduct_points/', formData);
             return res;
         } catch (error) {
             console.error('Error deducting points:', error);

@@ -93,7 +93,7 @@ export class SellerService {
 
     async getSellerOrders(sellerId) {
         try {
-            const res = await axios.get(`http://astone-backend-app.onrender.com/seller/${sellerId}/orders/`);
+            const res = await axios.get(`https://astone-backend-app.onrender.com/seller/${sellerId}/orders/`);
             return res.data;
         } catch (error) {
             console.error('Error fetching seller orders:', error.response?.data || error.message);
