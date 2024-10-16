@@ -225,13 +225,13 @@ function CheckoutPage() {
         </Box>
 
         <Box marginTop={3} display="flex" gap={2}>
-          {deliveryStatus !== 'Delivered' && deliveryStatus !== 'Canceled' && (
-            <Button variant="outlined" color="error" onClick={handleCancelOrder} sx={{ flexGrow: 1 }}>
+          {deliveryStatus !== 'Delivered' && deliveryStatus !== 'Canceled' && deliveryStatus !== 'Returned' && (
+            <Button variant="contained" color="error" onClick={handleCancelOrder} sx={{ flexGrow: 1 }}>
               Cancel Order
             </Button>
           )}
           {deliveryStatus === 'Delivered' && (
-            <Button variant="outlined" color="secondary" onClick={handleReturnOrder} sx={{ flexGrow: 1 }}>
+            <Button variant="contained" color="secondary" onClick={handleReturnOrder} sx={{ flexGrow: 1 }}>
               Return Product
             </Button>
           )}
@@ -300,8 +300,11 @@ function CheckoutPage() {
         <DialogTitle>Payment</DialogTitle>
         <DialogContent>
           <Typography variant="h6">Total Price: MYR {finalPrice.toFixed(2)}</Typography>
-          <CircularProgress />
-        </DialogContent>
+          {paymentLoading ? (
+            <CircularProgress />
+          ) : (
+            <Typography variant="body2">Process payment</Typography>
+          )}        </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePayment} color="primary">
             Cancel
