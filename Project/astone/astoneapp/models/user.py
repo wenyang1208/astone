@@ -13,6 +13,8 @@ class CustomUser(models.Model):
 
     password = models.CharField(max_length=512)
 
+    points = models.IntegerField(default=0)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
 
