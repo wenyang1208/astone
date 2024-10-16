@@ -10,7 +10,7 @@ class Order(models.Model):
     address = models.CharField(max_length=255, help_text="Delivery address", default="")
 
 class OrderItem(models.Model):
-    seller = models.ForeignKey(Seller, on_delete=models.CASCADE)
+    seller = models.ForeignKey(Seller, on_delete=models.CASCADE,null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     size = models.CharField(max_length=10, default='M', help_text="Size of the product")

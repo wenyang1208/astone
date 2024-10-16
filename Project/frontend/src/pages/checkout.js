@@ -51,6 +51,9 @@ function CheckoutPage() {
             const orderItem = orderRes.data.order_items[i];
             const sellerId = orderItem.product.seller;
             const toProcessedShipment = orderItem.quantity;
+            console.log(orderItem.id);
+            console.log(sellerId);
+            await orderService.updateOrderDetails(orderItem.id, { seller: sellerId });
             await sellerService.incrementShipment(sellerId, {
               to_processed_shipment: toProcessedShipment,
             });

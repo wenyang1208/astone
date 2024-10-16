@@ -85,4 +85,14 @@ export class SellerService {
             return null;
         }
     }
+
+    async getSellerOrders(sellerId) {
+        try {
+            const res = await axios.get(`http://localhost:8000/seller/${sellerId}/orders/`);
+            return res.data;
+        } catch (error) {
+            console.error('Error fetching seller orders:', error.response?.data || error.message);
+            return null;
+        }
+    }
 }

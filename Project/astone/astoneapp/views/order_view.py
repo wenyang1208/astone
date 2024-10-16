@@ -1,10 +1,12 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from astoneapp.models.product import Product 
+from django.db import transaction
+from astoneapp.models.seller import Seller 
 from astoneapp.models.order import Order, OrderItem
 from ..serializers.cart_serializer import OrderItemSerializer
 from astoneapp.models.cart import Cart, CartItem
+from rest_framework import status
 
 def get_cart():
     cart, created = Cart.objects.get_or_create(id=1)
@@ -53,4 +55,25 @@ def order_detail(request, order_id):
     items = order.orderitem_set.all()
     serializer = OrderItemSerializer(items, many=True)
     return Response({'order_items': serializer.data, 'total_price': order.total_price, 'address': order.address})
+
+@api_view(['PATCH'])
+def update_order_seller(request, order_item_id):
+    try:
+        order_item = get_object_or_404(OrderItem, id=order_item_id)
+        seller_id = request.data.get('seller')
+
+        if not seller_id:
+            return Response({'error': 'Seller data is required for updating'}, status=status.HTTP_400_BAD_REQUEST)
+
+        seller = get_object_or_404(Seller, id=seller_id)
+
+        with transaction.atomic():
+            order_item.seller = seller
+            order_item.save()
+
+        return Response({'message': 'Seller updated successfully'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 

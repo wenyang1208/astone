@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from astoneapp.models.seller import *
+from astoneapp.models.order import *
 from rest_framework.response import Response
 from astoneapp.serializers.seller_serializer import *
 from rest_framework import generics, status
@@ -98,3 +99,17 @@ class SellerChangePassword(generics.UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         return self.put(request, *args, **kwargs)  # Handle PATCH the same as PUT
+    
+class SellerOrdersView(APIView):
+    def get(self, request, pk):
+        seller = get_object_or_404(Seller, pk=pk)
+        order_items = OrderItem.objects.filter(seller=seller).select_related('order')
+        serialized_data = [{
+            'order_id': item.order.id,
+            'product_name': item.product.name,
+            'quantity': item.quantity,
+            'price': item.price,
+            'is_paid': item.order.is_paid,
+        } for item in order_items]
+
+        return Response(serialized_data, status=status.HTTP_200_OK)

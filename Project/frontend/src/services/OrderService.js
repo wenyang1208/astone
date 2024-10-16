@@ -61,4 +61,15 @@ export class OrderService {
             return null;
         }
     }
+
+    async updateOrderDetails(orderItemId, data) {
+        try {
+            const res = await axios.patch(`http://localhost:8000/order/${orderItemId}/edit`,data);
+            console.log(res.data);
+            return res;
+        } catch (error) {
+            console.error(`Error getting order ${orderItemId}:`, error);
+            return null;
+        }
+    }
 }

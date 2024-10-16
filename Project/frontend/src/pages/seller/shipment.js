@@ -4,30 +4,34 @@ import { Box, Typography, List, ListItem, ListItemText, Button, Grid, Paper } fr
 import { SellerService } from '../../services/SellerService';
 import SellerSidebar from '../../components/sellerSidebar';
 import SellerHeader from '../../components/sellerHeader';
+import { ACCESS_TOKEN } from '../../constant';
+import { jwtDecode } from 'jwt-decode';
 
 const Shipment = () => {
-  const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
   const sellerService = new SellerService();
+  const token = localStorage.getItem(ACCESS_TOKEN);
+  const sellerId = jwtDecode(token).seller_id;
 
   useEffect(() => {
-    fetchProductsToShip();
+    fetchSellerOrders();
   }, []);
 
-  const fetchProductsToShip = async () => {
+  const fetchSellerOrders = async () => {
     try {
-      const response = await sellerService.incrementShipment();
-      setProducts(response.data);
+     const response = await sellerService.getSellerOrders(sellerId);
+      setOrders(response);
     } catch (error) {
-      console.error('Failed to fetch products to ship:', error);
+      console.error('Failed to fetch orders:', error);
     }
   };
 
-  const handleShipment = async (productId) => {
+  const handleShipment = async (orderId) => {
     try {
-      await sellerService.incrementShipment(productId);
+      await sellerService.incrementShipment(orderId);
       // Refresh the list after processing
-      fetchProductsToShip();
+      fetchSellerOrders();
     } catch (error) {
       console.error('Failed to process shipment:', error);
     }
@@ -44,27 +48,27 @@ const Shipment = () => {
           <Box sx={{ flexGrow: 1, p: 3, mt: 8 }}>
             <Paper sx={{ p: 3 }}>
               <Typography variant="h5" sx={{ fontWeight: 600, fontSize: 30, mb: 2 }}>
-                Products to Ship
+                Orders to Ship
               </Typography>
               <List>
-                {products.map((product) => (
-                  <ListItem key={product.id} divider>
+                {orders.map((order) => (
+                  <ListItem key={order.order_id} divider>
                     <ListItemText
-                      primary={product.name}
-                      secondary={`Order ID: ${product.orderId}`}
+                      primary={`Product: ${order.product_name}`}
+                      secondary={`Order ID: ${order.order_id} | Quantity: ${order.quantity} | Price: ${order.price}`}
                     />
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => handleShipment(product.id)}
+                      onClick={() => handleShipment(order.order_id)}
                     >
                       Process Shipment
                     </Button>
                   </ListItem>
                 ))}
               </List>
-              {products.length === 0 && (
-                <Typography>No products to ship at the moment.</Typography>
+              {orders.length === 0 && (
+                <Typography>No orders to ship at the moment.</Typography>
               )}
               <Button onClick={() => navigate(-1)} sx={{ mt: 2 }}>
                 Back to Dashboard
