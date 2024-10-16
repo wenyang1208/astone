@@ -72,9 +72,32 @@ const Signup = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const validatePhone = (phone) => {
+    const re = /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/;
+    return re.test(String(phone));
+  };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
+    
+    // Clear previous errors
+    setFormErrors({ ...formErrors, [name]: '' });
+
+    // Validate email
+    if (name === 'email' && value && !validateEmail(value)) {
+      setFormErrors(prev => ({ ...prev, email: 'Invalid email format' }));
+    }
+
+    // Validate phone number
+    if (name === 'phone_number' && value && !validatePhone(value)) {
+      setFormErrors(prev => ({ ...prev, phone_number: 'Invalid phone number format' }));
+    }
   };
 
   const validateStep = (step) => {
@@ -82,8 +105,16 @@ const Signup = () => {
     if (step === 0) {
       if (!formValues.first_name) errors.first_name = 'First name is required';
       if (!formValues.last_name) errors.last_name = 'Last name is required';
-      if (!formValues.email) errors.email = 'Email is required';
+      if (!formValues.email) {
+        errors.email = 'Email is required';
+      } else if (!validateEmail(formValues.email)) {
+        errors.email = 'Invalid email format';
+      }
       if (formValues.email !== formValues.email2) errors.email2 = 'Emails do not match';
+    } else if (step === 1) {
+      if (formValues.phone_number && !validatePhone(formValues.phone_number)) {
+        errors.phone_number = 'Invalid phone number format';
+      }
     } else if (step === 2) {
       if (!formValues.password) errors.password = 'Password is required';
       if (formValues.password !== formValues.passwordConfirm) errors.passwordConfirm = 'Passwords do not match';
@@ -176,8 +207,8 @@ const Signup = () => {
               onChange={handleChange}
               error={!!formErrors.email}
               helperText={formErrors.email}
-              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
-              InputProps={{ style: { color: 'text.primary' } }} // Black text
+              InputLabelProps={{ style: { color: 'text.primary' } }}
+              InputProps={{ style: { color: 'text.primary' } }}
             />
             <TextField
               margin="normal"
@@ -191,8 +222,8 @@ const Signup = () => {
               onChange={handleChange}
               error={!!formErrors.email2}
               helperText={formErrors.email2}
-              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
-              InputProps={{ style: { color: 'text.primary' } }} // Black text
+              InputLabelProps={{ style: { color: 'text.primary' } }}
+              InputProps={{ style: { color: 'text.primary' } }}
             />
             <Button
               onClick={handleNext}
@@ -235,8 +266,10 @@ const Signup = () => {
               autoComplete="tel"
               value={formValues.phone_number}
               onChange={handleChange}
-              InputLabelProps={{ style: { color: 'text.primary' } }} // Black label
-              InputProps={{ style: { color: 'text.primary' } }} // Black text
+              error={!!formErrors.phone_number}
+              helperText={formErrors.phone_number}
+              InputLabelProps={{ style: { color: 'text.primary' } }}
+              InputProps={{ style: { color: 'text.primary' } }}
             />
             <TextField
               margin="normal"

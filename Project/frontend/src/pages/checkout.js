@@ -1,9 +1,10 @@
+import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Paper, Grid, Divider, IconButton } from '@mui/material';
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
 import {ToastContainer, toast} from 'react-toastify';
 import { SellerService } from '../services/SellerService';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { UserService } from '../services/UserService';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
@@ -27,6 +28,7 @@ function CheckoutPage() {
   const [userPoints, setUserPoints] = useState(0);
   const [discount, setDiscount] = useState(0);
   const [deliveryStatus, setDeliveryStatus] = useState('Processing');
+
 
   const fetchCartItems = async () => {
     const orderService = new OrderService();
@@ -105,7 +107,8 @@ function CheckoutPage() {
           for(let i = 0; i < orderRes.data.order_items.length; i++){
             const orderItem = orderRes.data.order_items[i];
             const sellerId = orderItem.product.seller;
-            const toProcessedShipment = orderItem.quantity;
+            const toProcessedShipment = 1;
+            await orderService.updateOrderDetails(orderItem.id, { seller: sellerId });
             await sellerService.incrementShipment(sellerId, {
               to_processed_shipment: toProcessedShipment,
             });
@@ -204,12 +207,17 @@ function CheckoutPage() {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom marginTop="5%">
-        Checkout
-      </Typography>
+    <Container maxWidth="md">
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 4, mt: 4 }}>
+        <IconButton onClick={() => navigate('/')} sx={{ mr: 2 }}>
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h4" component="h1">
+          Checkout
+        </Typography>
+      </Box>
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
           <CircularProgress />
         </Box>
       ) : orderDetails ? (

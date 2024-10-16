@@ -48,8 +48,7 @@ export class SellerService {
         }
     }
 
-    async requestPasswordReset(data)
-    {
+    async requestPasswordReset(data) {
         try {
             const res = await axios.post('https://astone-backend-app.onrender.com/seller/seller-forgot-password/', data);
             return res;
@@ -60,8 +59,7 @@ export class SellerService {
         }
     }
 
-    async changePassword(seller_id, data)
-    {
+    async changePassword(seller_id, data) {
         try {
             console.log(data);
             const res = await axios.put(`https://astone-backend-app.onrender.com/seller/seller-change-password/${seller_id}/`, data);
@@ -78,4 +76,28 @@ export class SellerService {
         return axios.post(`https://astone-backend-app.onrender.com/seller/${sellerId}/increment-shipment/`, toProcessedShipment);
       }
 
+    async incrementProcessedShipment(sellerId, processedShipment) {
+        console.log(processedShipment);
+        return axios.post(`https://astone-backend-app.onrender.com/seller/${sellerId}/increment-processed-shipment/`, processedShipment);
+    }
+
+    async getProductsToShip(sellerId) {
+        try {
+            const res = await axios.get(`https://astone-backend-app.onrender.com/seller/${sellerId}/products-to-ship/`);
+            return res.data;
+        } catch (error) {
+            console.error('Error fetching products to ship:', error.response?.data || error.message);
+            return null;
+        }
+    }
+
+    async getSellerOrders(sellerId) {
+        try {
+            const res = await axios.get(`http://astone-backend-app.onrender.com/seller/${sellerId}/orders/`);
+            return res.data;
+        } catch (error) {
+            console.error('Error fetching seller orders:', error.response?.data || error.message);
+            return null;
+        }
+    }
 }
