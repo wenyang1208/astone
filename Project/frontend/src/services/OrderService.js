@@ -9,6 +9,7 @@ export class OrderService {
             formData.append('email', email);
 
             const res = await axios.post(`https://astone-backend-app.onrender.com/add_to_cart/${productId}/`, formData);
+            const res = await axios.post(`https://astone-backend-app.onrender.com/add_to_cart/${productId}/`, formData);
             return res;
         } catch (error) {
             console.error(`Error adding product ${productId} to cart:`, error);
@@ -38,6 +39,7 @@ export class OrderService {
             formData.append('quantity', quantity);
             formData.append('email', email);
 
+            const res = await axios.post(`https://astone-backend-app.onrender.com/update_cart/${productId}/`, formData);
             const res = await axios.post(`https://astone-backend-app.onrender.com/update_cart/${productId}/`, formData);
             return res;
         } catch (error) {
