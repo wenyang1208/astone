@@ -20,7 +20,7 @@ const Shipment = () => {
 
   const fetchSellerOrders = async () => {
     try {
-     const response = await sellerService.getSellerOrders(sellerId);
+      const response = await sellerService.getSellerOrders(sellerId);
       setOrders(response);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
@@ -29,9 +29,20 @@ const Shipment = () => {
 
   const handleShipment = async (orderId) => {
     try {
-      await sellerService.incrementShipment(orderId);
-      // Refresh the list after processing
-      fetchSellerOrders();
+      await sellerService.incrementShipment(sellerId, { order_id: orderId });
+      // Remove the processed order from the state
+      setOrders(prevOrders => prevOrders.filter(order => order.order_id !== orderId));
+      
+      // Update the dashboard data
+      try {
+        const dashboardData = await sellerService.getSellerById(sellerId);
+        const updatedTodo = dashboardData.data.todo;
+        updatedTodo.to_processed_shipment -= 1;
+        updatedTodo.processed_shipment += 1;
+        //await sellerService.updateSellerTodo(sellerId, updatedTodo);
+      } catch (error) {
+        console.error('Failed to update dashboard data:', error);
+      }
     } catch (error) {
       console.error('Failed to process shipment:', error);
     }

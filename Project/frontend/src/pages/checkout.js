@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Paper, Grid, Divider, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
 import { SellerService } from '../services/SellerService';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 function CheckoutPage() {
   const BASE_URL = 'http://localhost:8000';
@@ -17,6 +18,8 @@ function CheckoutPage() {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [paymentLoading, setPaymentLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const fetchCartItems = async () => {
     const orderService = new OrderService();
     try {
@@ -29,8 +32,6 @@ function CheckoutPage() {
       console.error('Error fetching cart items:', error);
     }
   };
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCartItems();
@@ -50,9 +51,7 @@ function CheckoutPage() {
           for(let i = 0; i < orderRes.data.order_items.length; i++){
             const orderItem = orderRes.data.order_items[i];
             const sellerId = orderItem.product.seller;
-            const toProcessedShipment = orderItem.quantity;
-            console.log(orderItem.id);
-            console.log(sellerId);
+            const toProcessedShipment = 1;
             await orderService.updateOrderDetails(orderItem.id, { seller: sellerId });
             await sellerService.incrementShipment(sellerId, {
               to_processed_shipment: toProcessedShipment,
@@ -85,20 +84,25 @@ function CheckoutPage() {
       setPaymentOpen(false);
       alert('Payment successful!');
       // navigate('/order-confirmation', { state: { orderDetails } });
-    }, 2000); // Simulate payment processing time
+    }, 2000);
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom marginTop="5%">
-        Checkout
-      </Typography>
+    <Container maxWidth="md">
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 4, mt: 4 }}>
+        <IconButton onClick={() => navigate('/')} sx={{ mr: 2 }}>
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h4" component="h1">
+          Checkout
+        </Typography>
+      </Box>
       {loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
           <CircularProgress />
         </Box>
       ) : orderDetails ? (
-        <Box>
+        <Paper elevation={3} sx={{ p: 3 }}>
           <Typography variant="h6" gutterBottom>
             Order Details
           </Typography>
@@ -111,81 +115,125 @@ function CheckoutPage() {
           <Typography variant="body1">
             Address: {orderDetails.address}
           </Typography>
-          {/* Add more order details as needed */}
-        </Box>
+        </Paper>
       ) : (
-        <Box>
-          <List>
-            {cartItems.map((item, index) => {
-              const colors = item.product.colors;
-              const sizes = item.product.sizes;
-              const selectedColor = colors.find(color => color.code === item.color);
-              const selectedSize = sizes.find(size => size.value === item.size);
-              const imageUrl = item.product.default_image ? `${BASE_URL}${item.product.default_image}` : 'https://via.placeholder.com/140';
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={8}>
+            <Paper elevation={3} sx={{ p: 3, mb: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Order Summary
+              </Typography>
+              <List>
+                {cartItems.map((item, index) => {
+                  const colors = item.product.colors;
+                  const sizes = item.product.sizes;
+                  const selectedColor = colors.find(color => color.code === item.color);
+                  const selectedSize = sizes.find(size => size.value === item.size);
+                  const imageUrl = item.product?.images ? `${BASE_URL}${item.product.images[0].image_url}` : 'https://via.placeholder.com/200';
 
-              return (
-                <ListItem key={index}>
-                  <img src={imageUrl} alt={item.product.name} style={{ width: 50, height: 50, marginRight: 10 }} />
-                  <ListItemText
-                    primary={`${item.product.name} - ${item.quantity} x MYR ${item.price}`}
-                    secondary={`Total: MYR ${item.total_price.toFixed(2)}`}
-                  />
-                  {selectedColor && (
-                    <Box style={{ backgroundColor: selectedColor.code, width: '20px', height: '20px', marginRight: '5px' }} />
-                  )}
-                  {selectedSize && (
-                    <Typography variant="body2" sx={{ marginRight: '5px' }}>
-                      {selectedSize.value}
-                    </Typography>
-                  )}
-                </ListItem>
-              );
-            })}
-          </List>
-          <Typography variant="h6" gutterBottom>
-            Total Price: {`Total: MYR ${totalPrice}`}
-          </Typography>
-
-          <TextField
-            label="Recipient name"
-            value={recipient}
-            onChange={(e) => setRecipient(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Contact number"
-            value={contactNumber}
-            onChange={(e) => setContactNumber(e.target.value)}
-            fullWidth
-            margin="normal"
-          />          
-          <TextField
-            label="Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            fullWidth
-            margin="normal"
-          />
-          <Button variant="contained" color="secondary" onClick={handleOpenPayment}>
-            Proceed to payment
-          </Button>
-          {error && (
-            <Typography color="error" variant="body2">
-              {error}
-            </Typography>
-          )}
-        </Box>
+                  return (
+                    <React.Fragment key={index}>
+                      <ListItem alignItems="flex-start">
+                        <img src={imageUrl} alt={item.product.name} style={{ width: 80, height: 80, marginRight: 16, objectFit: 'cover' }} />
+                        <ListItemText
+                          primary={item.product.name}
+                          secondary={
+                            <React.Fragment>
+                              <Typography component="span" variant="body2" color="text.primary">
+                                {`${item.quantity} x MYR ${item.price}`}
+                              </Typography>
+                              {selectedColor && (
+                                <Box component="span" sx={{ display: 'inline-block', width: 20, height: 20, bgcolor: selectedColor.code, ml: 1, mr: 1, verticalAlign: 'text-bottom' }} />
+                              )}
+                              {selectedSize && (
+                                <Typography component="span" variant="body2">
+                                  {selectedSize.value}
+                                </Typography>
+                              )}
+                            </React.Fragment>
+                          }
+                        />
+                        <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                          MYR {item.total_price.toFixed(2)}
+                        </Typography>
+                      </ListItem>
+                      {index < cartItems.length - 1 && <Divider variant="inset" component="li" />}
+                    </React.Fragment>
+                  );
+                })}
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <Paper elevation={3} sx={{ p: 3 }}>
+              <Typography variant="h6" gutterBottom>
+                Shipping Information
+              </Typography>
+              <TextField
+                label="Recipient name"
+                value={recipient}
+                onChange={(e) => setRecipient(e.target.value)}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+              />
+              <TextField
+                label="Contact number"
+                value={contactNumber}
+                onChange={(e) => setContactNumber(e.target.value)}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+              />          
+              <TextField
+                label="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                multiline
+                rows={3}
+              />
+              <Box sx={{ mt: 3, mb: 2 }}>
+                <Typography variant="h6" gutterBottom>
+                  Total: MYR {totalPrice}
+                </Typography>
+              </Box>
+              <Button 
+                variant="contained" 
+                color="primary" 
+                fullWidth 
+                size="large"
+                onClick={handleOpenPayment}
+              >
+                Proceed to payment
+              </Button>
+              {error && (
+                <Typography color="error" variant="body2" sx={{ mt: 2 }}>
+                  {error}
+                </Typography>
+              )}
+            </Paper>
+          </Grid>
+        </Grid>
       )}
 
       <Dialog open={paymentOpen} onClose={handleClosePayment}>
         <DialogTitle>Payment</DialogTitle>
         <DialogContent>
-          <Typography variant="body1">Total Price: {`MYR ${totalPrice}`}</Typography>
-          <Typography variant="body2">Enter your payment details below:</Typography>
-          <TextField label="Card Number" fullWidth margin="normal" />
-          <TextField label="Expiry Date" type="date" fullWidth margin="normal" InputLabelProps={{ shrink: true }} />          
-          <TextField label="CVV" fullWidth margin="normal" />
+          <Typography variant="body1" gutterBottom>Total Price: MYR {totalPrice}</Typography>
+          <Typography variant="body2" gutterBottom>Enter your payment details below:</Typography>
+          <TextField label="Card Number" fullWidth margin="normal" variant="outlined" />
+          <TextField 
+            label="Expiry Date" 
+            type="date" 
+            fullWidth 
+            margin="normal" 
+            variant="outlined"
+            InputLabelProps={{ shrink: true }} 
+          />          
+          <TextField label="CVV" fullWidth margin="normal" variant="outlined" />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClosePayment} color="secondary">
