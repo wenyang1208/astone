@@ -20,7 +20,7 @@ const LoginSeller = () => {
       console.log('Login successful:', response.data);
       localStorage.setItem(ACCESS_TOKEN, response.data.access);
       localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
-      navigate('/productlist');
+      navigate('/sellerProfile');
       // Handle successful login 
     } else {
       console.error('Login failed');

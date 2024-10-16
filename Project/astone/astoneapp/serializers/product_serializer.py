@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from astoneapp.models.product import Product
 from astoneapp.models.image import Image
-
+from astoneapp.serializers.promotion_serializer import PromotionSerializer
 # Serializer serialize model instances into json objects for response
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,12 +10,11 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True, read_only=True)
-    # default_image = serializers.SerializerMethodField()
+    promotions = PromotionSerializer(many=False, read_only=True)
 
     class Meta:
         model = Product
         fields = '__all__'
-        # fields = ['id', 'name','description','category','colors','sizes','currency','price', 'rating', 'stock', 'original_price', 'promotion_price','seller','images']
         extra_kwargs = {"seller": {"read_only": True}}
 
     # def get_default_image(self, obj):

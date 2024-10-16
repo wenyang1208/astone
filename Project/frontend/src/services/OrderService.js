@@ -8,7 +8,7 @@ export class OrderService {
             formData.append('color', color);
             formData.append('email', email);
 
-            const res = await axios.post(`http://localhost:8000/add_to_cart/${productId}/`, formData);
+            const res = await axios.post(`https://astone-backend-app.onrender.com/add_to_cart/${productId}/`, formData);
             return res;
         } catch (error) {
             console.error(`Error adding product ${productId} to cart:`, error);
@@ -22,7 +22,7 @@ export class OrderService {
             formData.append('address', address);
             formData.append('email', email);
 
-            const res = await axios.post('http://localhost:8000/place_order/', formData);
+            const res = await axios.post('http://astone-backend-app.onrender.com/place_order/', formData);
             return res;
         } catch (error) {
             console.error('Error placing order:', error);
@@ -38,7 +38,7 @@ export class OrderService {
             formData.append('quantity', quantity);
             formData.append('email', email);
 
-            const res = await axios.post(`http://localhost:8000/update_cart/${productId}/`, formData);
+            const res = await axios.post(`https://astone-backend-app.onrender.com/update_cart/${productId}/`, formData);
             return res;
         } catch (error) {
             console.error(`Error updating cart item ${productId}:`, error);
@@ -51,7 +51,7 @@ export class OrderService {
             const formData = new FormData();
             formData.append('email', email);
     
-            const res = await axios.post('http://localhost:8000/cart/', formData);
+            const res = await axios.post('http://astone-backend-app.onrender.com/cart/', formData);
             return res;
         } catch (error) {
             console.error('Error getting cart:', error);
@@ -61,7 +61,7 @@ export class OrderService {
 
     async getOrderDetails(orderId, email) {
         try {
-            const res = await axios.get(`http://localhost:8000/order/${orderId}/`, {
+            const res = await axios.get(`http://astone-backend-app.onrender.com/order/${orderId}/`, {
                 params: { email }
             });
             return res;

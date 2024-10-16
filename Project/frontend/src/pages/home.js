@@ -29,7 +29,7 @@ const mainBanner = {
 };
 
 const Home = () => {
-  const BASE_URL = "http://localhost:8000";
+  const BASE_URL = "https://astone-backend-app.onrender.com";
 
   const [products, setProducts] = useState([]);
   const [visibleItems, setVisibleItems] = useState(8);
@@ -76,7 +76,21 @@ const Home = () => {
           {product.description}
         </Typography>
         <Typography variant="body2" style={styles.price} component="p">
-          {product.currency} {product.price}
+          {product.original_price > product.price ? (
+            <>
+              {/* Original price with strikethrough */}
+              <span style={{ textDecoration: 'line-through', color: 'grey', marginRight: '10px' }}>
+                {product.currency} {product.original_price}
+              </span>
+              {/* Current price */}
+              {product.currency} {product.price}
+            </>
+          ) : (
+            // If there's no original price, just show the current price
+            <>
+              {product.currency} {product.price}
+            </>
+          )}
         </Typography>
         <Button variant="contained" color="primary" size="small">
           Add to cart

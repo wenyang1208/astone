@@ -20,7 +20,7 @@ class SellerRegisterView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        response.data = {'message': 'Seller created successfully'}
+        response.data = {'message': 'Seller and associated Todo created successfully'}
         return response
     
 class SellerGetView(APIView):     
@@ -62,7 +62,7 @@ class SellerForgotPassword(generics.CreateAPIView):
             # Verify if seller exists with the given email
             seller = User.objects.filter(email=email).first()
             if seller:
-                 link = f"http://localhost:3000/sellerChangePassword/{seller.id}/"
+                 link = f"https://astone-frontend.vercel.app/sellerChangePassword/{seller.id}/"
                  send_mail(
                     subject='Verify Account',
                     message='Please verify your account',

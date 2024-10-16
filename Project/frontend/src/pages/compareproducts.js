@@ -4,7 +4,7 @@ import { Container, Grid, Card, CardContent, CardMedia, Typography, Button, Sele
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import MyAppBar from '../components/appBar';
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'https://astone-backend-app.onrender.com';
 
 const CompareProducts = () => {
   const [products, setProducts] = useState([]);

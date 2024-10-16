@@ -36,7 +36,7 @@ function MyAppBar() {
   const [userPoints, setUserPoints] = useState(0);
   const navigate = useNavigate();
 
-  const BASE_URL = 'http://localhost:8000';
+  const BASE_URL = 'https://astone-backend-app.onrender.com';
 
   const fetchCartItems = async () => {
     const orderService = new OrderService();

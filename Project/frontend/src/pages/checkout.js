@@ -2,16 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Container, Typography, Button, CircularProgress, Box, TextField, List, ListItem, ListItemText, Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { OrderService } from '../services/OrderService';
+import {ToastContainer, toast} from 'react-toastify';
+
+import { SellerService } from '../services/SellerService';
 import { UserService } from '../services/UserService';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';import 'react-toastify/dist/ReactToastify.css';
 
 function CheckoutPage() {
-  const BASE_URL = 'http://localhost:8000';
+  const BASE_URL = 'https://astone-backend-app.onrender.com';
   const [loading, setLoading] = useState(false);
   const [orderDetails, setOrderDetails] = useState(null);
   const [error, setError] = useState(null);
@@ -101,6 +102,14 @@ function CheckoutPage() {
         const orderId = res.data.order_id;
         const orderRes = await orderService.getOrderDetails(orderId, userEmail);
         if (orderRes && orderRes.data) {
+          for(let i = 0; i < orderRes.data.order_items.length; i++){
+            const orderItem = orderRes.data.order_items[i];
+            const sellerId = orderItem.product.seller;
+            const toProcessedShipment = orderItem.quantity;
+            await sellerService.incrementShipment(sellerId, {
+              to_processed_shipment: toProcessedShipment,
+            });
+          }
           setOrderDetails(orderRes.data);
           simulateDelivery();
         }

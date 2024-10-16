@@ -30,7 +30,7 @@ const Aston = ({ className, divClassName }) => {
   );
 };
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'https://astone-backend-app.onrender.com';
 
 
 function ProductView() {
@@ -125,6 +125,10 @@ function ProductView() {
     setOpenSnackbar(false);
   };
 
+  const calculateSavings = (originalPrice, currentPrice) => {
+    return (originalPrice - currentPrice).toFixed(2);
+  };
+
   return (
       <div>
         <MyAppBar/>
@@ -144,10 +148,23 @@ function ProductView() {
                 {product?.name}
               </Typography>
               <Typography variant="h5" color="textSecondary" gutterBottom>
+                {/* Original price with strikethrough */}
+                {product?.original_price > product?.price && (
+                  <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
+                    {product.currency} {product.original_price}
+                  </span>
+                )}
+                {/* Current price */}
                 {product?.currency} {product?.price}
               </Typography>
+              {/* Display savings if original_price exists */}
+              {product?.original_price > product?.price && (
+                <Typography variant="body1" color="red">
+                  Amount saved: {product.currency} {calculateSavings(product.original_price, product.price)}
+                </Typography>
+              )}
               <Typography gutterBottom>
-                {product?.description}
+                Description: {product?.description}
               </Typography>
               <Typography gutterBottom>
                 Brand: {product?.brand}

@@ -61,7 +61,7 @@ const SignupSeller = () => {
     event.preventDefault();
     if (validateStep(2)) {
       // Send form data to the API
-      // const response = await fetch('http://localhost:8000/seller/register/', {
+      // const response = await fetch('https://astone-backend-app.onrender.com/seller/register/', {
       //   method: 'POST',
       //   headers: {
       //     'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const SignupSeller = () => {
       //   console.log('Signup failed');
       // }
       try {
-        const response = await axios.post('http://localhost:8000/seller/register/', {
+        const response = await axios.post('https://astone-backend-app.onrender.com/seller/register/', {
           user: {
             username: formValues.email,
             first_name: formValues.firstName,

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import MyAppBar from '../components/appBar';
 
 const Men = () => {
-  const BASE_URL = 'http://localhost:8000';
+  const BASE_URL = 'https://astone-backend-app.onrender.com';
 
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');

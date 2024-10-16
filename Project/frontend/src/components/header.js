@@ -34,7 +34,7 @@ function Header() {
   useEffect(() => {
     // Fetch user details if userEmail is available
     if (userEmail) {
-      axios.get(`http://localhost:8000/user/${userEmail}/`)
+      axios.get(`https://astone-backend-app.onrender.com/user/${userEmail}/`)
         .then(response => {
           setUserFirstName(response.data.first_name);
           console.log('User details:', response.data);
