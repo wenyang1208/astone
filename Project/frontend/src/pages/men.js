@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { ProductService } from '../services/ProductService';
-import { Card, Paper, CardContent, CardMedia, Typography, Button, TextField, Checkbox, FormControlLabel, FormGroup, Slider, MenuItem, Select } from '@mui/material';
+import { Card, Paper, CardContent, Typography, Button, TextField, Checkbox, FormControlLabel, FormGroup, Slider, MenuItem, Select } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { useNavigate } from 'react-router-dom';
 import MyAppBar from '../components/appBar';
@@ -15,7 +14,7 @@ const Men = () => {
   const [filters, setFilters] = useState({ brands: [], clothingTypes: [] });
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedClothingTypes, setSelectedClothingTypes] = useState([]);
-  const [priceRange, setPriceRange] = useState([0, 100]);
+  const [priceRange, setPriceRange] = useState([0, 500]);
   const [sortOrder, setSortOrder] = useState('asc');
   const [sortedProducts, setSortedProducts] = useState([]);
 
@@ -41,9 +40,9 @@ const Men = () => {
 
     productService.getProducts()
       .then(res => {
-        const menproducts = res.data.filter(product => product.gender.toLowerCase() === "m");
-        setProducts(menproducts);
-        setFilters(extractFilters(menproducts));
+        const menProducts = res.data.filter(product => product.gender.toLowerCase() === "m");
+        setProducts(menProducts);
+        setFilters(extractFilters(menProducts));
       })
       .catch(err => {
         console.error('Error fetching products:', err);
@@ -51,34 +50,29 @@ const Men = () => {
   }, []);
 
   useEffect(() => {
-    console.log(1);
     if (filterFlag !== null && filterFlag) {
       const filtered = products.filter(product =>
         (selectedBrands.length === 0 || selectedBrands.includes(product.brand)) &&
         (selectedClothingTypes.length === 0 || selectedClothingTypes.some(type => product.category.includes(type))) &&
-        (product.gender.toLowerCase() === "m") &&
         product.price >= priceRange[0] && product.price <= priceRange[1] &&
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setProducts(filtered);
+      setSortedProducts(filtered);
     } else {
       const productService = new ProductService();
-
       productService.getProducts()
         .then(res => {
           const menProducts = res.data.filter(product => product.gender.toLowerCase() === "m");
-          setProducts(menProducts);
-          setFilters(extractFilters(menProducts));
+          setSortedProducts(menProducts);
         })
         .catch(err => {
           console.error('Error fetching products:', err);
         });
     }
-  }, [filterFlag]);
+  }, [filterFlag, products, selectedBrands, selectedClothingTypes, priceRange, searchTerm]);
 
   useEffect(() => {
-    console.log(2);
-    const sorted = [...products].sort((a, b) => {
+    const sorted = [...sortedProducts].sort((a, b) => {
       if (sortOrder === 'asc') {
         return a.price - b.price;
       } else {
@@ -86,7 +80,7 @@ const Men = () => {
       }
     });
     setSortedProducts(sorted);
-  }, [sortOrder, products]);
+  }, [sortOrder]);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -122,7 +116,7 @@ const Men = () => {
     setSearchTerm('');
     setSelectedBrands([]);
     setSelectedClothingTypes([]);
-    setPriceRange([0, 100]);
+    setPriceRange([0, 500]);
     setFilterFlag(false);
   };
 
@@ -132,13 +126,13 @@ const Men = () => {
 
   const ProductCard = ({ product }) => (
     <Card style={styles.card} onClick={() => handleCardClick(product.id)}>
-              <Paper>
-                <img
-                  src={(product?.images && product.images.length > 0) ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
-                  alt={product?.name}
-                  style={{ width: '100%', height: 'auto' }}
-                />
-              </Paper>
+      <Paper>
+        <img
+          src={(product?.images && product.images.length > 0) ? `${BASE_URL}${product.images[0].image_url}` : 'https://via.placeholder.com/750'}
+          alt={product?.name}
+          style={{ width: '100%', height: 'auto' }}
+        />
+      </Paper>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
           {product.name}
@@ -152,7 +146,7 @@ const Men = () => {
       </CardContent>
     </Card>
   );
-  
+
   return (
     <div>
       <MyAppBar />
@@ -160,7 +154,7 @@ const Men = () => {
         <aside style={styles.sidebar}>
           <div style={styles.filter}>
             <h2 style={styles.heading}>Filters</h2>
-            
+
             <TextField
               label="Search"
               variant="outlined"
@@ -169,7 +163,7 @@ const Men = () => {
               onChange={handleSearchChange}
               style={{ marginBottom: '20px' }}
             />
-            
+
             <div style={styles.section}>
               <h3 style={styles.subHeading}>Brands</h3>
               <FormGroup>
@@ -188,7 +182,7 @@ const Men = () => {
                 ))}
               </FormGroup>
             </div>
-            
+
             <div style={styles.section}>
               <h3 style={styles.subHeading}>Type</h3>
               <FormGroup>
@@ -207,7 +201,7 @@ const Men = () => {
                 ))}
               </FormGroup>
             </div>
-            
+
             <div style={styles.section}>
               <h3 style={styles.subHeading}>Price</h3>
               <Slider
@@ -215,17 +209,17 @@ const Men = () => {
                 onChange={handlePriceRangeChange}
                 valueLabelDisplay="auto"
                 min={0}
-                max={100}
+                max={500}
                 style={{ marginBottom: '20px' }}
               />
             </div>
-  
+
             <Button variant="contained" color="primary" onClick={handleApplyFilter} style={{ width: "100%", marginBottom: "10px" }}>
               Apply Filter(s)
             </Button>
             <Button variant="contained" color="secondary" onClick={handleClearFilter} style={{ width: "100%", marginBottom: "10px" }}>
               Clear Filter(s)
-            </Button>            
+            </Button>
             <div style={styles.section}>
               <h3 style={styles.subHeading}>Sort by Price</h3>
               <Select
