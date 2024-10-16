@@ -30,7 +30,7 @@ const Aston = ({ className, divClassName }) => {
   );
 };
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'https://astone-backend-app.onrender.com';
 
 
 function ProductView() {
@@ -97,25 +97,36 @@ function ProductView() {
 
   const handleAddToCart = async () => {
     if (!size || !color) {
-      setSnackbarMessage('Please select both size and color.');
-      setOpenSnackbar(true);
-      return;
+        setSnackbarMessage('Please select both size and color.');
+        setOpenSnackbar(true);
+        return;
+    }
+
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+        setSnackbarMessage('User email not found. Please log in.');
+        setOpenSnackbar(true);
+        return;
     }
 
     const orderService = new OrderService();
     try {
-      const res = await orderService.addToCart(id, size, color);
-      if (res && res.data) {
-        console.log('Product added to cart:', res.data);
-        window.location.reload()
-      }
+        const res = await orderService.addToCart(id, size, color, userEmail);
+        if (res && res.data) {
+            console.log('Product added to cart:', res.data);
+            window.location.reload();
+        }
     } catch (error) {
-      console.error('Error adding product to cart:', error);
+        console.error('Error adding product to cart:', error);
     }
   };
 
   const handleCloseSnackbar = () => {
     setOpenSnackbar(false);
+  };
+
+  const calculateSavings = (originalPrice, currentPrice) => {
+    return (originalPrice - currentPrice).toFixed(2);
   };
 
   return (
@@ -137,10 +148,23 @@ function ProductView() {
                 {product?.name}
               </Typography>
               <Typography variant="h5" color="textSecondary" gutterBottom>
+                {/* Original price with strikethrough */}
+                {product?.original_price > product?.price && (
+                  <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
+                    {product.currency} {product.original_price}
+                  </span>
+                )}
+                {/* Current price */}
                 {product?.currency} {product?.price}
               </Typography>
+              {/* Display savings if original_price exists */}
+              {product?.original_price > product?.price && (
+                <Typography variant="body1" color="red">
+                  Amount saved: {product.currency} {calculateSavings(product.original_price, product.price)}
+                </Typography>
+              )}
               <Typography gutterBottom>
-                {product?.description}
+                Description: {product?.description}
               </Typography>
               <Typography gutterBottom>
                 Brand: {product?.brand}

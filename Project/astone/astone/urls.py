@@ -25,6 +25,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from astoneapp.views.cart_view import *
 from astoneapp.views.order_view import *
 from astoneapp.views.user_view import *
+from astoneapp.views.todo_view import *
 
 # Add urls as needed, usually one for each view function
 urlpatterns = [
@@ -38,6 +39,7 @@ urlpatterns = [
     path('add_to_cart/<int:product_id>/', add_to_cart, name='add_to_cart'),
     path('cart/', cart_detail, name='cart_detail'),
     path('update_cart/<int:product_id>/', update_cart_item, name='update_cart'),
+    path('deduct_points/', deduct_points, name='deduct_points'),
     path('place_order/', place_order, name='place_order'),
     path('order/<int:order_id>/', order_detail, name='order_detail'),
     path('register/', register_user, name='register'),
@@ -50,8 +52,10 @@ urlpatterns = [
     path('seller/<int:pk>/', SellerGetView.as_view(), name='get_seller'),
     path('api-auth/', include('rest_framework.urls')), #pre-built url from rest framework
     path('promotions/', PromotionListCreate.as_view(), name='promotions'),
+    path('promotions/<int:promotion_id>/delete/', PromotionDelete.as_view(), name='delete_promotions'),
     path('seller/seller-forgot-password/', SellerForgotPassword.as_view(), name='seller_forgot_password'),
     path('seller/seller-change-password/<int:user_id>/', SellerChangePassword.as_view(), name='change-seller-password'),
     path('forgot-password/', forgot_password, name='forgot-password'),
-    path('change-password/<int:user_id>/', change_password, name='change-password')
+    path('change-password/<int:user_id>/', change_password, name='change-password'),
+    path('seller/<int:seller_id>/increment-shipment/', increment_processed_shipment, name='increase_processed_shipment'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

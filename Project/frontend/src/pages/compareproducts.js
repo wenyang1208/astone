@@ -3,7 +3,7 @@ import { ProductService } from '../services/ProductService';
 import { Container, Grid, Card, CardContent, CardMedia, Typography, TextField, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import MyAppBar from '../components/appBar';
 
-const BASE_URL = 'http://localhost:8000';
+const BASE_URL = 'https://astone-backend-app.onrender.com';
 
 const CompareProducts = () => {
   const [products, setProducts] = useState([]);
