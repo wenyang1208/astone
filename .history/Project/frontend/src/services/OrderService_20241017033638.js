@@ -51,7 +51,7 @@ export class OrderService {
             const formData = new FormData();
             formData.append('email', email);
     
-            const res = await axios.get('http://astone-backend-app.onrender.com/cart/', formData);
+            const res = await axios.post('http://astone-backend-app.onrender.com/cart/', formData);
             return res;
         } catch (error) {
             console.error('Error getting cart:', error);
