@@ -17,6 +17,30 @@ Refer to [frontend](./Project/frontend) for more information.
 
 Refer to [backend](./Project/astone) for more information.
 
+## Pull Requests
+
+### Creating Pull Requests
+
+1. **Write small PRs**  
+Aim to create small, focused pull requests that fulfill a single purpose.
+
+2. **Review your own PR**  
+Before requesting a review, ensure that your code is clean, well-documented, and follows the project's coding standards.
+
+3. **Test your own PR**  
+Build and test your own pull requests before submitting it. This allows you to catch errors or typos before reviewers see them.
+
+4. **Provide context**  
+Explain the purpose of your PR and provide any necessary context to help reviewers understand your changes within the title and description. 
+
+### Managing Pull Requests
+
+1. **Define code owners**  
+After a handover, assign code owners to each part of the codebase or the whole codebase. This ensures that the right people are notified when a PR is created and can handle the review process.
+
+2. **Use protected branches**  
+Protect the main branch to prevent direct commits and ensure that all changes are made through pull requests. This allows for code reviews and ensures that the main branch is always stable.
+
 ## Open License 
 Astone is licensed under the [GNU General Public License v3.0](./LICENSE).  
 
