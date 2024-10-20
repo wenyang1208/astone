@@ -96,3 +96,43 @@ Refer [tutorial](./Project/) for more information.
 | Lim Woo Shen | System Architect (SA) | wlim0061@student.monash.edu |
 
 ## Summary to New Developers
+Welcome to the Astone e-commerce platform! This project is built with ReactJS for the frontend, Django for the backend, and PostgreSQL for database management. As a new developer, you’ll primarily work with these technologies, so familiarity with them will help you navigate the codebase efficiently.
+
+### Key Information:
+
+
+**Frontend:**
+<br> 
+React with Material-UI for components. Check out the frontend folder for the project structure and setup instructions.
+<br>
+
+**Backend:**
+<br> 
+Django framework connected to PostgreSQL. Refer to the backend folder for more details on setting up and working with the backend.
+<br>
+
+**Deployment:**
+<br> 
+We use Vercel for the frontend and Render for the backend. The project is set up for automated deployments using GitHub, so make sure your code passes all tests before merging to the main branch.
+<br>
+
+### Getting Started:
+
+**Clone the Repository:**
+<br>
+Start by cloning the repository to your local machine.
+<br>
+<br>
+**Follow the Setup:** 
+<br>
+Make sure to follow the setup instructions in the frontend and backend README files to get your local development environment up and running.
+<br>
+<br>
+**Coding Standards:** 
+<br>
+Stick to small, focused PRs, test your code thoroughly, and document it well. This will make the review process smoother and ensure the main branch stays stable.
+<br>
+<br>
+**Team Communication:** 
+<br>
+If you're assigned to a specific feature or area, reach out to the relevant code owner for assistance. Collaboration is key, and our process includes regular feedback and reviews.
