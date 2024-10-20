@@ -17,6 +17,29 @@ Refer to [frontend](./Project/frontend) for more information.
 
 Refer to [backend](./Project/astone) for more information.
 
+## Software and Deployment
+Deployment uses Github, Vercel, and Render with free packages. This is done by connecting Vercel and Render to the Github repository "astone" to host the website.
+
+### Frontend
+Tools: Github, Vercel
+
+Domains: <a href="https://astone-frontend.vercel.app/">https://astone-frontend.vercel.app/
+
+### Backend & Database
+Tools: Github, Render
+
+Domains: <a href="https://astone-backend-app.onrender.com/">https://astone-backend-app.onrender.com/
+
+Admin: <a href="https://astone-backend-app.onrender.com/admin/">https://astone-backend-app.onrender.com/admin/
+
+Admin username: admin
+
+Admin password: 1234
+
+### Github Repo Link:
+
+<a href="https://github.com/wenyang1208/astone">https://github.com/wenyang1208/astone
+
 ## Pull Requests
 
 ### Creating Pull Requests
@@ -71,3 +94,5 @@ Refer [tutorial](./Project/) for more information.
 | Chua Wen Yang | System Architect (SA) | wchu0033@student.monash.edu |
 | Jastej Singh Gill | System Architect (SA) | jsav0005@student.monash.edu |
 | Lim Woo Shen | System Architect (SA) | wlim0061@student.monash.edu |
+
+## Summary to New Developers
